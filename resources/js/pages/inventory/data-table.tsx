@@ -1,3 +1,5 @@
+"use client";
+
 import { useTable, type ColumnDef, type RowData } from "@tanstack/react-table";
 
 import {
