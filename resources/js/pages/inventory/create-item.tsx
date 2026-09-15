@@ -10,6 +10,7 @@ export default function CreateItem() {
             <Head title="Add Item" />
             <div className="m-4">
                 <Link
+                    as="button"
                     href={inventory()}
                     className={buttonVariants({
                         variant: "destructive",
