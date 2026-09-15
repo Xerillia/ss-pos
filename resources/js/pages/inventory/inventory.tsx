@@ -7,7 +7,7 @@ export default function Inventory() {
     return (
         <>
             <Head title="Inventory" />
-            <div className="ml-2 mt-2">
+            <div className="m-4">
                 <Link
                     href={createItem()}
                     className={buttonVariants({ size: "sm" })}
