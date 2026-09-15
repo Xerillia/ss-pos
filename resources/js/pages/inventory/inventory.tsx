@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { inventory } from "@/routes/product";
-import { Head } from "@inertiajs/react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { createItem, inventory } from "@/routes/product";
+import { Head, Link } from "@inertiajs/react";
 import { PackagePlus } from "lucide-react";
 
 export default function Inventory() {
@@ -8,9 +8,12 @@ export default function Inventory() {
         <>
             <Head title="Inventory" />
             <div className="ml-2 mt-2">
-                <Button size="sm">
+                <Link
+                    href={createItem()}
+                    className={buttonVariants({ size: "sm" })}
+                >
                     <PackagePlus /> Add Item
-                </Button>
+                </Link>
             </div>
         </>
     );
