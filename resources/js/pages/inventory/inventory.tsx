@@ -1,4 +1,4 @@
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { createItem, inventory } from "@/routes/product";
 import { Head, Link } from "@inertiajs/react";
 import { PackagePlus } from "lucide-react";
