@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { inventory } from "@/routes";
+import { inventory } from "@/routes/product";
 import { Head } from "@inertiajs/react";
 import { PackagePlus } from "lucide-react";
 
