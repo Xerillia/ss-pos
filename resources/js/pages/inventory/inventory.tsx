@@ -4,8 +4,14 @@ import { Head, Link, usePage } from "@inertiajs/react";
 import { PackagePlus } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import { DataTable } from "./data-table";
+import { columns, Product } from "./columns";
 
-export default function Inventory() {
+interface InventoryProps {
+    products: Product[];
+}
+
+export default function Inventory({ products }: InventoryProps) {
     const { flash } = usePage().props as any;
 
     useEffect(() => {
@@ -20,13 +26,15 @@ export default function Inventory() {
     return (
         <>
             <Head title="Inventory" />
-            <div className="m-4">
+            <div className="m-4 space-y-4">
                 <Link
                     href={createItem()}
                     className={buttonVariants({ size: "sm" })}
                 >
                     <PackagePlus /> Add Item
                 </Link>
+
+                <DataTable columns={columns} data={products} />
             </div>
         </>
     );
