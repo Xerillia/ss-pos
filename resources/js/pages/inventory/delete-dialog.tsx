@@ -58,7 +58,7 @@ export default function DeleteDialog({
                         }}
                         disabled={processing}
                     >
-                        Confirm Delete
+                        Delete
                     </Button>
                 </DialogFooter>
             </DialogContent>
