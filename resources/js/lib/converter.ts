@@ -59,6 +59,20 @@ export function convertNumberToLetter(value: string): string {
     let remaining = value;
     const resultLetters: string[] = [];
 
+    // Track the first occurrence for each priority number
+    // The first occurrence of 1, 2, or 3
+    const usedPriority = {
+        "1": false,
+        "2": false,
+        "3": false,
+    };
+
+    const priorityLetterMap: Record<string, string> = {
+        "1": "K",
+        "2": "L",
+        "3": "M",
+    };
+
     // Regular non-zero tokens sorted by length descending
     const nonZeroTokens = Object.keys(reverseLookup)
         .filter((token) => !/^0+$/.test(token))
@@ -117,7 +131,18 @@ export function convertNumberToLetter(value: string): string {
         let matched = false;
         for (const token of nonZeroTokens) {
             if (remaining.startsWith(token)) {
-                const chosenLetter = getRandomElement(reverseLookup[token]);
+                let chosenLetter = "";
+
+                // Prioritize K, L, M for the FIRST occurrence of "1", "2", or "3"
+                if (
+                    (token === "1" || token === "2" || token === "3") &&
+                    !usedPriority[token]
+                ) {
+                    usedPriority[token] = true;
+                    chosenLetter = priorityLetterMap[token];
+                } else {
+                    chosenLetter = getRandomElement(reverseLookup[token] ?? []);
+                }
 
                 if (chosenLetter === lastLetter) {
                     resultLetters.push("Z");
