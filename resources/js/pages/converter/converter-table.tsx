@@ -18,12 +18,12 @@ const first = [
     { letter: ["A", "K"], definition: "1" },
     { letter: ["B", "L"], definition: "2" },
     { letter: ["C", "M"], definition: "3" },
-    { letter: ["D", "N"], definition: "4" },
+    { letter: ["D", ""], definition: "4" },
     { letter: ["E", "O"], definition: "5" },
-    { letter: ["P"], definition: "6" },
-    { letter: ["G"], definition: "7" },
-    { letter: ["R"], definition: "8" },
-    { letter: ["S"], definition: "9" },
+    { letter: ["", "P"], definition: "6" },
+    { letter: ["G", ""], definition: "7" },
+    { letter: ["", "R"], definition: "8" },
+    { letter: ["", "S"], definition: "9" },
 ];
 
 const second = [
