@@ -9,9 +9,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { convertLetterToNumber, convertNumberToLetter } from "@/lib/converter";
+import { useConversionHistory } from "@/lib/useConversionHistory";
 import { useState } from "react";
 
 export default function ConverterMachine() {
+    const { history, addConversion } = useConversionHistory();
+
     const [letter, setLetter] = useState("");
     const [number, setNumber] = useState("");
 
@@ -29,6 +32,38 @@ export default function ConverterMachine() {
         setLetter(convertNumberToLetter(replaced));
     };
 
+    const handleSaveLetterToNumber = () => {
+        if (letter.trim() && number.trim()) {
+            // Get the most recent saved item
+            const latest = history[0];
+
+            // Only save if it's different from the last entry
+            if (
+                !latest ||
+                latest.fromValue !== letter ||
+                latest.toValue !== number
+            ) {
+                addConversion(letter, number);
+            }
+        }
+    };
+
+    const handleSaveNumberToLetter = () => {
+        if (letter.trim() && number.trim()) {
+            // Get the most recent saved item
+            const latest = history[0];
+
+            // Only save if it's different from the last entry
+            if (
+                !latest ||
+                latest.fromValue !== number ||
+                latest.toValue !== letter
+            ) {
+                addConversion(number, letter);
+            }
+        }
+    };
+
     return (
         <div className="flex gap-3 text-sm">
             <Card className="w-1/2">
@@ -43,6 +78,7 @@ export default function ConverterMachine() {
                     <Input
                         value={letter}
                         onChange={(e) => handleLetter(e.target.value)}
+                        onBlur={handleSaveLetterToNumber}
                     />
                 </CardContent>
             </Card>
@@ -58,6 +94,7 @@ export default function ConverterMachine() {
                     <Input
                         value={number}
                         onChange={(e) => handleNumber(e.target.value)}
+                        onBlur={handleSaveNumberToLetter}
                     />
                 </CardContent>
             </Card>
