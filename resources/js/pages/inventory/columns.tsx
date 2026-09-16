@@ -5,16 +5,7 @@ import { type DataTableFeatures } from "./data-table-features";
 import dayjs from "dayjs";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
-
-export type Product = {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    quantity: number;
-    created_at: string;
-    updated_at: string;
-};
+import { Product } from "@/types/product";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Product>();
 
