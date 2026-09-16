@@ -114,6 +114,7 @@ export function convertNumberToLetter(value: string): string {
         }
 
         // 2. Standard greedy evaluation for non-zero tokens
+        let matched = false;
         for (const token of nonZeroTokens) {
             if (remaining.startsWith(token)) {
                 const chosenLetter = getRandomElement(reverseLookup[token]);
@@ -126,8 +127,16 @@ export function convertNumberToLetter(value: string): string {
                 }
 
                 remaining = remaining.slice(token.length);
+                matched = true;
                 break;
             }
+        }
+
+        // Fallback for unmapped individual characters
+        if (!matched) {
+            resultLetters.push(remaining[0]);
+            lastLetter = "";
+            remaining = remaining.slice(1);
         }
     }
 
