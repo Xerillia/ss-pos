@@ -14,7 +14,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-const data = [
+const first = [
     { letter: ["A", "K"], definition: "1" },
     { letter: ["B", "L"], definition: "2" },
     { letter: ["C", "M"], definition: "3" },
@@ -24,6 +24,9 @@ const data = [
     { letter: ["G"], definition: "7" },
     { letter: ["R"], definition: "8" },
     { letter: ["S"], definition: "9" },
+];
+
+const second = [
     { letter: ["T"], definition: "0" },
     { letter: ["U"], definition: "00" },
     { letter: ["V"], definition: "000" },
@@ -33,14 +36,14 @@ const data = [
 
 export default function ConverterTable() {
     return (
-        <Card className="w-1/4">
+        <Card>
             <CardHeader>
                 <CardTitle>Lookup Table</CardTitle>
                 <CardDescription>
                     How to convert from letter to number.
                 </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex gap-4">
                 <Table>
                     <TableHeader>
                         <TableRow className="text-center">
@@ -49,7 +52,24 @@ export default function ConverterTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {data.map((row, index) => (
+                        {first.map((row, index) => (
+                            <TableRow key={index}>
+                                <TableCell>{row.letter.at(0)}</TableCell>
+                                <TableCell>{row.letter.at(1)}</TableCell>
+                                <TableCell>{row.definition}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+                <Table>
+                    <TableHeader>
+                        <TableRow className="text-center">
+                            <TableHead colSpan={2}>Letter</TableHead>
+                            <TableHead>Definition</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {second.map((row, index) => (
                             <TableRow key={index}>
                                 <TableCell>{row.letter.at(0)}</TableCell>
                                 <TableCell>{row.letter.at(1)}</TableCell>
