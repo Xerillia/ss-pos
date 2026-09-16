@@ -3,9 +3,11 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { type DataTableFeatures } from "./data-table-features";
 import dayjs from "dayjs";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { Product } from "@/types/product";
+import { editItem } from "@/routes/product";
+import { Link } from "@inertiajs/react";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Product>();
 
@@ -125,6 +127,24 @@ export const columns = columnHelper.columns([
             const date = new Date(row.getValue("updated_at"));
             const formatted = dayjs(date).format("YYYY-MM-DD HH:mm:ss");
             return <p className="text-center">{formatted}</p>;
+        },
+    }),
+    columnHelper.display({
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => {
+            const productId = row.original.id;
+            return (
+                <Link
+                    href={editItem(productId).url}
+                    className={buttonVariants({
+                        variant: "outline",
+                        size: "sm",
+                    })}
+                >
+                    Edit
+                </Link>
+            );
         },
     }),
 ]);
