@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { v4 } from "uuid";
 
-export interface ConversionRecord {
+export interface ConversionHistory {
     id: string;
     timestamp: number;
     fromValue: string;
@@ -17,7 +17,7 @@ export function useConversionHistory(
     const storage = storageType === "local" ? localStorage : sessionStorage;
 
     // Initialize state lazily from storage
-    const [history, setHistory] = useState<ConversionRecord[]>(() => {
+    const [history, setHistory] = useState<ConversionHistory[]>(() => {
         try {
             const data = storage.getItem(STORAGE_KEY);
             return data ? JSON.parse(data) : [];
@@ -37,7 +37,7 @@ export function useConversionHistory(
     }, [history, storage]);
 
     const addConversion = (fromValue: string, toValue: string) => {
-        const newRecord: ConversionRecord = {
+        const newRecord: ConversionHistory = {
             id: v4(),
             timestamp: Date.now(),
             fromValue,
