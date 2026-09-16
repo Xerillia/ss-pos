@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { convertLetterToNumber, convertNumberToLetter } from "@/lib/converter";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function ConverterMachine() {
     const [letter, setLetter] = useState("");
