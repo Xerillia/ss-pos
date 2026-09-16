@@ -4,8 +4,8 @@ import { Head, Link, usePage } from "@inertiajs/react";
 import { PackagePlus } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { DataTable } from "./data-table";
-import { columns, Product } from "./columns";
+import InventoryTable from "./inventory-table";
+import { Product } from "@/types/product";
 
 interface InventoryProps {
     products: Product[];
@@ -35,7 +35,7 @@ export default function Inventory({ products }: InventoryProps) {
                     <PackagePlus /> Add Item
                 </Link>
 
-                <DataTable columns={columns} data={products} />
+                <InventoryTable products={products} />
             </div>
         </>
     );
