@@ -37,7 +37,7 @@ class ProductController extends Controller
 
         return redirect()->route('product.inventory')->with('success', [
             'id' => $product->id,
-            'message' => 'Item added successfully.',
+            'message' => $product->name.' added successfully.',
         ]);
     }
 
@@ -68,7 +68,7 @@ class ProductController extends Controller
 
         return redirect()->route('product.inventory')->with('success', [
             'id' => $product->id,
-            'message' => 'Item updated successfully.',
+            'message' => $product->name.' updated successfully.',
         ]);
     }
 
@@ -81,7 +81,7 @@ class ProductController extends Controller
 
         return redirect()->route('product.inventory')->with('success', [
             'id' => $product->id,
-            'message' => 'Item deleted successfully.',
+            'message' => $product->name.' deleted successfully.',
         ]);
     }
 }
