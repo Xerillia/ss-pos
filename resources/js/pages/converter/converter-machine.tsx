@@ -8,8 +8,27 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { convertLetterToNumber, convertNumberToLetter } from "@/lib/converter";
+import { useEffect, useState } from "react";
 
 export default function ConverterMachine() {
+    const [letter, setLetter] = useState("");
+    const [number, setNumber] = useState("");
+
+    const handleLetter = (value: string) => {
+        const replaced = value
+            .toLocaleUpperCase()
+            .replace(/[^[ABCDEPGRSKLMOTUVWZ]/giu, "");
+        setLetter(replaced);
+        setNumber(convertLetterToNumber(replaced));
+    };
+
+    const handleNumber = (value: string) => {
+        const replaced = value.replace(/\D/g, "");
+        setNumber(replaced);
+        setLetter(convertNumberToLetter(replaced));
+    };
+
     return (
         <div className="flex gap-3 text-sm">
             <Card className="w-1/2">
@@ -21,7 +40,10 @@ export default function ConverterMachine() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Input />
+                    <Input
+                        value={letter}
+                        onChange={(e) => handleLetter(e.target.value)}
+                    />
                 </CardContent>
             </Card>
             <Card className="w-1/2">
@@ -33,7 +55,10 @@ export default function ConverterMachine() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Input />
+                    <Input
+                        value={number}
+                        onChange={(e) => handleNumber(e.target.value)}
+                    />
                 </CardContent>
             </Card>
         </div>
