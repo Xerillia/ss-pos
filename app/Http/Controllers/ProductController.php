@@ -33,9 +33,12 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        Product::create($request->validated());
+        $product = Product::create($request->validated());
 
-        return redirect()->route('product.inventory')->with('success', 'Item added successfully.');
+        return redirect()->route('product.inventory')->with('success', [
+            'id' => $product->id,
+            'message' => 'Item added successfully.',
+        ]);
     }
 
     /**
@@ -63,7 +66,10 @@ class ProductController extends Controller
     {
         $product->update($request->validated());
 
-        return redirect()->route('product.inventory')->with('success', 'Item updated successfully.');
+        return redirect()->route('product.inventory')->with('success', [
+            'id' => $product->id,
+            'message' => 'Item updated successfully.',
+        ]);
     }
 
     /**
@@ -73,6 +79,9 @@ class ProductController extends Controller
     {
         $product->delete();
 
-        return redirect()->route('product.inventory')->with('success', 'Item deleted successfully.');
+        return redirect()->route('product.inventory')->with('success', [
+            'id' => $product->id,
+            'message' => 'Item deleted successfully.',
+        ]);
     }
 }

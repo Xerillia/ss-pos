@@ -16,10 +16,10 @@ export default function Inventory({ products }: InventoryProps) {
 
     useEffect(() => {
         if (flash.success) {
-            toast.success(flash.success, { id: "success-toast" });
+            toast.success(flash.success.message, { id: flash.success.id });
         }
         if (flash.error) {
-            toast.error(flash.error, { id: "error-toast" });
+            toast.error(flash.error.message, { id: flash.error.id });
         }
     }, [flash]);
 
