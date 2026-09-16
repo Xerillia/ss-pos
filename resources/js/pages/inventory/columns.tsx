@@ -54,7 +54,7 @@ export const columns = columnHelper.columns([
     }),
     columnHelper.accessor("description", {
         header: "Description",
-        cell: (info) => info.getValue(),
+        cell: (info) => <p className="max-w-32 truncate">{info.getValue()}</p>,
     }),
     columnHelper.accessor("price", {
         header: ({ column }) => {
