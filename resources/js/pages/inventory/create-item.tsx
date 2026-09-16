@@ -1,5 +1,5 @@
 import { createItem, inventory } from "@/routes/product";
-import CreateItemForm from "./create-item-form";
+import ItemForm from "./item-form";
 import { Head, Link } from "@inertiajs/react";
 import { Undo2 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
@@ -20,7 +20,7 @@ export default function CreateItem() {
                     <Undo2 /> Cancel
                 </Link>
 
-                <CreateItemForm />
+                <ItemForm mode="create" />
             </div>
         </>
     );

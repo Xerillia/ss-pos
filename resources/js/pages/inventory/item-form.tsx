@@ -3,19 +3,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { useForm } from "@inertiajs/react";
-import { storeItem } from "@/routes/product";
+import { storeItem, updateItem } from "@/routes/product";
+import { Product } from "@/types/product";
 
-export default function CreateItemForm() {
-    const { data, setData, post, processing, errors } = useForm({
-        name: "",
-        description: "",
-        price: 0,
-        quantity: 0,
+interface ItemFormProps {
+    product?: Product;
+    mode: "create" | "edit";
+}
+
+export default function ItemForm({ product, mode }: ItemFormProps) {
+    const { data, setData, post, put, processing, errors } = useForm({
+        name: product?.name || "",
+        description: product?.description || "",
+        price: product?.price || 0,
+        quantity: product?.quantity || 0,
     });
 
     const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post(storeItem().url);
+
+        if (mode === "create") {
+            post(storeItem().url);
+        } else {
+            if (!product) {
+                console.error("Product is required for edit mode.");
+                return;
+            }
+            put(updateItem(product.id).url);
+        }
     };
 
     return (
@@ -86,10 +101,13 @@ export default function CreateItemForm() {
             <Button type="submit" disabled={processing} size="sm">
                 {processing ? (
                     <>
-                        <Spinner data-icon="inline-start" /> Adding...
+                        <Spinner data-icon="inline-start" />{" "}
+                        {mode === "create" ? "Adding..." : "Updating..."}
                     </>
-                ) : (
+                ) : mode === "create" ? (
                     "Add Item"
+                ) : (
+                    "Update Item"
                 )}
             </Button>
         </form>
