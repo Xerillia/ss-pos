@@ -8,11 +8,11 @@ import {
 import {
     Table,
     TableBody,
-    TableCell,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import ConverterTableContent from "./converter-table-content";
 
 const first = [
     { letter: ["A", "K"], definition: "1" },
@@ -52,13 +52,7 @@ export default function ConverterTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {first.map((row, index) => (
-                            <TableRow key={index}>
-                                <TableCell>{row.letter.at(0)}</TableCell>
-                                <TableCell>{row.letter.at(1)}</TableCell>
-                                <TableCell>{row.definition}</TableCell>
-                            </TableRow>
-                        ))}
+                        <ConverterTableContent data={first} />
                     </TableBody>
                 </Table>
                 <Table>
@@ -69,13 +63,7 @@ export default function ConverterTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {second.map((row, index) => (
-                            <TableRow key={index}>
-                                <TableCell>{row.letter.at(0)}</TableCell>
-                                <TableCell>{row.letter.at(1)}</TableCell>
-                                <TableCell>{row.definition}</TableCell>
-                            </TableRow>
-                        ))}
+                        <ConverterTableContent data={second} />
                     </TableBody>
                 </Table>
             </CardContent>
