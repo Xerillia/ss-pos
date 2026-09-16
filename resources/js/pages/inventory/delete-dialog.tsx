@@ -25,6 +25,15 @@ export default function DeleteDialog({
 
     const { delete: destroy, processing } = useForm();
 
+    const handleDelete = (e: React.SubmitEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        destroy(destroyItem(productId).url, {
+            onSuccess: () => {
+                setOpen(false);
+            },
+        });
+    };
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger
@@ -47,19 +56,15 @@ export default function DeleteDialog({
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                    <Button
-                        variant="destructive"
-                        onClick={() => {
-                            destroy(destroyItem(productId).url, {
-                                onSuccess: () => {
-                                    setOpen(false);
-                                },
-                            });
-                        }}
-                        disabled={processing}
-                    >
-                        Delete
-                    </Button>
+                    <form onSubmit={handleDelete}>
+                        <Button
+                            type="submit"
+                            variant="destructive"
+                            disabled={processing}
+                        >
+                            {processing ? "Deleting..." : "Delete"}
+                        </Button>
+                    </form>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
