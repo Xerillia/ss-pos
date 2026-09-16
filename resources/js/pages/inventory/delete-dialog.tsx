@@ -1,4 +1,4 @@
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -9,7 +9,8 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { destroyItem } from "@/routes/product";
-import { Link } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
+import { useState } from "react";
 
 interface DeleteDialogProps {
     productId: number;
@@ -20,8 +21,12 @@ export default function DeleteDialog({
     productId,
     productName,
 }: DeleteDialogProps) {
+    const [open, setOpen] = useState(false);
+
+    const { delete: destroy, processing } = useForm();
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger
                 className={buttonVariants({
                     variant: "destructive",
@@ -42,15 +47,19 @@ export default function DeleteDialog({
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                    <Link
-                        href={destroyItem(productId).url}
-                        className={buttonVariants({
-                            variant: "destructive",
-                        })}
-                        method="delete"
+                    <Button
+                        variant="destructive"
+                        onClick={() => {
+                            destroy(destroyItem(productId).url, {
+                                onSuccess: () => {
+                                    setOpen(false);
+                                },
+                            });
+                        }}
+                        disabled={processing}
                     >
                         Confirm Delete
-                    </Link>
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
