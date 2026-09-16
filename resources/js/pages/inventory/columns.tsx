@@ -8,6 +8,7 @@ import { ArrowUpDown } from "lucide-react";
 import { Product } from "@/types/product";
 import { editItem } from "@/routes/product";
 import { Link } from "@inertiajs/react";
+import DeleteDialog from "./delete-dialog";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Product>();
 
@@ -134,16 +135,23 @@ export const columns = columnHelper.columns([
         header: "Actions",
         cell: ({ row }) => {
             const productId = row.original.id;
+            const productName = row.original.name;
             return (
-                <Link
-                    href={editItem(productId).url}
-                    className={buttonVariants({
-                        variant: "outline",
-                        size: "sm",
-                    })}
-                >
-                    Edit
-                </Link>
+                <div className="flex justify-center gap-2">
+                    <Link
+                        href={editItem(productId).url}
+                        className={buttonVariants({
+                            variant: "outline",
+                            size: "sm",
+                        })}
+                    >
+                        Edit
+                    </Link>
+                    <DeleteDialog
+                        productId={productId}
+                        productName={productName}
+                    />
+                </div>
             );
         },
     }),
