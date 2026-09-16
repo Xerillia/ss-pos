@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { convertLetterToNumber, convertNumberToLetter } from "@/lib/converter";
-import { useConversionHistory } from "@/lib/useConversionHistory";
 import { useState } from "react";
+import { useConversionHistory } from "./converter-history-context";
 
 export default function ConverterMachine() {
     const { history, addConversion } = useConversionHistory();
