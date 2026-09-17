@@ -1,7 +1,7 @@
-import { editItem, inventory } from "@/routes/product";
-import { Head, Link } from "@inertiajs/react";
+import { inventory } from "@/routes/product";
+import { Head, router } from "@inertiajs/react";
 import { Undo2 } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import ItemForm from "../../components/inventory/item-form";
 import { Product } from "@/types/product";
 
@@ -10,20 +10,20 @@ interface EditItemProps {
 }
 
 export default function EditItem({ product }: EditItemProps) {
+    const handleCancel = () => {
+        if (window.history.length <= 2) {
+            router.visit(inventory());
+        } else {
+            window.history.back();
+        }
+    };
     return (
         <>
             <Head title="Edit Item" />
             <div className="m-4">
-                <Link
-                    as="button"
-                    href={inventory()}
-                    className={buttonVariants({
-                        variant: "destructive",
-                        size: "sm",
-                    })}
-                >
+                <Button variant="destructive" size="sm" onClick={handleCancel}>
                     <Undo2 /> Cancel
-                </Link>
+                </Button>
 
                 <ItemForm product={product} mode="edit" />
             </div>
