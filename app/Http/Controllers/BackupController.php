@@ -23,7 +23,7 @@ class BackupController extends Controller
                 'size' => round($disk->size($file) / 1024, 2).' KB',
                 'date' => $disk->lastModified($file),
             ];
-        })->sortBy('date')->values();
+        })->sortByDesc('date')->values();
 
         return response()->json($backups);
     }
