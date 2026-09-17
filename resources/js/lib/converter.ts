@@ -20,6 +20,16 @@ const lookup: Record<string, string> = {
 
 export const INVALID_LETTERS_REGEX = /[^[ABCDEPGRSKLMOTUVWZ]/giu;
 
+const extractBody = (regex: RegExp) => {
+    const match = regex.source.match(/\[\^(.*)\]/);
+    return match ? match[1] : "";
+};
+
+export const INVALID_LETTERS_EXCLUDE_NUMBER_REGEX = new RegExp(
+    `[^${extractBody(INVALID_LETTERS_REGEX)}0-9]`,
+    "giu",
+);
+
 export function convertLetterToNumber(value: string): string {
     const chars = [...value.toUpperCase()];
     const result = chars

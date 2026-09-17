@@ -5,6 +5,10 @@ import { Spinner } from "@/components/ui/spinner";
 import { useForm } from "@inertiajs/react";
 import { storeItem, updateItem } from "@/routes/product";
 import { Product } from "@/types/product";
+import {
+    convertLetterToNumber,
+    INVALID_LETTERS_EXCLUDE_NUMBER_REGEX,
+} from "@/lib/converter";
 
 interface ItemFormProps {
     product?: Product;
@@ -19,6 +23,12 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
         price: product?.price || 0,
         quantity: product?.quantity || 0,
     });
+
+    const handleCode = (value: string) => {
+        return convertLetterToNumber(
+            value.replace(INVALID_LETTERS_EXCLUDE_NUMBER_REGEX, ""),
+        );
+    };
 
     const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -69,10 +79,13 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
                 <Label htmlFor="capital">Capital</Label>
                 <Input
                     id="capital"
-                    type="number"
+                    type="text"
                     value={data.capital}
                     onChange={(e) =>
-                        setData("capital", parseFloat(e.target.value) || 0)
+                        setData(
+                            "capital",
+                            parseFloat(handleCode(e.target.value)) || 0,
+                        )
                     }
                     placeholder="Enter item capital"
                     className={errors.capital ? "border-destructive" : ""}
@@ -87,10 +100,13 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
                 <Label htmlFor="price">Price</Label>
                 <Input
                     id="price"
-                    type="number"
+                    type="text"
                     value={data.price}
                     onChange={(e) =>
-                        setData("price", parseFloat(e.target.value) || 0)
+                        setData(
+                            "price",
+                            parseFloat(handleCode(e.target.value)) || 0,
+                        )
                     }
                     placeholder="Enter item price"
                     className={errors.price ? "border-destructive" : ""}
