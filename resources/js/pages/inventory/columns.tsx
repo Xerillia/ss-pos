@@ -46,10 +46,10 @@ export const columns = columnHelper.columns([
         },
         cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("description", {
-        header: "Description",
-        cell: (info) => <p className="max-w-32 truncate">{info.getValue()}</p>,
-    }),
+    // columnHelper.accessor("description", {
+    //     header: "Description",
+    //     cell: (info) => <p className="max-w-32 truncate">{info.getValue()}</p>,
+    // }),
     columnHelper.accessor("price", {
         header: ({ column }) => {
             return (
