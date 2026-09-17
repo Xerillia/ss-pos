@@ -2,7 +2,6 @@
 
 import { createColumnHelper } from "@tanstack/react-table";
 import { type DataTableFeatures } from "./data-table-features";
-import dayjs from "dayjs";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { Product } from "@/types/product";
@@ -10,6 +9,7 @@ import { editItem } from "@/routes/product";
 import { Link } from "@inertiajs/react";
 import DeleteDialog from "./delete-dialog";
 import { rupiah } from "@/lib/rupiah";
+import { archive } from "@/lib/archive";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Product>();
 
@@ -101,11 +101,9 @@ export const columns = columnHelper.columns([
                 </Button>
             );
         },
-        cell: ({ row }) => {
-            const date = new Date(row.getValue("created_at"));
-            const formatted = dayjs(date).format("YYYY-MM-DD HH:mm:ss");
-            return <p className="text-center">{formatted}</p>;
-        },
+        cell: ({ row }) => (
+            <p className="text-center">{archive(row.getValue("created_at"))}</p>
+        ),
     }),
     columnHelper.accessor("updated_at", {
         header: ({ column }) => {
@@ -121,11 +119,9 @@ export const columns = columnHelper.columns([
                 </Button>
             );
         },
-        cell: ({ row }) => {
-            const date = new Date(row.getValue("updated_at"));
-            const formatted = dayjs(date).format("YYYY-MM-DD HH:mm:ss");
-            return <p className="text-center">{formatted}</p>;
-        },
+        cell: ({ row }) => (
+            <p className="text-center">{archive(row.getValue("updated_at"))}</p>
+        ),
     }),
     columnHelper.display({
         id: "actions",
