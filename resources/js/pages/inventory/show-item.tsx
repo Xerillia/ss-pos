@@ -1,3 +1,4 @@
+import ItemAction from "@/components/inventory/item-action";
 import ItemTable from "@/components/inventory/item-table";
 import { buttonVariants } from "@/components/ui/button";
 import { inventory } from "@/routes/product";
@@ -14,12 +15,16 @@ export default function ShowItem({ product }: ShowItemProps) {
         <>
             <Head title={product.name} />
             <div className="m-4 space-y-4">
-                <Link
-                    href={inventory()}
-                    className={buttonVariants({ size: "sm" })}
-                >
-                    <Undo2 /> Return
-                </Link>
+                <div className="flex justify-between">
+                    <Link
+                        href={inventory()}
+                        className={buttonVariants({ size: "sm" })}
+                    >
+                        <Undo2 /> Return
+                    </Link>
+
+                    <ItemAction product={product} />
+                </div>
 
                 <ItemTable product={product} />
             </div>
