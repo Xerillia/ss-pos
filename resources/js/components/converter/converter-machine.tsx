@@ -8,7 +8,11 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { convertLetterToNumber, convertNumberToLetter } from "@/lib/converter";
+import {
+    convertLetterToNumber,
+    convertNumberToLetter,
+    INVALID_LETTERS_REGEX,
+} from "@/lib/converter";
 import { useState } from "react";
 import { useConversionHistory } from "./converter-history-context";
 
@@ -21,7 +25,7 @@ export default function ConverterMachine() {
     const handleLetter = (value: string) => {
         const replaced = value
             .toLocaleUpperCase()
-            .replace(/[^[ABCDEPGRSKLMOTUVWZ]/giu, "");
+            .replace(INVALID_LETTERS_REGEX, "");
         setLetter(replaced);
         setNumber(convertLetterToNumber(replaced));
     };

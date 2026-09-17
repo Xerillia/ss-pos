@@ -18,6 +18,8 @@ const lookup: Record<string, string> = {
     W: "0000",
 };
 
+export const INVALID_LETTERS_REGEX = /[^[ABCDEPGRSKLMOTUVWZ]/giu;
+
 export function convertLetterToNumber(value: string): string {
     const chars = [...value.toUpperCase()];
     const result = chars
