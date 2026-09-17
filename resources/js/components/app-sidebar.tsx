@@ -1,6 +1,7 @@
 import { Link } from "@inertiajs/react";
 import {
     BookOpen,
+    DatabaseBackup,
     FolderGit2,
     LayoutGrid,
     Package,
@@ -19,7 +20,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { converter, dashboard } from "@/routes";
+import { backup, converter, dashboard } from "@/routes";
 import type { NavItem } from "@/types";
 import { inventory } from "@/routes/product";
 
@@ -38,6 +39,11 @@ const mainNavItems: NavItem[] = [
         title: "Converter",
         href: converter(),
         icon: RefreshCw,
+    },
+    {
+        title: "Backup",
+        href: backup(),
+        icon: DatabaseBackup,
     },
 ];
 

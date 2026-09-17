@@ -7,6 +7,7 @@ Route::inertia('/', 'welcome')->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
     Route::inertia('converter', 'converter')->name('converter');
+    Route::inertia('backup', 'backup')->name('backup');
 });
 
 require __DIR__.'/settings.php';
