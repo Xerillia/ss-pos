@@ -137,7 +137,10 @@ export const columns = columnHelper.columns([
             const productId = row.original.id;
             const productName = row.original.name;
             return (
-                <div className="flex justify-center gap-2">
+                <div
+                    className="flex justify-center gap-2"
+                    onClick={(e) => e.stopPropagation()}
+                >
                     <Link
                         href={editItem(productId).url}
                         className={buttonVariants({

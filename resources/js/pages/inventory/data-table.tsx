@@ -11,6 +11,7 @@ import {
 import {
     Table,
     TableBody,
+    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -18,6 +19,9 @@ import {
 } from "@/components/ui/table";
 
 import { features, type DataTableFeatures } from "./data-table-features";
+import { Product } from "@/types/product";
+import { router } from "@inertiajs/react";
+import { showItem } from "@/routes/product";
 
 interface DataTableProps<TData extends RowData> {
     columns: ColumnDef<DataTableFeatures, TData>[];
@@ -39,6 +43,10 @@ export function DataTable<TData extends RowData>({
             sorting,
         },
     });
+
+    const handleRowClick = (product: any) => {
+        router.visit(showItem(product));
+    };
 
     return (
         <div className="overflow-hidden rounded-md border">
@@ -67,6 +75,8 @@ export function DataTable<TData extends RowData>({
                             <TableRow
                                 key={row.id}
                                 data-state={row.getIsSelected() && "selected"}
+                                onClick={() => handleRowClick(row.original)}
+                                className="cursor-default select-none"
                             >
                                 {row.getVisibleCells().map((cell) => (
                                     <TableCell key={cell.id}>

@@ -77,7 +77,20 @@ export default function InventoryTable({ products }: InventoryTableProps) {
                 </div>
             </div>
 
-            <DataTable columns={columns} data={filteredProducts} />
+            <div>
+                <div
+                    className={`grid transition-all duration-300 ease-in-out ${
+                        filteredProducts.length > 0
+                            ? "grid-rows-[1fr] opacity-100 mb-2"
+                            : "grid-rows-[0fr] opacity-0 mb-0"
+                    }`}
+                >
+                    <Label className="text-muted-foreground block">
+                        Click on any row to open the specified item.
+                    </Label>
+                </div>
+                <DataTable columns={columns} data={filteredProducts} />
+            </div>
         </>
     );
 }
