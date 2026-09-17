@@ -84,7 +84,7 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
                     onChange={(e) =>
                         setData(
                             "capital",
-                            parseFloat(handleCode(e.target.value)) || 0,
+                            parseInt(handleCode(e.target.value)) || 0,
                         )
                     }
                     placeholder="Enter item capital"
@@ -105,7 +105,7 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
                     onChange={(e) =>
                         setData(
                             "price",
-                            parseFloat(handleCode(e.target.value)) || 0,
+                            parseInt(handleCode(e.target.value)) || 0,
                         )
                     }
                     placeholder="Enter item price"
