@@ -12,6 +12,10 @@ interface DeleteDialogProps {
 export default function DeleteDialog({ product }: DeleteDialogProps) {
     const [open, setOpen] = useState(false);
 
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger
@@ -23,7 +27,10 @@ export default function DeleteDialog({ product }: DeleteDialogProps) {
                 <Trash2 /> Delete
             </DialogTrigger>
             <DialogContent>
-                <DeleteDialogContent product={product} setOpen={setOpen} />
+                <DeleteDialogContent
+                    product={product}
+                    handleClose={handleClose}
+                />
             </DialogContent>
         </Dialog>
     );

@@ -7,12 +7,12 @@ import { Button } from "../ui/button";
 
 interface DeleteDialogContentProps {
     product: Product;
-    setOpen: (state: boolean) => void;
+    handleClose: () => void;
 }
 
 export default function DeleteDialogContent({
     product,
-    setOpen,
+    handleClose,
 }: DeleteDialogContentProps) {
     const { delete: destroy, processing } = useForm();
 
@@ -20,7 +20,7 @@ export default function DeleteDialogContent({
         e.preventDefault();
         destroy(destroyItem(product).url, {
             onSuccess: () => {
-                setOpen(false);
+                handleClose();
             },
         });
     };
