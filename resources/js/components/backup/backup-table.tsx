@@ -17,17 +17,17 @@ type Backup = {
     date: number;
 };
 
-interface BackupHistoryProps {
+interface BackupTableProps {
     backups: Backup[];
     loading: boolean;
     error: string;
 }
 
-export default function BackupHistory({
+export default function BackupTable({
     backups,
     loading,
     error,
-}: BackupHistoryProps) {
+}: BackupTableProps) {
     if (loading) return <div>Loading backups...</div>;
     if (error) return <div>Error: {error}</div>;
 

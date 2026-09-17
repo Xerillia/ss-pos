@@ -1,4 +1,4 @@
-import BackupHistory from "@/components/backup/backup-history";
+import BackupTable from "@/components/backup/backup-table";
 import { useBackup } from "@/components/backup/useBackup";
 
 import { Button } from "@/components/ui/button";
@@ -34,7 +34,7 @@ export default function Backup() {
                 >
                     <DatabaseArrowDown /> Backup Now
                 </Button>
-                <BackupHistory
+                <BackupTable
                     backups={backups}
                     loading={loading}
                     error={error}
