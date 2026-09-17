@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { destroyItem } from "@/routes/product";
 import { useForm } from "@inertiajs/react";
+import { Trash2 } from "lucide-react";
 import { useState } from "react";
 
 interface DeleteDialogProps {
@@ -42,7 +43,7 @@ export default function DeleteDialog({
                     size: "sm",
                 })}
             >
-                Delete
+                <Trash2 /> Delete
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>

@@ -3,7 +3,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { type DataTableFeatures } from "./data-table-features";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Pencil } from "lucide-react";
 import { Product } from "@/types/product";
 import { editItem } from "@/routes/product";
 import { Link } from "@inertiajs/react";
@@ -141,7 +141,7 @@ export const columns = columnHelper.columns([
                             size: "sm",
                         })}
                     >
-                        Edit
+                        <Pencil /> Edit
                     </Link>
                     <DeleteDialog
                         productId={productId}
