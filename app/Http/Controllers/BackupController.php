@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\Storage;
 
 class BackupController extends Controller
 {
+    protected const DISK = 'local';
+
     /**
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
     {
-        $disk = Storage::disk('local');
+        $disk = Storage::disk(self::DISK);
         $files = $disk->files(config('app.name'));
 
         $backups = collect($files)->map(function ($file) use ($disk) {
@@ -48,5 +50,10 @@ class BackupController extends Controller
                 'message' => 'Backup failed. Check server logs.',
             ], 500);
         }
+    }
+
+    public function download(string $name)
+    {
+        return Storage::disk(self::DISK)->download(config('app.name').'/'.$name);
     }
 }
