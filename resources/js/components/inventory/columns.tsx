@@ -10,6 +10,7 @@ import { Link } from "@inertiajs/react";
 import DeleteDialog from "./delete-dialog";
 import { rupiah } from "@/lib/rupiah";
 import { archive } from "@/lib/archive";
+import { ButtonGroup } from "../ui/button-group";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Product>();
 
@@ -134,19 +135,21 @@ export const columns = columnHelper.columns([
                     className="flex justify-center gap-2"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <Link
-                        href={editItem(productId).url}
-                        className={buttonVariants({
-                            variant: "outline",
-                            size: "sm",
-                        })}
-                    >
-                        <Pencil /> Edit
-                    </Link>
-                    <DeleteDialog
-                        productId={productId}
-                        productName={productName}
-                    />
+                    <ButtonGroup>
+                        <Link
+                            href={editItem(productId).url}
+                            className={buttonVariants({
+                                variant: "outline",
+                                size: "sm",
+                            })}
+                        >
+                            <Pencil /> Edit
+                        </Link>
+                        <DeleteDialog
+                            productId={productId}
+                            productName={productName}
+                        />
+                    </ButtonGroup>
                 </div>
             );
         },
