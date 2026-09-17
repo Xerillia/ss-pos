@@ -3,14 +3,16 @@
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('inventory', [ProductController::class, 'index'])->name('product.inventory');
+Route::middleware(['auth'])->prefix('inventory')->name('product.')->group(function () {
+    Route::get('/', [ProductController::class, 'index'])->name('inventory');
 
-    Route::get('inventory/add', [ProductController::class, 'create'])->name('product.createItem');
-    Route::post('inventory/add', [ProductController::class, 'store'])->name('product.storeItem');
+    Route::get('/add', [ProductController::class, 'create'])->name('createItem');
+    Route::post('/add', [ProductController::class, 'store'])->name('storeItem');
 
-    Route::get('inventory/edit/{product}', [ProductController::class, 'edit'])->name('product.editItem');
-    Route::put('inventory/edit/{product}', [ProductController::class, 'update'])->name('product.updateItem');
+    Route::get('/show/{product}', [ProductController::class, 'show'])->name('showItem');
 
-    Route::delete('inventory/delete/{product}', [ProductController::class, 'destroy'])->name('product.destroyItem');
+    Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('editItem');
+    Route::put('/edit/{product}', [ProductController::class, 'update'])->name('updateItem');
+
+    Route::delete('/delete/{product}', [ProductController::class, 'destroy'])->name('destroyItem');
 });
