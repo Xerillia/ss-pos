@@ -135,7 +135,6 @@ export const columns = columnHelper.columns([
     }),
     columnHelper.display({
         id: "actions",
-        header: "Actions",
         cell: ({ row }) => {
             const product = row.original;
             const [open, setOpen] = useState(false);
@@ -147,7 +146,7 @@ export const columns = columnHelper.columns([
             };
             return (
                 <div
-                    className="flex justify-center gap-2"
+                    className="flex justify-center gap-2 -m-2"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <DropdownMenu
@@ -155,7 +154,7 @@ export const columns = columnHelper.columns([
                         onOpenChange={setDropdownOpen}
                     >
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
+                            <Button variant="ghost" className="p-2">
                                 <span className="sr-only">Open menu</span>
                                 <MoreHorizontal className="h-4 w-4" />
                             </Button>
