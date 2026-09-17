@@ -1,4 +1,4 @@
-import { api } from "@/api/axios";
+import { api, apiDownload } from "@/api/axios";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -39,6 +39,31 @@ export function useBackup() {
         }
     };
 
+    const handleDownload = async (name: string) => {
+        try {
+            const response = await apiDownload.get(`/backups/${name}`);
+
+            // turn blob into downloadable link
+            const blobUrl = window.URL.createObjectURL(
+                new Blob([response.data]),
+            );
+            const tempLink = document.createElement("a");
+            tempLink.href = blobUrl;
+
+            // download
+            tempLink.setAttribute("download", name);
+            document.body.appendChild(tempLink);
+            tempLink.click();
+
+            // cleanup
+            tempLink.remove();
+            window.URL.revokeObjectURL(blobUrl);
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return {
         backups,
         loading,
@@ -47,5 +72,6 @@ export function useBackup() {
         isBackingUp,
         fetchBackups,
         handleBackup,
+        handleDownload,
     };
 }
