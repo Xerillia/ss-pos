@@ -2,15 +2,12 @@
 
 import { createColumnHelper } from "@tanstack/react-table";
 import { type DataTableFeatures } from "./data-table-features";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { ArrowUpDown, Pencil } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowUpDown } from "lucide-react";
 import { Product } from "@/types/product";
-import { editItem } from "@/routes/product";
-import { Link } from "@inertiajs/react";
-import DeleteDialog from "./delete-dialog";
 import { rupiah } from "@/lib/rupiah";
 import { archive } from "@/lib/archive";
-import { ButtonGroup } from "../ui/button-group";
+import ItemAction from "./item-action";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Product>();
 
@@ -135,21 +132,7 @@ export const columns = columnHelper.columns([
                     className="flex justify-center gap-2"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <ButtonGroup>
-                        <Link
-                            href={editItem(productId).url}
-                            className={buttonVariants({
-                                variant: "outline",
-                                size: "sm",
-                            })}
-                        >
-                            <Pencil /> Edit
-                        </Link>
-                        <DeleteDialog
-                            productId={productId}
-                            productName={productName}
-                        />
-                    </ButtonGroup>
+                    <ItemAction product={row.original} />
                 </div>
             );
         },
