@@ -19,6 +19,10 @@ export default function ItemTable({ product }: ItemTableProps) {
                         label="Description"
                         value={product.description}
                     />
+                    <ItemTableRow
+                        label="Capital"
+                        value={rupiah(product.capital)}
+                    />
                     <ItemTableRow label="Price" value={rupiah(product.price)} />
                     <ItemTableRow label="Quantity" value={product.quantity} />
                     <ItemTableRow

@@ -15,6 +15,7 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
     const { data, setData, post, put, processing, errors } = useForm({
         name: product?.name || "",
         description: product?.description || "",
+        capital: product?.capital || 0,
         price: product?.price || 0,
         quantity: product?.quantity || 0,
     });
@@ -60,6 +61,24 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
                 />
                 {errors.description && (
                     <p className="text-red-500">{errors.description}</p>
+                )}
+            </div>
+
+            {/* Capital */}
+            <div className="space-y-2">
+                <Label htmlFor="capital">Capital</Label>
+                <Input
+                    id="capital"
+                    type="number"
+                    value={data.capital}
+                    onChange={(e) =>
+                        setData("capital", parseFloat(e.target.value) || 0)
+                    }
+                    placeholder="Enter item capital"
+                    className={errors.capital ? "border-destructive" : ""}
+                />
+                {errors.capital && (
+                    <p className="text-red-500">{errors.capital}</p>
                 )}
             </div>
 
