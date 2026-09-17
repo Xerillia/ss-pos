@@ -11,7 +11,6 @@ import {
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -19,7 +18,6 @@ import {
 } from "@/components/ui/table";
 
 import { features, type DataTableFeatures } from "./data-table-features";
-import { Product } from "@/types/product";
 import { router } from "@inertiajs/react";
 import { showItem } from "@/routes/product";
 
