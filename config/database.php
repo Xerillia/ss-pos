@@ -62,6 +62,10 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 Mysql::ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
+
+            'dump' => [
+                'dump_binary_path' => 'D:/Dev/laragon/bin/mysql/mysql-8.4.3-winx64/bin',
+            ],
         ],
 
         'mariadb' => [

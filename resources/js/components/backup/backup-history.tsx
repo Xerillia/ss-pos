@@ -16,24 +16,17 @@ type Backup = {
     date: number;
 };
 
-export default function BackupHistory() {
-    const [backups, setBackups] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string>();
+interface BackupHistoryProps {
+    backups: Backup[];
+    loading: boolean;
+    error: string;
+}
 
-    useEffect(() => {
-        api.get("/backups")
-            .then((response) => response.data)
-            .then((data) => {
-                setBackups(data);
-                setLoading(false);
-            })
-            .catch((err: Error) => {
-                setError(err.message);
-                setLoading(false);
-            });
-    }, []);
-
+export default function BackupHistory({
+    backups,
+    loading,
+    error,
+}: BackupHistoryProps) {
     if (loading) return <div>Loading backups...</div>;
     if (error) return <div>Error: {error}</div>;
 
