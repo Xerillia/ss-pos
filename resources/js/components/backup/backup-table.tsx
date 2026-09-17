@@ -23,6 +23,8 @@ interface BackupTableProps {
     error: string;
 }
 
+const SECOND_TO_MILLISECOND = 1000;
+
 export default function BackupTable({
     backups,
     loading,
@@ -37,18 +39,19 @@ export default function BackupTable({
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Size</TableHead>
                     <TableHead>Date</TableHead>
+                    <TableHead>Size</TableHead>
+
                     <TableHead>Download</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
                 {backups.map((backup: Backup, index) => (
                     <TableRow key={index}>
-                        <TableCell>{backup.name}</TableCell>
+                        <TableCell>
+                            {archive(backup.date * SECOND_TO_MILLISECOND)}
+                        </TableCell>
                         <TableCell>{backup.size}</TableCell>
-                        <TableCell>{archive(backup.date * 1000)}</TableCell>
                         <TableCell>
                             <Button onClick={() => handleDownload(backup.name)}>
                                 <Download />

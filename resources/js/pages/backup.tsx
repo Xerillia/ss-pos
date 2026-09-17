@@ -34,11 +34,13 @@ export default function Backup() {
                 >
                     <DatabaseArrowDown /> Backup Now
                 </Button>
-                <BackupTable
-                    backups={backups}
-                    loading={loading}
-                    error={error}
-                />
+                <div className="w-1/2">
+                    <BackupTable
+                        backups={backups}
+                        loading={loading}
+                        error={error}
+                    />
+                </div>
             </div>
         </>
     );
