@@ -3,11 +3,23 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { type DataTableFeatures } from "./data-table-features";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { Product } from "@/types/product";
 import { rupiah } from "@/lib/rupiah";
 import { archive } from "@/lib/archive";
-import ItemAction from "./item-action";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Link } from "@inertiajs/react";
+import { editItem } from "@/routes/product";
+import { Dialog, DialogContent } from "../ui/dialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import DeleteDialogContent from "./delete-dialog-content";
+import { useState } from "react";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Product>();
 
@@ -125,14 +137,58 @@ export const columns = columnHelper.columns([
         id: "actions",
         header: "Actions",
         cell: ({ row }) => {
-            const productId = row.original.id;
-            const productName = row.original.name;
+            const product = row.original;
+            const [open, setOpen] = useState(false);
+            const [dropdownOpen, setDropdownOpen] = useState(false);
+
+            const handleClose = () => {
+                setOpen(false);
+                setDropdownOpen(false);
+            };
             return (
                 <div
                     className="flex justify-center gap-2"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <ItemAction product={row.original} />
+                    <DropdownMenu
+                        open={dropdownOpen}
+                        onOpenChange={setDropdownOpen}
+                    >
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel className="text-xs text-muted-foreground">
+                                Actions
+                            </DropdownMenuLabel>
+                            <DropdownMenuItem>
+                                <Link
+                                    href={editItem(product)}
+                                    className="flex gap-2 items-center"
+                                >
+                                    <Pencil /> Edit
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onSelect={(e) => e.preventDefault()}
+                            >
+                                <Dialog open={open} onOpenChange={setOpen}>
+                                    <DialogTrigger className="flex gap-2 items-center">
+                                        <Trash2 /> Delete
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DeleteDialogContent
+                                            product={product}
+                                            handleClose={handleClose}
+                                        />
+                                    </DialogContent>
+                                </Dialog>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             );
         },
