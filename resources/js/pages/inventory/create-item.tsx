@@ -1,5 +1,5 @@
 import { createItem, inventory } from "@/routes/product";
-import ItemForm from "./item-form";
+import ItemForm from "../../components/inventory/item-form";
 import { Head, Link } from "@inertiajs/react";
 import { Undo2 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";

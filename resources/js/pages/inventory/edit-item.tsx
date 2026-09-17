@@ -2,7 +2,7 @@ import { editItem, inventory } from "@/routes/product";
 import { Head, Link } from "@inertiajs/react";
 import { Undo2 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import ItemForm from "./item-form";
+import ItemForm from "../../components/inventory/item-form";
 import { Product } from "@/types/product";
 
 interface EditItemProps {

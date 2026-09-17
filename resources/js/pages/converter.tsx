@@ -1,10 +1,10 @@
 "use client";
 
 import { Head } from "@inertiajs/react";
-import ConverterMachine from "./converter-machine";
-import ConverterTable from "./converter-table";
-import ConverterHistory from "./converter-history";
-import { ConverterHistoryProvider } from "./converter-history-context";
+import ConverterMachine from "../components/converter/converter-machine";
+import ConverterTable from "../components/converter/converter-table";
+import ConverterHistory from "../components/converter/converter-history";
+import { ConverterHistoryProvider } from "../components/converter/converter-history-context";
 
 export default function Converter() {
     return (

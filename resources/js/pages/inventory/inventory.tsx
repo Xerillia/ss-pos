@@ -4,7 +4,7 @@ import { Head, Link, usePage } from "@inertiajs/react";
 import { PackagePlus } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import InventoryTable from "./inventory-table";
+import InventoryTable from "../../components/inventory/inventory-table";
 import { Product } from "@/types/product";
 
 interface InventoryProps {
