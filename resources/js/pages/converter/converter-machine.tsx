@@ -40,10 +40,9 @@ export default function ConverterMachine() {
             // Only save if it's different from the last entry
             if (
                 !latest ||
-                latest.fromValue !== letter ||
-                latest.toValue !== number
+                (latest.fromValue !== letter && latest.toValue !== number)
             ) {
-                addConversion(letter, number);
+                addConversion(letter, Number(number).toLocaleString("de-DE"));
             }
         }
     };
@@ -56,10 +55,9 @@ export default function ConverterMachine() {
             // Only save if it's different from the last entry
             if (
                 !latest ||
-                latest.fromValue !== number ||
-                latest.toValue !== letter
+                (latest.fromValue !== number && latest.toValue !== letter)
             ) {
-                addConversion(number, letter);
+                addConversion(Number(number).toLocaleString("de-DE"), letter);
             }
         }
     };
