@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const api = axios.create({
+const baseOptions = {
     baseURL: `${import.meta.env.VITE_APP_URL}/api`,
     withCredentials: true,
     withXSRFToken: true,
@@ -8,4 +8,11 @@ export const api = axios.create({
         Accept: "application/json",
         "Content-Type": "application/json",
     },
+};
+
+export const api = axios.create(baseOptions);
+
+export const apiDownload = axios.create({
+    ...baseOptions,
+    responseType: "blob",
 });
