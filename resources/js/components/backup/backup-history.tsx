@@ -8,6 +8,7 @@ import {
     TableRow,
 } from "../ui/table";
 import { archive } from "@/lib/archive";
+import api from "@/api/axios";
 
 type Backup = {
     name: string;
@@ -18,29 +19,16 @@ type Backup = {
 export default function BackupHistory() {
     const [backups, setBackups] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string>();
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_APP_URL}/api/backups`, {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-        })
-            .then((response) => {
-                if (!response.ok)
-                    throw new Error(
-                        `${response.status}: ${response.statusText}`,
-                    );
-                return response.json();
-            })
+        api.get("/backups")
+            .then((response) => response.data)
             .then((data) => {
                 setBackups(data);
                 setLoading(false);
             })
-            .catch((err) => {
+            .catch((err: Error) => {
                 setError(err.message);
                 setLoading(false);
             });
