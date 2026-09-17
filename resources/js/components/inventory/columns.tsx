@@ -9,6 +9,7 @@ import { Product } from "@/types/product";
 import { editItem } from "@/routes/product";
 import { Link } from "@inertiajs/react";
 import DeleteDialog from "./delete-dialog";
+import { rupiah } from "@/lib/rupiah";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Product>();
 
@@ -66,11 +67,7 @@ export const columns = columnHelper.columns([
         },
         cell: ({ row }) => {
             const amount = parseFloat(row.getValue("price"));
-            const formatted = new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-                maximumFractionDigits: 0,
-            }).format(amount);
+            const formatted = rupiah(amount);
             return formatted;
         },
     }),
