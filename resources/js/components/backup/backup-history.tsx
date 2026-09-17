@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { Download } from "lucide-react";
+import { Button } from "../ui/button";
 import {
     Table,
     TableBody,
@@ -8,7 +9,7 @@ import {
     TableRow,
 } from "../ui/table";
 import { archive } from "@/lib/archive";
-import api from "@/api/axios";
+import { useBackup } from "./useBackup";
 
 type Backup = {
     name: string;
@@ -30,6 +31,8 @@ export default function BackupHistory({
     if (loading) return <div>Loading backups...</div>;
     if (error) return <div>Error: {error}</div>;
 
+    const { handleDownload } = useBackup();
+
     return (
         <Table>
             <TableHeader>
@@ -37,6 +40,7 @@ export default function BackupHistory({
                     <TableHead>Name</TableHead>
                     <TableHead>Size</TableHead>
                     <TableHead>Date</TableHead>
+                    <TableHead>Download</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -45,6 +49,11 @@ export default function BackupHistory({
                         <TableCell>{backup.name}</TableCell>
                         <TableCell>{backup.size}</TableCell>
                         <TableCell>{archive(backup.date * 1000)}</TableCell>
+                        <TableCell>
+                            <Button onClick={() => handleDownload(backup.name)}>
+                                <Download />
+                            </Button>
+                        </TableCell>
                     </TableRow>
                 ))}
             </TableBody>
