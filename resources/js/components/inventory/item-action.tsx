@@ -22,7 +22,7 @@ export default function ItemAction({ product }: ItemActionProps) {
             >
                 <Pencil /> Edit
             </Link>
-            <DeleteDialog productId={product.id} productName={product.name} />
+            <DeleteDialog product={product} />
         </ButtonGroup>
     );
 }
