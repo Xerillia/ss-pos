@@ -119,7 +119,7 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
                 <Label htmlFor="quantity">Quantity</Label>
                 <Input
                     id="quantity"
-                    type="number"
+                    type="text"
                     value={data.quantity}
                     onChange={(e) =>
                         setData("quantity", parseInt(e.target.value) || 0)
