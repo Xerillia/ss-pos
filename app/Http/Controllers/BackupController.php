@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 
 class BackupController extends Controller
@@ -70,11 +70,9 @@ class BackupController extends Controller
         $fileName = time().'_'.$file->getClientOriginalName();
         $filePath = $file->storeAs('temp-backups', $fileName, 'local');
 
-        $absolutePath = storage_path('app/'.$filePath);
-
         try {
             Artisan::call('backup:restore', [
-                '--backup' => $absolutePath,
+                '--backup' => $filePath,
                 '--no-interaction' => true,
             ]);
 
