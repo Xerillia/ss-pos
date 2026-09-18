@@ -15,7 +15,7 @@ import { Input } from "../ui/input";
 import { useState } from "react";
 
 interface BackupNowProps {
-    handleBackup: () => void;
+    handleBackup: (name: string) => void;
     loading: boolean;
     isBackingUp: boolean;
 }
@@ -26,9 +26,10 @@ export default function BackupNow({
     isBackingUp,
 }: BackupNowProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const [name, setName] = useState("");
 
     const handleConfirm = () => {
-        handleBackup();
+        handleBackup(name);
         setIsOpen(false);
     };
 
@@ -38,7 +39,6 @@ export default function BackupNow({
                 <Button
                     size="sm"
                     className="select-none"
-                    //
                     disabled={loading || isBackingUp}
                 >
                     <DatabaseArrowDown /> Backup Now
@@ -52,7 +52,13 @@ export default function BackupNow({
                     </DialogDescription>
                 </DialogHeader>
                 <Field>
-                    <Input id="name" placeholder="(Optional) Enter a name" />
+                    <Input
+                        id="name"
+                        type="text"
+                        placeholder="(Optional) Enter a name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
                 </Field>
                 <DialogFooter>
                     <DialogClose asChild>

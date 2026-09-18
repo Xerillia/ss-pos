@@ -23,13 +23,16 @@ export function useBackup() {
         }
     };
 
-    const handleBackup = async () => {
+    const handleBackup = async (name: string) => {
         setIsBackingUp(true);
 
         const toastId = toast.loading("Backing up database...");
 
+        const formData = new FormData();
+        formData.append("backup_name", name);
+
         try {
-            const response = await api.post("/backups");
+            const response = await api.post("/backups", formData);
 
             if (response.data.success) {
                 toast.success(response.data.message, { id: toastId });
