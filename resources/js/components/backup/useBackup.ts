@@ -1,4 +1,6 @@
 import { api, apiDownload, apiUpload } from "@/api/axios";
+import { inventory } from "@/routes/product";
+import { router } from "@inertiajs/react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -85,6 +87,8 @@ export function useBackup() {
                 response.data.message || "Database restored successfully!",
                 { id: toastId },
             );
+
+            router.visit(inventory(), { only: ["products"] });
         } catch (err: any) {
             const errorMessage =
                 err.response?.data?.error || "Failed to restore database.";
