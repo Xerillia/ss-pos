@@ -84,4 +84,11 @@ return [
         'validate_csrf_token' => ValidateCsrfToken::class,
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Sanctum Guard / Cookie
+    |--------------------------------------------------------------------------
+    */
+    'cookie' => config('session.cookie'),
+
 ];
