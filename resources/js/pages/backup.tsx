@@ -1,6 +1,6 @@
 import BackupTable from "@/components/backup/backup-table";
+import BackupUpload from "@/components/backup/backup-upload";
 import { useBackup } from "@/components/backup/useBackup";
-
 import { Button } from "@/components/ui/button";
 import { Head } from "@inertiajs/react";
 import { DatabaseArrowDown } from "lucide-react";
@@ -15,6 +15,8 @@ export default function Backup() {
         isBackingUp,
         fetchBackups,
         handleBackup,
+        isRestoring,
+        handleUploadAndApply,
     } = useBackup();
 
     useEffect(() => {
@@ -26,14 +28,21 @@ export default function Backup() {
         <>
             <Head title="Backup" />
             <div className="m-4 space-y-4">
-                <Button
-                    size="sm"
-                    className="select-none"
-                    onClick={handleBackup}
-                    disabled={isBackingUp}
-                >
-                    <DatabaseArrowDown /> Backup Now
-                </Button>
+                <div className="flex gap-3">
+                    <Button
+                        size="sm"
+                        className="select-none"
+                        onClick={handleBackup}
+                        disabled={isBackingUp}
+                    >
+                        <DatabaseArrowDown /> Backup Now
+                    </Button>
+                    <BackupUpload
+                        isBackingUp={isBackingUp}
+                        isRestoring={isRestoring}
+                        handleUploadAndApply={handleUploadAndApply}
+                    />
+                </div>
                 <div className="w-1/2">
                     <BackupTable
                         backups={backups}
