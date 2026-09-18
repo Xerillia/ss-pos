@@ -38,8 +38,11 @@ class BackupController extends Controller
         $files = $disk->files(config('app.name'));
 
         $backups = collect($files)->map(function ($file) use ($disk) {
+            $filename = basename($file);
+
             return [
-                'name' => self::extractName(basename($file)),
+                'filename' => $filename,
+                'name' => self::extractName($filename),
                 'size' => round($disk->size($file) / 1024, 2).' KB',
                 'date' => $disk->lastModified($file),
             ];
