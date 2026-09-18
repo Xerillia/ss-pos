@@ -12,6 +12,7 @@ import { archive } from "@/lib/archive";
 import { useBackup } from "./useBackup";
 
 type Backup = {
+    filename: string;
     name: string;
     size: string;
     date: number;
@@ -40,8 +41,8 @@ export default function BackupTable({
             <TableHeader>
                 <TableRow>
                     <TableHead>Date</TableHead>
+                    <TableHead>Name</TableHead>
                     <TableHead>Size</TableHead>
-
                     <TableHead>Download</TableHead>
                 </TableRow>
             </TableHeader>
@@ -51,9 +52,12 @@ export default function BackupTable({
                         <TableCell>
                             {archive(backup.date * SECOND_TO_MILLISECOND)}
                         </TableCell>
+                        <TableCell>{backup.name}</TableCell>
                         <TableCell>{backup.size}</TableCell>
                         <TableCell>
-                            <Button onClick={() => handleDownload(backup.name)}>
+                            <Button
+                                onClick={() => handleDownload(backup.filename)}
+                            >
                                 <Download />
                             </Button>
                         </TableCell>

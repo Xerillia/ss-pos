@@ -7,10 +7,27 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BackupController extends Controller
 {
     protected const DISK = 'local';
+
+    /**
+     * Extract the name from a filename
+     *
+     * @param  string  $fileName  In the format YYYY-MM-DD-HH-mm-ss-name.zip
+     */
+    protected function extractName(string $fileName): string
+    {
+        if (preg_match('/^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}(?:-(.+?))?(?:\.zip)?$/', $fileName, $matches)) {
+            if (isset($matches[1])) {
+                return str_replace('-', ' ', $matches[1]);
+            }
+        }
+
+        return '';
+    }
 
     /**
      * Display a listing of the resource.
@@ -21,8 +38,11 @@ class BackupController extends Controller
         $files = $disk->files(config('app.name'));
 
         $backups = collect($files)->map(function ($file) use ($disk) {
+            $filename = basename($file);
+
             return [
-                'name' => basename($file),
+                'filename' => $filename,
+                'name' => self::extractName($filename),
                 'size' => round($disk->size($file) / 1024, 2).' KB',
                 'date' => $disk->lastModified($file),
             ];
@@ -34,13 +54,25 @@ class BackupController extends Controller
     /**
      * Generate a new backup
      */
-    public function generate()
+    public function generate(Request $request)
     {
+        $request->validate([
+            'backup_name' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $arguments = [
+            '--only-db' => true,
+            '--no-interaction' => true,
+        ];
+
+        if ($request->filled('backup_name')) {
+            $safeName = Str::slug($request->input('backup_name'));
+            $fileName = now()->format('Y-m-d-H-i-s').'-'.$safeName.'.zip';
+            $arguments['--filename'] = $fileName;
+        }
+
         try {
-            Artisan::call('backup:run', [
-                '--only-db' => true,
-                '--no-interaction' => true,
-            ]);
+            Artisan::call('backup:run', $arguments);
 
             return response()->json([
                 'success' => true,
