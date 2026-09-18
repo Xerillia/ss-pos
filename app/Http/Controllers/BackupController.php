@@ -36,7 +36,10 @@ class BackupController extends Controller
     public function generate()
     {
         try {
-            Artisan::call('backup:run', ['--only-db' => true]);
+            Artisan::call('backup:run', [
+                '--only-db' => true,
+                '--no-interaction' => true,
+            ]);
 
             return response()->json([
                 'success' => true,
