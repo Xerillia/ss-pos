@@ -77,8 +77,6 @@ export function useBackup() {
         if (isRestoring) return;
         if (!file) return;
 
-        // confirm user here
-
         setIsRestoring(true);
 
         const toastId = toast.loading("Applying database backup...");
