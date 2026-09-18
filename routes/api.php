@@ -14,5 +14,6 @@ Route::middleware('auth:sanctum')->name('api.')->group(function () {
         Route::post('/backups', [BackupController::class, 'generate'])->name('generate');
         Route::get('/backups/{name}', [BackupController::class, 'download'])->name('download')->where('name', '.*\.(zip|sql)$');
         Route::post('/backups/restore', [BackupController::class, 'uploadAndApply'])->name('uploadAndApply');
+        Route::post('/backups/restore/{name}', [BackupController::class, 'apply'])->name('restore')->where('name', '.*\.(zip|sql)$');
     });
 });
