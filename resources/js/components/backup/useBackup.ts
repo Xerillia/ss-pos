@@ -1,4 +1,4 @@
-import { api, apiDownload } from "@/api/axios";
+import { api, apiDownload, apiUpload } from "@/api/axios";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -7,6 +7,7 @@ export function useBackup() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [isBackingUp, setIsBackingUp] = useState(false);
+    const [isRestoring, setIsRestoring] = useState(false);
 
     const fetchBackups = async () => {
         try {
@@ -64,6 +65,36 @@ export function useBackup() {
         }
     };
 
+    const handleUploadAndApply = async (file: File | null) => {
+        if (isRestoring) return;
+        if (!file) return;
+
+        // confirm user here
+
+        setIsRestoring(true);
+
+        const toastId = toast.loading("Applying database backup...");
+
+        const formData = new FormData();
+        formData.append("backup_file", file);
+
+        try {
+            const response = await apiUpload.post("/backups/restore", formData);
+
+            toast.success(
+                response.data.message || "Database restored successfully!",
+                { id: toastId },
+            );
+        } catch (err: any) {
+            const errorMessage =
+                err.response?.data?.error || "Failed to restore database.";
+
+            toast.error(errorMessage, { id: toastId });
+        } finally {
+            setIsRestoring(false);
+        }
+    };
+
     return {
         backups,
         loading,
@@ -73,5 +104,7 @@ export function useBackup() {
         fetchBackups,
         handleBackup,
         handleDownload,
+        isRestoring,
+        handleUploadAndApply,
     };
 }

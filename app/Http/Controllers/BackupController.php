@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -48,8 +49,8 @@ class BackupController extends Controller
         } catch (\Exception $e) {
             Log::error('Backup failed: '.$e->getMessage());
 
-            return response()->json(['
-                success' => false,
+            return response()->json([
+                'success' => false,
                 'message' => 'Backup failed. Check server logs.',
             ], 500);
         }
@@ -58,5 +59,40 @@ class BackupController extends Controller
     public function download(string $name)
     {
         return Storage::disk(self::DISK)->download(config('app.name').'/'.$name);
+    }
+
+    public function uploadAndApply(Request $request)
+    {
+        // validation
+        $request->validate([
+            'backup_file' => ['required', 'file', 'mimes:zip,sql', 'max:50000'],
+        ]);
+
+        // temp storage
+        $file = $request->file('backup_file');
+        $fileName = time().'_'.$file->getClientOriginalName();
+        $filePath = $file->storeAs('temp-backups', $fileName, 'local');
+
+        try {
+            Artisan::call('backup:restore', [
+                '--backup' => $filePath,
+                '--no-interaction' => true,
+            ]);
+
+            // delete on success
+            Storage::disk('local')->delete($filePath);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Database uploaded and applied successfully.',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Restore failed: '.$e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Restore failed. Check server logs.',
+            ], 500);
+        }
     }
 }
