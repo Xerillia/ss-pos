@@ -67,7 +67,7 @@ export default function BackupUpload({
                 variant="outline"
                 className="select-none"
                 onClick={() => fileInputRef.current?.click()}
-                disabled={loading || isBackingUp || isRestoring}
+                disabled={isBackingUp || isRestoring}
             >
                 <UploadCloud />{" "}
                 {isRestoring ? "Applying Database..." : "Upload Backup"}

@@ -39,7 +39,7 @@ export default function BackupNow({
                 <Button
                     size="sm"
                     className="select-none"
-                    disabled={loading || isBackingUp}
+                    disabled={isBackingUp}
                 >
                     <DatabaseArrowDown /> Backup Now
                 </Button>

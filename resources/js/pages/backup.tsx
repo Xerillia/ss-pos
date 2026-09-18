@@ -9,7 +9,6 @@ export default function Backup() {
     const {
         backups,
         loading,
-        setLoading,
         error,
         isBackingUp,
         fetchBackups,
@@ -19,7 +18,6 @@ export default function Backup() {
     } = useBackup();
 
     useEffect(() => {
-        setLoading(true);
         fetchBackups();
     }, []);
 

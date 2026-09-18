@@ -108,7 +108,6 @@ export function useBackup() {
     return {
         backups,
         loading,
-        setLoading,
         error,
         isBackingUp,
         fetchBackups,
