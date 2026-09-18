@@ -130,18 +130,25 @@ class BackupController extends Controller
 
     public function apply(string $name)
     {
-        $file = Storage::disk(self::DISK)->download(config('app.name').'/'.$name);
+        $filePath = config('app.name').'/'.$name;
 
-        if (! $file) {
+        try {
+            Artisan::call('backup:restore', [
+                '--backup' => $filePath,
+                '--no-interaction' => true,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Database uploaded and applied successfully.',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Backup failed: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
-                'message' => 'File not found!',
-            ]);
+                'message' => 'Backup failed. Check server logs.',
+            ], 500);
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Found '.$file,
-        ]);
     }
 }
