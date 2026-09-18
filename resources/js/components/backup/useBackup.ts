@@ -25,15 +25,18 @@ export function useBackup() {
 
     const handleBackup = async () => {
         setIsBackingUp(true);
+
+        const toastId = toast.loading("Backing up database...");
+
         try {
             const response = await api.post("/backups");
 
             if (response.data.success) {
-                toast.success(response.data.message);
+                toast.success(response.data.message, { id: toastId });
 
                 await fetchBackups();
             } else {
-                toast.error(response.data.message);
+                toast.error(response.data.message, { id: toastId });
             }
         } catch (error) {
             console.error(error);
