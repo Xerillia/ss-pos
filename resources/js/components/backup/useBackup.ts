@@ -92,6 +92,7 @@ export function useBackup() {
                 { id: toastId },
             );
 
+            // visit then refresh prop
             router.visit(inventory(), { only: ["products"] });
         } catch (err: any) {
             const errorMessage =
@@ -117,6 +118,9 @@ export function useBackup() {
                 response.data.message || "Database restored successfully!",
                 { id: toastId },
             );
+
+            // visit then refresh prop
+            router.visit(inventory(), { only: ["products"] });
         } catch (err: any) {
             const errorMessage =
                 err.response?.data?.error || "Failed to restore database.";
