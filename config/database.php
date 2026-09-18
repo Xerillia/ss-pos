@@ -64,7 +64,7 @@ return [
             ]) : [],
 
             'dump' => [
-                'dump_binary_path' => 'D:/Dev/laragon/bin/mysql/mysql-8.4.3-winx64/bin',
+                'dump_binary_path' => env('DB_DUMP_BINARY_PATH', ''),
             ],
         ],
 
