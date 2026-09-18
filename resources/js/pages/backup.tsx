@@ -33,13 +33,14 @@ export default function Backup() {
                         size="sm"
                         className="select-none"
                         onClick={handleBackup}
-                        disabled={isBackingUp}
+                        disabled={loading || isBackingUp}
                     >
                         <DatabaseArrowDown /> Backup Now
                     </Button>
                     <BackupUpload
                         isBackingUp={isBackingUp}
                         isRestoring={isRestoring}
+                        loading={loading}
                         handleUploadAndApply={handleUploadAndApply}
                     />
                 </div>

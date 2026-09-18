@@ -11,11 +11,13 @@ import {
 } from "../ui/alert-dialog";
 
 interface BackupUploadProps {
+    loading: boolean;
     isBackingUp: boolean;
     isRestoring: boolean;
     handleUploadAndApply: (file: File | null) => void;
 }
 export default function BackupUpload({
+    loading,
     isBackingUp,
     isRestoring,
     handleUploadAndApply,
@@ -65,7 +67,7 @@ export default function BackupUpload({
                 variant="outline"
                 className="select-none"
                 onClick={() => fileInputRef.current?.click()}
-                disabled={isBackingUp || isRestoring}
+                disabled={loading || isBackingUp || isRestoring}
             >
                 <UploadCloud />{" "}
                 {isRestoring ? "Applying Database..." : "Upload Backup"}
