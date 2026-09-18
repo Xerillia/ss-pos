@@ -40,8 +40,8 @@ export default function BackupTable({
             <TableHeader>
                 <TableRow>
                     <TableHead>Date</TableHead>
+                    <TableHead>Name</TableHead>
                     <TableHead>Size</TableHead>
-
                     <TableHead>Download</TableHead>
                 </TableRow>
             </TableHeader>
@@ -51,6 +51,7 @@ export default function BackupTable({
                         <TableCell>
                             {archive(backup.date * SECOND_TO_MILLISECOND)}
                         </TableCell>
+                        <TableCell>{backup.name}</TableCell>
                         <TableCell>{backup.size}</TableCell>
                         <TableCell>
                             <Button onClick={() => handleDownload(backup.name)}>

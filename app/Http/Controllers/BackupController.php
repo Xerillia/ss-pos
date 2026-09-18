@@ -14,6 +14,22 @@ class BackupController extends Controller
     protected const DISK = 'local';
 
     /**
+     * Extract the name from a filename
+     *
+     * @param  string  $fileName  In the format YYYY-MM-DD-HH-mm-ss-name.zip
+     */
+    protected function extractName(string $fileName): string
+    {
+        if (preg_match('/^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}(?:-(.+?))?(?:\.zip)?$/', $fileName, $matches)) {
+            if (isset($matches[1])) {
+                return str_replace('-', ' ', $matches[1]);
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
@@ -23,7 +39,7 @@ class BackupController extends Controller
 
         $backups = collect($files)->map(function ($file) use ($disk) {
             return [
-                'name' => basename($file),
+                'name' => self::extractName(basename($file)),
                 'size' => round($disk->size($file) / 1024, 2).' KB',
                 'date' => $disk->lastModified($file),
             ];
