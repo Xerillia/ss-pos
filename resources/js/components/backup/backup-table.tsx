@@ -11,6 +11,11 @@ import {
 import { archive } from "@/lib/archive";
 import { useBackup } from "./useBackup";
 import RestoreTo from "./restore-to";
+import slugify from "react-slugify";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 type Backup = {
     filename: string;
@@ -23,14 +28,14 @@ interface BackupTableProps {
     backups: Backup[];
     loading: boolean;
     error: string;
+    handleApply: (filename: string) => void;
 }
-
-const SECOND_TO_MILLISECOND = 1000;
 
 export default function BackupTable({
     backups,
     loading,
     error,
+    handleApply,
 }: BackupTableProps) {
     if (loading) return <div>Loading backups...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -49,25 +54,35 @@ export default function BackupTable({
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {backups.map((backup: Backup, index) => (
-                    <TableRow key={index}>
-                        <TableCell>
-                            {archive(backup.date * SECOND_TO_MILLISECOND)}
-                        </TableCell>
-                        <TableCell>{backup.name}</TableCell>
-                        <TableCell>{backup.size}</TableCell>
-                        <TableCell className="text-center">
-                            <Button
-                                onClick={() => handleDownload(backup.filename)}
-                            >
-                                <Download />
-                            </Button>
-                        </TableCell>
-                        <TableCell className="text-center">
-                            <RestoreTo />
-                        </TableCell>
-                    </TableRow>
-                ))}
+                {backups.map((backup: Backup, index) => {
+                    const slug = slugify(backup.name);
+                    const filename =
+                        dayjs(backup.date).utc().format("YYYY-MM-DD-HH-mm-ss") +
+                        (slug ? "-" + slug : "") +
+                        ".zip";
+                    return (
+                        <TableRow key={index}>
+                            <TableCell>{archive(backup.date)}</TableCell>
+                            <TableCell>{backup.name}</TableCell>
+                            <TableCell>{backup.size}</TableCell>
+                            <TableCell className="text-center">
+                                <Button
+                                    onClick={() =>
+                                        handleDownload(backup.filename)
+                                    }
+                                >
+                                    <Download />
+                                </Button>
+                            </TableCell>
+                            <TableCell className="text-center">
+                                <RestoreTo
+                                    handleApply={handleApply}
+                                    filename={filename}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    );
+                })}
             </TableBody>
         </Table>
     );

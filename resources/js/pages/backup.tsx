@@ -15,6 +15,7 @@ export default function Backup() {
         handleBackup,
         isRestoring,
         handleUploadAndApply,
+        handleApply,
     } = useBackup();
 
     useEffect(() => {
@@ -43,6 +44,7 @@ export default function Backup() {
                         backups={backups}
                         loading={loading}
                         error={error}
+                        handleApply={handleApply}
                     />
                 </div>
             </div>

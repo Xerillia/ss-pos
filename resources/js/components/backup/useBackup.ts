@@ -103,6 +103,32 @@ export function useBackup() {
         }
     };
 
+    const handleApply = async (filename: string) => {
+        if (isRestoring) return;
+
+        setIsRestoring(true);
+
+        const toastId = toast.loading("Applying database backup...");
+
+        try {
+            const response = await api.post(`/backups/restore/${filename}`);
+
+            toast.success(
+                response.data.message || "Database restored successfully!",
+                { id: toastId },
+            );
+        } catch (err: any) {
+            const errorMessage =
+                err.response?.data?.error || "Failed to restore database.";
+
+            toast.error(errorMessage || "Failed to restore database.", {
+                id: toastId,
+            });
+        } finally {
+            setIsRestoring(false);
+        }
+    };
+
     return {
         backups,
         loading,
@@ -113,5 +139,6 @@ export function useBackup() {
         handleDownload,
         isRestoring,
         handleUploadAndApply,
+        handleApply,
     };
 }
