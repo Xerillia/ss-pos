@@ -44,7 +44,7 @@ class BackupController extends Controller
                 'filename' => $filename,
                 'name' => self::extractName($filename),
                 'size' => round($disk->size($file) / 1024, 2).' KB',
-                'date' => $disk->lastModified($file),
+                'date' => $disk->lastModified($file) * 1000, // to millisecond
             ];
         })->sortByDesc('date')->values();
 
@@ -124,6 +124,30 @@ class BackupController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Restore failed. Check server logs.',
+            ], 500);
+        }
+    }
+
+    public function apply(string $name)
+    {
+        $filePath = config('app.name').'/'.$name;
+
+        try {
+            Artisan::call('backup:restore', [
+                '--backup' => $filePath,
+                '--no-interaction' => true,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Database uploaded and applied successfully.',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Backup failed: '.$e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Backup failed. Check server logs.',
             ], 500);
         }
     }

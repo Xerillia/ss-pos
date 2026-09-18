@@ -77,8 +77,6 @@ export function useBackup() {
         if (isRestoring) return;
         if (!file) return;
 
-        // confirm user here
-
         setIsRestoring(true);
 
         const toastId = toast.loading("Applying database backup...");
@@ -94,12 +92,42 @@ export function useBackup() {
                 { id: toastId },
             );
 
+            // visit then refresh prop
             router.visit(inventory(), { only: ["products"] });
         } catch (err: any) {
             const errorMessage =
                 err.response?.data?.error || "Failed to restore database.";
 
             toast.error(errorMessage, { id: toastId });
+        } finally {
+            setIsRestoring(false);
+        }
+    };
+
+    const handleApply = async (filename: string) => {
+        if (isRestoring) return;
+
+        setIsRestoring(true);
+
+        const toastId = toast.loading("Applying database backup...");
+
+        try {
+            const response = await api.post(`/backups/restore/${filename}`);
+
+            toast.success(
+                response.data.message || "Database restored successfully!",
+                { id: toastId },
+            );
+
+            // visit then refresh prop
+            router.visit(inventory(), { only: ["products"] });
+        } catch (err: any) {
+            const errorMessage =
+                err.response?.data?.error || "Failed to restore database.";
+
+            toast.error(errorMessage || "Failed to restore database.", {
+                id: toastId,
+            });
         } finally {
             setIsRestoring(false);
         }
@@ -115,5 +143,6 @@ export function useBackup() {
         handleDownload,
         isRestoring,
         handleUploadAndApply,
+        handleApply,
     };
 }
