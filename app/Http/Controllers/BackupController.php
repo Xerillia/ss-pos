@@ -38,7 +38,7 @@ class BackupController extends Controller
     public function generate(Request $request)
     {
         $request->validate([
-            'name' => ['nullable', 'string', 'max:255'],
+            'backup_name' => ['nullable', 'string', 'max:255'],
         ]);
 
         $arguments = [
@@ -46,9 +46,9 @@ class BackupController extends Controller
             '--no-interaction' => true,
         ];
 
-        if ($request->filled('name')) {
-            $safeName = Str::slug($request->input('name'));
-            $fileName = $safeName.'-'.now()->format('Y-m-d-H-i-s').'.zip';
+        if ($request->filled('backup_name')) {
+            $safeName = Str::slug($request->input('backup_name'));
+            $fileName = now()->format('Y-m-d-H-i-s').'-'.$safeName.'.zip';
             $arguments['--filename'] = $fileName;
         }
 
