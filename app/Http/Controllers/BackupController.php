@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BackupController extends Controller
 {
@@ -34,13 +35,25 @@ class BackupController extends Controller
     /**
      * Generate a new backup
      */
-    public function generate()
+    public function generate(Request $request)
     {
+        $request->validate([
+            'name' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $arguments = [
+            '--only-db' => true,
+            '--no-interaction' => true,
+        ];
+
+        if ($request->filled('name')) {
+            $safeName = Str::slug($request->input('name'));
+            $fileName = $safeName.'-'.now()->format('Y-m-d-H-i-s').'.zip';
+            $arguments['--filename'] = $fileName;
+        }
+
         try {
-            Artisan::call('backup:run', [
-                '--only-db' => true,
-                '--no-interaction' => true,
-            ]);
+            Artisan::call('backup:run', $arguments);
 
             return response()->json([
                 'success' => true,
