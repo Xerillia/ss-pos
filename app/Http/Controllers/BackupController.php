@@ -44,7 +44,7 @@ class BackupController extends Controller
                 'filename' => $filename,
                 'name' => self::extractName($filename),
                 'size' => round($disk->size($file) / 1024, 2).' KB',
-                'date' => $disk->lastModified($file),
+                'date' => $disk->lastModified($file) * 1000, // to millisecond
             ];
         })->sortByDesc('date')->values();
 
@@ -126,5 +126,22 @@ class BackupController extends Controller
                 'message' => 'Restore failed. Check server logs.',
             ], 500);
         }
+    }
+
+    public function apply(string $name)
+    {
+        $file = Storage::disk(self::DISK)->download(config('app.name').'/'.$name);
+
+        if (! $file) {
+            return response()->json([
+                'success' => false,
+                'message' => 'File not found!',
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Found '.$file,
+        ]);
     }
 }
