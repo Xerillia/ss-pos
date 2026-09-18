@@ -10,6 +10,7 @@ import {
 } from "../ui/table";
 import { archive } from "@/lib/archive";
 import { useBackup } from "./useBackup";
+import RestoreTo from "./restore-to";
 
 type Backup = {
     filename: string;
@@ -43,7 +44,8 @@ export default function BackupTable({
                     <TableHead>Date</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Size</TableHead>
-                    <TableHead>Download</TableHead>
+                    <TableHead className="text-center">Download</TableHead>
+                    <TableHead className="text-center">Restore</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -54,12 +56,15 @@ export default function BackupTable({
                         </TableCell>
                         <TableCell>{backup.name}</TableCell>
                         <TableCell>{backup.size}</TableCell>
-                        <TableCell>
+                        <TableCell className="text-center">
                             <Button
                                 onClick={() => handleDownload(backup.filename)}
                             >
                                 <Download />
                             </Button>
+                        </TableCell>
+                        <TableCell className="text-center">
+                            <RestoreTo />
                         </TableCell>
                     </TableRow>
                 ))}
