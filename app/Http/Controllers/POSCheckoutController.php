@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSaleRequest;
 use App\Models\Product;
 use App\Models\Sale;
+use App\PaymentStatus;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -71,14 +72,25 @@ class POSCheckoutController extends Controller
             $totalAmount = ($subtotal + $taxAmount) - $discountAmount;
 
             $paidAmount = $validated['paid_amount'];
-            $changeAmount = max(0, $paidAmount - $totalAmount);
+
+            // debt, change, payment status
+            if ($paidAmount >= $totalAmount) {
+                $changeAmount = $paidAmount - $totalAmount;
+                $debtAmount = 0.00;
+                $paymentStatus = PaymentStatus::PAID;
+            } else {
+                $changeAmount = 0.00;
+                $debtAmount = $totalAmount - $paidAmount;
+                $paymentStatus = $paidAmount > 0 ? PaymentStatus::PARTIAL : PaymentStatus::UNPAID;
+            }
 
             // create sale record
             $sale = Sale::create([
                 'sale_number' => $validated['sale_number'] ?? null,
                 'user_id' => $request->user()?->id,
+                'customer_id' => $validated['customer_id'] ?? null,
                 'status' => 'completed',
-                'payment_status' => 'paid',
+                'payment_status' => $paymentStatus,
                 'payment_method' => $validated['payment_method'],
                 'subtotal_amount' => $subtotal,
                 'tax_amount' => $taxAmount,
@@ -87,6 +99,7 @@ class POSCheckoutController extends Controller
                 'currency' => $validated['currency'] ?? 'IDR',
                 'paid_amount' => $paidAmount,
                 'change_amount' => $changeAmount,
+                'debt_amount' => $debtAmount,
                 'notes' => $validated['notes'] ?? null,
             ]);
 
