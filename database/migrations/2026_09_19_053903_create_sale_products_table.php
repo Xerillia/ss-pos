@@ -29,6 +29,9 @@ return new class extends Migration
             $table->decimal('flat_discount', 10, 2)->default(0.00);
             $table->decimal('total_price', 10, 2); // ((price - unit_discount) * qty) - flat
 
+            // lifecycle
+            $table->string('item_status')->default('active'); // active, refunded, exchanged
+
             $table->timestamps();
         });
     }

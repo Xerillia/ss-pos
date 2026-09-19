@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\SaleItemStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,7 @@ class SaleProduct extends Model
     ];
 
     protected $casts = [
+        'item_status' => SaleItemStatus::class,
         'quantity' => 'integer',
         'unit_price' => 'decimal:2',
         'unit_discount' => 'decimal:2',
