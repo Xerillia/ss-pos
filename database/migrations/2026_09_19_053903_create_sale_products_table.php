@@ -25,7 +25,9 @@ return new class extends Migration
 
             $table->integer('quantity');
             $table->decimal('unit_price', 10, 2);
-            $table->decimal('total_price', 10, 2);
+            $table->decimal('unit_discount', 10, 2)->default(0.00);
+            $table->decimal('flat_discount', 10, 2)->default(0.00);
+            $table->decimal('total_price', 10, 2); // ((price - unit_discount) * qty) - flat
 
             $table->timestamps();
         });
