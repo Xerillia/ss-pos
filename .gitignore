@@ -28,3 +28,7 @@ yarn-error.log
 /.vscode
 /.zed
 _ide_helper*
+
+# Laravel Enumify
+/resources/js/enums/*
+!/resources/js/enums/.gitkeep
