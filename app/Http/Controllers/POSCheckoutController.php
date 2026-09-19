@@ -32,7 +32,21 @@ class POSCheckoutController extends Controller
                     throw new \Exception("Insufficient stock for product: {$product->name}");
                 }
 
-                $itemTotal = $product->price * $item['quantity'];
+                $quantity = $item['quantity'];
+                $grossTotal = $product->price * $quantity;
+
+                // discounts
+                $unitDiscount = $item['unit_discount'] ?? 0.00;
+                $flatDiscount = $item['flat_discount'] ?? 0.00;
+
+                // cap
+                $unitDiscount = min($unitDiscount, $product->price);
+
+                // total discounts
+                $totalDiscount = ($unitDiscount * $quantity) + $flatDiscount;
+                $totalDiscount = min($totalDiscount, $grossTotal);
+
+                $itemTotal = $grossTotal - $totalDiscount;
                 $subtotal += $itemTotal;
 
                 // deduct stock
@@ -45,6 +59,8 @@ class POSCheckoutController extends Controller
                     'product_sku' => $product->sku,
                     'quantity' => $item['quantity'],
                     'unit_price' => $product->price,
+                    'unit_discount' => $unitDiscount,
+                    'flat_discount' => $flatDiscount,
                     'total_price' => $itemTotal,
                 ];
             }
