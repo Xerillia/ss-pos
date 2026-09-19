@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCustomerRequest;
-use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
@@ -14,7 +13,11 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return Inertia::render('customer/customers');
+        $customers = Customer::all();
+
+        return Inertia::render('customer/customers', [
+            'customers' => $customers,
+        ]);
     }
 
     /**
@@ -28,7 +31,7 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCustomerRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -52,7 +55,7 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCustomerRequest $request, Customer $customer)
+    public function update(Request $request, Customer $customer)
     {
         //
     }
