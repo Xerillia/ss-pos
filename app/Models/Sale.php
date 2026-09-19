@@ -52,4 +52,12 @@ class Sale extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the customer that is associated with the sale.
+     */
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }
