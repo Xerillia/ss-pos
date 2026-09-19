@@ -24,6 +24,7 @@ class StoreSaleRequest extends FormRequest
     {
         return [
             'sale_number' => ['nullable', 'string', 'max:50', 'unique:sales,sale_number'],
+            'customer_id' => ['nullable', 'exists:customers,id'],
             'payment_method' => ['required', 'string'],
             'paid_amount' => ['required', 'numeric', 'min:0'],
             'tax_amount' => ['nullable', 'numeric', 'min:0'],
