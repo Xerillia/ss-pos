@@ -17,7 +17,10 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-import { features, type DataTableFeatures } from "./data-table-features";
+import {
+    features,
+    type DataTableFeatures,
+} from "../../lib/data-table-features";
 import { router } from "@inertiajs/react";
 import { showItem } from "@/routes/product";
 import { Button } from "../ui/button";
