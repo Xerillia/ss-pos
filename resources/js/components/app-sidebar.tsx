@@ -5,6 +5,7 @@ import {
     FolderGit2,
     LayoutGrid,
     Package,
+    Receipt,
     RefreshCw,
 } from "lucide-react";
 import AppLogo from "@/components/app-logo";
@@ -23,12 +24,18 @@ import {
 import { backup, converter, dashboard } from "@/routes";
 import type { NavItem } from "@/types";
 import { inventory } from "@/routes/product";
+import { posIndex } from "@/routes/pos";
 
 const mainNavItems: NavItem[] = [
     {
         title: "Dashboard",
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: "Point of Sale",
+        href: posIndex(),
+        icon: Receipt,
     },
     {
         title: "Inventory",
