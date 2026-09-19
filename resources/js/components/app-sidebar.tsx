@@ -7,6 +7,7 @@ import {
     Package,
     Receipt,
     RefreshCw,
+    Users,
 } from "lucide-react";
 import AppLogo from "@/components/app-logo";
 import { NavFooter } from "@/components/nav-footer";
@@ -25,6 +26,7 @@ import { backup, converter, dashboard } from "@/routes";
 import type { NavItem } from "@/types";
 import { inventory } from "@/routes/product";
 import { posIndex } from "@/routes/pos";
+import { customerIndex } from "@/routes/customer";
 
 const mainNavItems: NavItem[] = [
     {
@@ -36,6 +38,11 @@ const mainNavItems: NavItem[] = [
         title: "Point of Sale",
         href: posIndex(),
         icon: Receipt,
+    },
+    {
+        title: "Customers",
+        href: customerIndex(),
+        icon: Users,
     },
     {
         title: "Inventory",
