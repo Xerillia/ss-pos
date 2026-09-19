@@ -17,12 +17,16 @@ class SaleProduct extends Model
         'product_sku',
         'quantity',
         'unit_price',
+        'unit_discount',
+        'flat_discount',
         'total_price',
     ];
 
     protected $casts = [
         'quantity' => 'integer',
         'unit_price' => 'decimal:2',
+        'unit_discount' => 'decimal:2',
+        'flat_discount' => 'decimal:2',
         'total_price' => 'decimal:2',
     ];
 
