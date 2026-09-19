@@ -31,7 +31,7 @@ class StoreSaleRequest extends FormRequest
             'currency' => ['nullable', 'string', 'size:3'],
             'notes' => ['nullable', 'string'],
             'items' => ['required', 'array', 'min:1'],
-            'items.*.product_id' => ['required', 'exists:products,id'],
+            'items.*.product_id' => ['required', 'distinct', 'exists:products,id'],
             'items.*.quantity' => ['required', 'integer', 'min:1'],
             'items.*.unit_discount' => ['nullable', 'numeric', 'min:0'],
             'items.*.flat_discount' => ['nullable', 'numeric', 'min:0'],
@@ -42,6 +42,7 @@ class StoreSaleRequest extends FormRequest
     {
         return [
             'sale_number.unique' => 'This sale number has already been used.',
+            'items.*.product_id.distinct' => 'Duplicate product detected in checkout items. Merge quantities instead.',
         ];
     }
 }
