@@ -21,7 +21,7 @@ return new class extends Migration
 
             // status
             $table->string('status')->default('completed'); // completed, pending, refunded, voided
-            $table->string('payment_status')->default('paid'); // paid, unpaid, partially_refunded
+            $table->string('payment_status')->default('paid'); // paid, partial, unpaid, partially_refunded
             $table->string('payment_method')->nullable(); // cash, transfer
 
             // financial
@@ -34,6 +34,7 @@ return new class extends Migration
             // POS detail
             $table->decimal('paid_amount', 10, 2)->default(0.00);
             $table->decimal('change_amount', 10, 2)->default(0.00);
+            $table->decimal('debt_amount', 10, 2)->default(0.00);
 
             $table->timestamps();
             $table->softDeletes();
