@@ -1,0 +1,218 @@
+import { Customer } from "@/types/customer";
+import { useForm } from "@inertiajs/react";
+import {
+    Field,
+    FieldDescription,
+    FieldGroup,
+    FieldLabel,
+    FieldLegend,
+    FieldSeparator,
+    FieldSet,
+} from "../ui/field";
+import { Input } from "../ui/input";
+import { Checkbox } from "../ui/checkbox";
+import { Button } from "../ui/button";
+
+interface CustomerFormProps {
+    customer?: Customer;
+    mode: "create" | "edit";
+}
+
+interface CustomerForm {
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    city: string;
+    postal_code: string;
+    credit_limit: number;
+    is_active: boolean;
+    notes: string;
+}
+
+export default function CustomerForm({ customer, mode }: CustomerFormProps) {
+    const { data, setData, post, put, processing, errors } =
+        useForm<CustomerForm>({
+            name: customer?.name || "",
+            email: customer?.email || "",
+            phone: customer?.phone || "",
+            address: customer?.address || "",
+            city: customer?.city || "",
+            postal_code: customer?.postal_code || "",
+            credit_limit: customer?.credit_limit || 0,
+            is_active: customer?.is_active || true,
+            notes: customer?.notes || "",
+        });
+
+    const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        if (mode === "create") {
+            // post(storeItem().url);
+        } else {
+            if (!customer) {
+                console.error("Customer is required for edit mode.");
+                return;
+            }
+            // put(updateItem(customer.id).url);
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <FieldGroup>
+                <FieldSet>
+                    <FieldGroup>
+                        <div className="grid grid-cols-3 gap-4">
+                            <Field>
+                                <FieldLabel htmlFor="name">
+                                    Customer Name
+                                    <span className="text-red-500">*</span>
+                                </FieldLabel>
+                                <Input
+                                    id="name"
+                                    type="text"
+                                    placeholder="John Doe"
+                                    value={data.name}
+                                    onChange={(e) =>
+                                        setData("name", e.target.value)
+                                    }
+                                    autoFocus
+                                />
+                            </Field>
+                            <Field>
+                                <FieldLabel htmlFor="email">
+                                    Customer Email
+                                </FieldLabel>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    placeholder="johndoe@gmail.com"
+                                    value={data.email}
+                                    onChange={(e) =>
+                                        setData("email", e.target.value)
+                                    }
+                                />
+                            </Field>
+                            <Field>
+                                <FieldLabel htmlFor="phone">
+                                    Customer Phone
+                                </FieldLabel>
+                                <Input
+                                    id="phone"
+                                    type="text"
+                                    placeholder="081234567890"
+                                    value={data.phone}
+                                    onChange={(e) =>
+                                        setData("phone", e.target.value)
+                                    }
+                                />
+                            </Field>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4">
+                            <Field>
+                                <FieldLabel htmlFor="address">
+                                    Customer Address
+                                </FieldLabel>
+                                <Input
+                                    id="address"
+                                    type="text"
+                                    placeholder="15 Street"
+                                    value={data.address}
+                                    onChange={(e) =>
+                                        setData("address", e.target.value)
+                                    }
+                                />
+                            </Field>
+                            <Field>
+                                <FieldLabel htmlFor="city">
+                                    Customer City
+                                </FieldLabel>
+                                <Input
+                                    id="city"
+                                    type="text"
+                                    placeholder="Woodland"
+                                    value={data.city}
+                                    onChange={(e) =>
+                                        setData("city", e.target.value)
+                                    }
+                                />
+                            </Field>
+                            <Field>
+                                <FieldLabel htmlFor="postal_code">
+                                    Customer Postal Code
+                                </FieldLabel>
+                                <Input
+                                    id="postal_code"
+                                    type="text"
+                                    placeholder="12345"
+                                    value={data.postal_code}
+                                    onChange={(e) =>
+                                        setData("postal_code", e.target.value)
+                                    }
+                                />
+                            </Field>
+                        </div>
+                        <Field>
+                            <FieldLabel htmlFor="credit_limit">
+                                Credit Limit
+                                <span className="text-red-500">*</span>
+                            </FieldLabel>
+                            <Input
+                                id="credit_limit"
+                                type="number"
+                                placeholder="200000"
+                                value={data.credit_limit}
+                                onChange={(e) =>
+                                    setData(
+                                        "credit_limit",
+                                        Number(e.target.value),
+                                    )
+                                }
+                            />
+                        </Field>
+                    </FieldGroup>
+                </FieldSet>
+                <FieldSeparator />
+                <FieldSet className="gap-2">
+                    <FieldLegend>
+                        Status <span className="text-red-500">*</span>
+                    </FieldLegend>
+                    <FieldDescription>
+                        Is the customer still active?
+                    </FieldDescription>
+                    <FieldGroup>
+                        <Field orientation="horizontal">
+                            <Checkbox
+                                id="is_active"
+                                checked={data.is_active}
+                                onCheckedChange={(checked) =>
+                                    setData("is_active", Boolean(checked))
+                                }
+                            />
+                            <FieldLabel htmlFor="is_active">Active</FieldLabel>
+                        </Field>
+                        <Field>
+                            <FieldLabel htmlFor="notes">Notes</FieldLabel>
+                            <Input
+                                id="notes"
+                                type="text"
+                                placeholder="Short description"
+                                value={data.notes}
+                                onChange={(e) =>
+                                    setData("notes", e.target.value)
+                                }
+                                className="max-w-md"
+                            />
+                        </Field>
+                    </FieldGroup>
+                </FieldSet>
+                <Field orientation="horizontal">
+                    <Button type="submit" size="sm">
+                        Add Customer
+                    </Button>
+                </Field>
+            </FieldGroup>
+        </form>
+    );
+}
