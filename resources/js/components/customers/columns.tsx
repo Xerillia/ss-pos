@@ -33,8 +33,8 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "../ui/alert-dialog";
-import { useForm } from "@inertiajs/react";
-import { destroyCustomer } from "@/routes/customer";
+import { router, useForm } from "@inertiajs/react";
+import { destroyCustomer, editCustomer } from "@/routes/customer";
 import { toast } from "sonner";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Customer>();
@@ -220,7 +220,12 @@ export const columns = [
                             <DropdownMenuItem className="gap-2">
                                 <Eye className="h-4 w-4" /> View Profile
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="gap-2">
+                            <DropdownMenuItem
+                                className="gap-2"
+                                onSelect={() =>
+                                    router.visit(editCustomer(customer))
+                                }
+                            >
                                 <Edit className="h-4 w-4" /> Edit Customer
                             </DropdownMenuItem>
                             <DropdownMenuItem
