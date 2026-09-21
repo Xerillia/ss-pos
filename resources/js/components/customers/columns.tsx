@@ -64,7 +64,9 @@ export const columns = [
             return (
                 <div className="flex items-center gap-3">
                     <Avatar className="h-9 w-9">
-                        <AvatarFallback>{initials}</AvatarFallback>
+                        <AvatarFallback className="bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                            {initials}
+                        </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
                         <span className="font-medium">{name}</span>
