@@ -7,12 +7,15 @@ import { Button } from "../ui/button";
 import { Plus, Search } from "lucide-react";
 import useFuse from "./useFuse";
 import { Input } from "../ui/input";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "@/lib/useDebounce";
+import { getPageRange } from "@/lib/pagination";
 
 interface ItemListProps {
     products: Product[];
 }
+
+const ITEMS_PER_PAGE = 8;
 
 export default function ItemList({ products }: ItemListProps) {
     const stockLabel = (quantity: number) => {
@@ -37,6 +40,26 @@ export default function ItemList({ products }: ItemListProps) {
         return filteredProducts(debouncedSearchQuery);
     }, [debouncedSearchQuery, products]);
 
+    const [currentPage, setCurrentPage] = useState(1);
+
+    // Reset to page 1 when search query changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [debouncedSearchQuery]);
+
+    // Calculate total pages and page range
+    const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+    const pageRange = useMemo(
+        () => getPageRange(currentPage, totalPages),
+        [currentPage, totalPages],
+    );
+
+    // Slice products array for current page
+    const paginatedProducts = useMemo(() => {
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        return filtered.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    }, [filtered, currentPage]);
+
     return (
         <>
             <div className="space-y-4">
@@ -51,51 +74,116 @@ export default function ItemList({ products }: ItemListProps) {
                         className="pl-9"
                     />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                    {filtered.map((product) => {
-                        const isDisabled = product.quantity <= 0;
+                <div className="overflow-y-auto">
+                    {paginatedProducts.length === 0 ? (
+                        <p className="text-center text-sm text-muted-foreground">
+                            No products found.
+                        </p>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-3">
+                            {paginatedProducts.map((product) => {
+                                const isDisabled = product.quantity <= 0;
 
-                        return (
-                            <Card
-                                key={product.id}
-                                // {...(!isDisabled && {
-                                //     onClick: () => handleSelect(product),
-                                // })}
-                                className={`group transition-colors ${
-                                    isDisabled
-                                        ? "opacity-50 cursor-not-allowed select-none"
-                                        : "hover:bg-black/5 hover:dark:bg-white/5 hover:cursor-pointer"
-                                }`}
-                            >
-                                <CardContent className="space-y-3">
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <p className="font-bold text-sm group-hover:text-amber-600 dark:group-hover:text-amber-400">
-                                                {product.name}
-                                            </p>
-                                            <p className="text-xs text-muted-foreground">
-                                                {product.sku || "-"}
-                                            </p>
-                                        </div>
-                                        {stockLabel(product.quantity)}
-                                    </div>
-                                    <Separator />
-                                    <div className="flex justify-between items-end">
-                                        <p className="font-bold text-sm">
-                                            {rupiah(product.price)}
-                                        </p>
-                                        <Button
-                                            disabled={isDisabled}
-                                            className="w-6 h-6 group-hover:bg-amber-600 dark:group-hover:bg-amber-400"
-                                        >
-                                            <Plus />
-                                        </Button>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        );
-                    })}
+                                return (
+                                    <Card
+                                        key={product.id}
+                                        // {...(!isDisabled && {
+                                        //     onClick: () => handleSelect(product),
+                                        // })}
+                                        className={`group transition-colors ${
+                                            isDisabled
+                                                ? "opacity-50 cursor-not-allowed select-none"
+                                                : "hover:bg-black/5 hover:dark:bg-white/5 hover:cursor-pointer"
+                                        }`}
+                                    >
+                                        <CardContent className="space-y-3">
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <p className="font-bold text-sm group-hover:text-amber-600 dark:group-hover:text-amber-400">
+                                                        {product.name}
+                                                    </p>
+                                                    <p className="text-xs text-muted-foreground">
+                                                        {product.sku || "-"}
+                                                    </p>
+                                                </div>
+                                                {stockLabel(product.quantity)}
+                                            </div>
+                                            <Separator />
+                                            <div className="flex justify-between items-end">
+                                                <p className="font-bold text-sm">
+                                                    {rupiah(product.price)}
+                                                </p>
+                                                <Button
+                                                    disabled={isDisabled}
+                                                    className="w-6 h-6 group-hover:bg-amber-600 dark:group-hover:bg-amber-400"
+                                                >
+                                                    <Plus />
+                                                </Button>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                    <div className="sticky bottom-0 bg-background py-2 border-t flex items-center justify-center space-x-2">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                                setCurrentPage((prev) => Math.max(prev - 1, 1))
+                            }
+                            disabled={currentPage === 1}
+                        >
+                            Previous
+                        </Button>
+
+                        {pageRange.map((page, index) => {
+                            if (page === "ellipsis") {
+                                return (
+                                    <span
+                                        key={`ellipsis-${index}`}
+                                        className="px-1 text-sm text-muted-foreground select-none"
+                                    >
+                                        ...
+                                    </span>
+                                );
+                            }
+
+                            return (
+                                <Button
+                                    key={page}
+                                    variant={
+                                        currentPage === page
+                                            ? "default"
+                                            : "outline"
+                                    }
+                                    size="sm"
+                                    className="aspect-square"
+                                    onClick={() => setCurrentPage(page)}
+                                >
+                                    {page}
+                                </Button>
+                            );
+                        })}
+
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                                setCurrentPage((prev) =>
+                                    Math.min(prev + 1, totalPages),
+                                )
+                            }
+                            disabled={currentPage === totalPages}
+                        >
+                            Next
+                        </Button>
+                    </div>
+                )}
             </div>
         </>
     );
