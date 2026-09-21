@@ -1,30 +1,14 @@
 import { Product } from "@/types/product";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Fuse from "fuse.js";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useDebounce } from "@/lib/useDebounce";
 
 interface InventoryTableProps {
     products: Product[];
-}
-
-// custom hook to debounce search input
-function useDebounce<T>(value: T, delay: number): T {
-    const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedValue(value);
-        }, delay);
-
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [value, delay]);
-
-    return debouncedValue;
 }
 
 export default function InventoryTable({ products }: InventoryTableProps) {
