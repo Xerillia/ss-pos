@@ -8,4 +8,6 @@ Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(functi
 
     Route::get('/add', [CustomerController::class, 'create'])->name('createCustomer');
     Route::post('/add', [CustomerController::class, 'store'])->name('storeCustomer');
+
+    Route::delete('/delete/{customer}', [CustomerController::class, 'destroy'])->name('destroyCustomer');
 });

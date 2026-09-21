@@ -21,10 +21,21 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Customer } from "@/types/customer";
+import { useState } from "react";
+import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "../ui/alert-dialog";
+import { useForm } from "@inertiajs/react";
+import { destroyCustomer } from "@/routes/customer";
+import { toast } from "sonner";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Customer>();
 
@@ -164,6 +175,37 @@ export const columns = [
         cell: (info) => {
             const customer = info.row.original;
 
+            const [open, setOpen] = useState(false);
+
+            const { delete: destroy, processing } = useForm();
+
+            const handleDelete = (
+                e: React.SubmitEvent<HTMLFormElement>,
+                customer: Customer,
+            ) => {
+                e.preventDefault();
+
+                const toastId = toast.loading("Deleting customer...");
+
+                destroy(destroyCustomer(customer).url, {
+                    onSuccess: (page) => {
+                        const props = page.props as typeof page.props & {
+                            flash?: { success?: string };
+                        };
+
+                        toast.success(
+                            props.flash?.success || "Customer deleted!",
+                            {
+                                id: toastId,
+                            },
+                        );
+                    },
+                    onError: () =>
+                        toast.error("An error has occured!", { id: toastId }),
+                    onFinish: () => setOpen(false),
+                });
+            };
+
             return (
                 <div className="text-right">
                     <DropdownMenu>
@@ -181,11 +223,47 @@ export const columns = [
                             <DropdownMenuItem className="gap-2">
                                 <Edit className="h-4 w-4" /> Edit Customer
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="gap-2">
-                                <Trash className="h-4 w-4" /> Delete
+                            <DropdownMenuItem
+                                className="gap-2"
+                                onSelect={() => setOpen(true)}
+                            >
+                                <Trash className="h-4 w-4" />
+                                Delete
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
+
+                    <AlertDialog open={open} onOpenChange={setOpen}>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                    Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will
+                                    permanently delete{" "}
+                                    <span className="font-semibold">
+                                        {customer.name}
+                                    </span>{" "}
+                                    from the server. Please confirm that you
+                                    want to proceed.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <Button onClick={() => setOpen(false)}>
+                                    Cancel
+                                </Button>
+
+                                <form
+                                    onSubmit={(e) => handleDelete(e, customer)}
+                                >
+                                    <Button type="submit" variant="destructive">
+                                        Delete
+                                    </Button>
+                                </form>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
             );
         },
