@@ -53,7 +53,7 @@ export default function InventoryTable({ products }: InventoryTableProps) {
             <div className="transition-transform">
                 <Input
                     id="search"
-                    placeholder="Search products..."
+                    placeholder="Search item..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="max-w-1/2"
