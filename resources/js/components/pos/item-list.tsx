@@ -26,35 +26,49 @@ export default function ItemList({ products }: ItemListProps) {
 
     return (
         <div className="grid grid-cols-2 gap-3">
-            {products.map((product) => (
-                <Card
-                    key={product.id}
-                    className="group hover:bg-black/5 hover:dark:bg-white/5 hover:cursor-pointer transition-colors"
-                >
-                    <CardContent className="space-y-3">
-                        <div className="flex justify-between items-start">
-                            <div>
-                                <p className="font-bold text-sm group-hover:text-amber-600 dark:group-hover:text-amber-400">
-                                    {product.name}
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                    {product.sku || "-"}
-                                </p>
+            {products.map((product) => {
+                const isDisabled = product.quantity <= 0;
+
+                return (
+                    <Card
+                        key={product.id}
+                        {...(!isDisabled && {
+                            onClick: () => handleSelect(product),
+                        })}
+                        className={`group transition-colors ${
+                            isDisabled
+                                ? "opacity-50 cursor-not-allowed select-none"
+                                : "hover:bg-black/5 hover:dark:bg-white/5 hover:cursor-pointer"
+                        }`}
+                    >
+                        <CardContent className="space-y-3">
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <p className="font-bold text-sm group-hover:text-amber-600 dark:group-hover:text-amber-400">
+                                        {product.name}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {product.sku || "-"}
+                                    </p>
+                                </div>
+                                {stockLabel(product.quantity)}
                             </div>
-                            {stockLabel(product.quantity)}
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between items-end">
-                            <p className="font-bold text-sm">
-                                {rupiah(product.price)}
-                            </p>
-                            <Button className="w-6 h-6 group-hover:bg-amber-600 dark:group-hover:bg-amber-400">
-                                <Plus />
-                            </Button>
-                        </div>
-                    </CardContent>
-                </Card>
-            ))}
+                            <Separator />
+                            <div className="flex justify-between items-end">
+                                <p className="font-bold text-sm">
+                                    {rupiah(product.price)}
+                                </p>
+                                <Button
+                                    disabled={isDisabled}
+                                    className="w-6 h-6 group-hover:bg-amber-600 dark:group-hover:bg-amber-400"
+                                >
+                                    <Plus />
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+                );
+            })}
         </div>
     );
 }
