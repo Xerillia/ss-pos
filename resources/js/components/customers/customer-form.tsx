@@ -12,7 +12,7 @@ import {
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 import { Button } from "../ui/button";
-import { storeCustomer } from "@/routes/customer";
+import { storeCustomer, updateCustomer } from "@/routes/customer";
 import { toast } from "sonner";
 import ErrorLabel from "../error-label";
 
@@ -77,7 +77,21 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
                 console.error("Customer is required for edit mode.");
                 return;
             }
-            // put(updateItem(customer.id).url);
+            const toastId = toast.loading("Updating customer...");
+
+            put(updateCustomer(customer.id).url, {
+                onSuccess: (page) => {
+                    const props = page.props as typeof page.props & {
+                        flash?: { success?: string };
+                    };
+
+                    toast.success(props.flash?.success || "Customer updated!", {
+                        id: toastId,
+                    });
+                },
+                onError: () =>
+                    toast.error("An error has occured!", { id: toastId }),
+            });
         }
     };
 
@@ -246,7 +260,10 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
                 </FieldSet>
                 <Field orientation="horizontal">
                     <Button type="submit" size="sm" disabled={processing}>
-                        Add Customer
+                        {mode === "create" &&
+                            (processing ? "Adding..." : "Add Customer")}
+                        {mode === "edit" &&
+                            (processing ? "Updating..." : "Update Customer")}
                     </Button>
                 </Field>
             </FieldGroup>
