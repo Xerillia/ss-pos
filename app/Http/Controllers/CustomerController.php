@@ -69,6 +69,10 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        $customer->delete();
+
+        return redirect()->route('customer.customers')
+            ->with('success', $customer->name.' deleted successfully.',
+            );
     }
 }
