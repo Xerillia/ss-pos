@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useDebounce } from "@/lib/useDebounce";
 import useFuse from "../pos/useFuse";
+import { Search } from "lucide-react";
 
 interface InventoryTableProps {
     products: Product[];
@@ -26,13 +27,17 @@ export default function InventoryTable({ products }: InventoryTableProps) {
     return (
         <>
             <div className="transition-transform">
-                <Input
-                    id="search"
-                    placeholder="Search item..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="max-w-1/2"
-                />
+                <div className="relative">
+                    <Search className="absolute top-1/2 left-3 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                    <Input
+                        id="query"
+                        type="text"
+                        placeholder="Search items..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-9"
+                    />
+                </div>
                 <div
                     className={`grid transition-all duration-300 ease-in-out ${
                         hasSearch
