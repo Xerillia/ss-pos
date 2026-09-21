@@ -1,7 +1,7 @@
 import { columns } from "@/components/customers/columns";
 import { DataTable } from "@/components/customers/data-table";
 import { buttonVariants } from "@/components/ui/button";
-import { customerCreate } from "@/routes/customer";
+import { createCustomer } from "@/routes/customer";
 import { Customer } from "@/types/customer";
 import { Head, Link } from "@inertiajs/react";
 import { User } from "lucide-react";
@@ -17,7 +17,7 @@ export default function Customers({ customers }: CustomersProps) {
             <div className="m-4 space-y-4">
                 <Link
                     as="button"
-                    href={customerCreate()}
+                    href={createCustomer()}
                     className={buttonVariants({ size: "sm" })}
                 >
                     <User data-icon="inline-start" />
