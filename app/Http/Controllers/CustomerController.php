@@ -36,9 +36,8 @@ class CustomerController extends Controller
     {
         $customer = Customer::create($request->validated());
 
-        return redirect()->route('customer.customers')->with('success', [
-            'message' => $customer->name.' added successfully.',
-        ]);
+        return redirect()->route('customer.customers')
+            ->with('success', 'Customer '.$customer->name.' added successfully.');
     }
 
     /**

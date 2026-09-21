@@ -1,5 +1,5 @@
 import { Customer } from "@/types/customer";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import {
     Field,
     FieldDescription,
@@ -12,6 +12,8 @@ import {
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 import { Button } from "../ui/button";
+import { storeCustomer } from "@/routes/customer";
+import { toast } from "sonner";
 
 interface CustomerFormProps {
     customer?: Customer;
@@ -48,7 +50,21 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
         e.preventDefault();
 
         if (mode === "create") {
-            // post(storeItem().url);
+            const toastId = toast.loading("Adding customer...");
+
+            post(storeCustomer().url, {
+                onSuccess: (page) => {
+                    const props = page.props as typeof page.props & {
+                        flash?: { success?: string };
+                    };
+
+                    toast.success(props.flash?.success || "Customer added!", {
+                        id: toastId,
+                    });
+                },
+                onError: () =>
+                    toast.error("An error has occured!", { id: toastId }),
+            });
         } else {
             if (!customer) {
                 console.error("Customer is required for edit mode.");
