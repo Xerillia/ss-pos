@@ -14,6 +14,7 @@ import { Checkbox } from "../ui/checkbox";
 import { Button } from "../ui/button";
 import { storeCustomer } from "@/routes/customer";
 import { toast } from "sonner";
+import ErrorLabel from "../error-label";
 
 interface CustomerFormProps {
     customer?: Customer;
@@ -95,6 +96,7 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
                                     }
                                     autoFocus
                                 />
+                                <ErrorLabel error={errors.name} />
                             </Field>
                             <Field>
                                 <FieldLabel htmlFor="email">
@@ -109,6 +111,7 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
                                         setData("email", e.target.value)
                                     }
                                 />
+                                <ErrorLabel error={errors.email} />
                             </Field>
                             <Field>
                                 <FieldLabel htmlFor="phone">
@@ -123,6 +126,7 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
                                         setData("phone", e.target.value)
                                     }
                                 />
+                                <ErrorLabel error={errors.phone} />
                             </Field>
                         </div>
                         <div className="grid grid-cols-3 gap-4">
@@ -139,6 +143,7 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
                                         setData("address", e.target.value)
                                     }
                                 />
+                                <ErrorLabel error={errors.address} />
                             </Field>
                             <Field>
                                 <FieldLabel htmlFor="city">
@@ -153,6 +158,7 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
                                         setData("city", e.target.value)
                                     }
                                 />
+                                <ErrorLabel error={errors.city} />
                             </Field>
                             <Field>
                                 <FieldLabel htmlFor="postal_code">
@@ -167,6 +173,7 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
                                         setData("postal_code", e.target.value)
                                     }
                                 />
+                                <ErrorLabel error={errors.postal_code} />
                             </Field>
                         </div>
                         <Field>
@@ -176,7 +183,7 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
                             </FieldLabel>
                             <Input
                                 id="credit_limit"
-                                type="number"
+                                type="text"
                                 placeholder="200000"
                                 value={data.credit_limit}
                                 onChange={(e) =>
@@ -186,6 +193,7 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
                                     )
                                 }
                             />
+                            <ErrorLabel error={errors.credit_limit} />
                         </Field>
                     </FieldGroup>
                 </FieldSet>
@@ -207,6 +215,7 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
                                 }
                             />
                             <FieldLabel htmlFor="is_active">Active</FieldLabel>
+                            <ErrorLabel error={errors.is_active} />
                         </Field>
                         <Field>
                             <FieldLabel htmlFor="notes">Notes</FieldLabel>
@@ -220,11 +229,12 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
                                 }
                                 className="max-w-md"
                             />
+                            <ErrorLabel error={errors.notes} />
                         </Field>
                     </FieldGroup>
                 </FieldSet>
                 <Field orientation="horizontal">
-                    <Button type="submit" size="sm">
+                    <Button type="submit" size="sm" disabled={processing}>
                         Add Customer
                     </Button>
                 </Field>
