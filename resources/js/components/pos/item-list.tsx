@@ -4,7 +4,11 @@ import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import { rupiah } from "@/lib/rupiah";
 import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
+import useFuse from "./useFuse";
+import { Input } from "../ui/input";
+import { useMemo, useState } from "react";
+import { useDebounce } from "@/lib/useDebounce";
 
 interface ItemListProps {
     products: Product[];
@@ -24,51 +28,75 @@ export default function ItemList({ products }: ItemListProps) {
         return <Badge className={style}>{text}</Badge>;
     };
 
-    return (
-        <div className="grid grid-cols-2 gap-3">
-            {products.map((product) => {
-                const isDisabled = product.quantity <= 0;
+    const [query, setQuery] = useState("");
+    const { filteredProducts } = useFuse(products);
 
-                return (
-                    <Card
-                        key={product.id}
-                        {...(!isDisabled && {
-                            onClick: () => handleSelect(product),
-                        })}
-                        className={`group transition-colors ${
-                            isDisabled
-                                ? "opacity-50 cursor-not-allowed select-none"
-                                : "hover:bg-black/5 hover:dark:bg-white/5 hover:cursor-pointer"
-                        }`}
-                    >
-                        <CardContent className="space-y-3">
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <p className="font-bold text-sm group-hover:text-amber-600 dark:group-hover:text-amber-400">
-                                        {product.name}
-                                    </p>
-                                    <p className="text-xs text-muted-foreground">
-                                        {product.sku || "-"}
-                                    </p>
-                                </div>
-                                {stockLabel(product.quantity)}
-                            </div>
-                            <Separator />
-                            <div className="flex justify-between items-end">
-                                <p className="font-bold text-sm">
-                                    {rupiah(product.price)}
-                                </p>
-                                <Button
-                                    disabled={isDisabled}
-                                    className="w-6 h-6 group-hover:bg-amber-600 dark:group-hover:bg-amber-400"
-                                >
-                                    <Plus />
-                                </Button>
-                            </div>
-                        </CardContent>
-                    </Card>
-                );
-            })}
-        </div>
+    const debouncedSearchQuery = useDebounce(query, 300); // 300ms debounce
+
+    const filtered = useMemo<Product[]>(() => {
+        return filteredProducts(debouncedSearchQuery);
+    }, [debouncedSearchQuery, products]);
+
+    return (
+        <>
+            <div className="space-y-4">
+                <div className="relative">
+                    <Search className="absolute top-1/2 left-3 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                    <Input
+                        id="query"
+                        type="text"
+                        placeholder="Search items..."
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        className="pl-9"
+                    />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                    {filtered.map((product) => {
+                        const isDisabled = product.quantity <= 0;
+
+                        return (
+                            <Card
+                                key={product.id}
+                                // {...(!isDisabled && {
+                                //     onClick: () => handleSelect(product),
+                                // })}
+                                className={`group transition-colors ${
+                                    isDisabled
+                                        ? "opacity-50 cursor-not-allowed select-none"
+                                        : "hover:bg-black/5 hover:dark:bg-white/5 hover:cursor-pointer"
+                                }`}
+                            >
+                                <CardContent className="space-y-3">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <p className="font-bold text-sm group-hover:text-amber-600 dark:group-hover:text-amber-400">
+                                                {product.name}
+                                            </p>
+                                            <p className="text-xs text-muted-foreground">
+                                                {product.sku || "-"}
+                                            </p>
+                                        </div>
+                                        {stockLabel(product.quantity)}
+                                    </div>
+                                    <Separator />
+                                    <div className="flex justify-between items-end">
+                                        <p className="font-bold text-sm">
+                                            {rupiah(product.price)}
+                                        </p>
+                                        <Button
+                                            disabled={isDisabled}
+                                            className="w-6 h-6 group-hover:bg-amber-600 dark:group-hover:bg-amber-400"
+                                        >
+                                            <Plus />
+                                        </Button>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        );
+                    })}
+                </div>
+            </div>
+        </>
     );
 }
