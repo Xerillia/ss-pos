@@ -1,7 +1,14 @@
-export default function PointOfSale() {
+import ItemList from "@/components/pos/item-list";
+import { Product } from "@/types/product";
+
+interface PointOfSaleProps {
+    products: Product[];
+}
+
+export default function PointOfSale({ products }: PointOfSaleProps) {
     return (
         <div className="m-4">
-            <p>hi</p>
+            <ItemList products={products} />
         </div>
     );
 }

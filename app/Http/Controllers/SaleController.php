@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -9,11 +10,15 @@ use Inertia\Inertia;
 class SaleController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display POS
      */
     public function index()
     {
-        return Inertia::render('pos/pos');
+        $products = Product::all();
+
+        return Inertia::render('pos/pos', [
+            'products' => $products,
+        ]);
     }
 
     /**
