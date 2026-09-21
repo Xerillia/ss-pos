@@ -13,11 +13,12 @@ import { getPageRange } from "@/lib/pagination";
 
 interface ItemListProps {
     products: Product[];
+    addToCart: (product: Product) => void;
 }
 
 const ITEMS_PER_PAGE = 8;
 
-export default function ItemList({ products }: ItemListProps) {
+export default function ItemList({ products, addToCart }: ItemListProps) {
     const stockLabel = (quantity: number) => {
         const style =
             quantity > 10
@@ -87,9 +88,9 @@ export default function ItemList({ products }: ItemListProps) {
                                 return (
                                     <Card
                                         key={product.id}
-                                        // {...(!isDisabled && {
-                                        //     onClick: () => handleSelect(product),
-                                        // })}
+                                        {...(!isDisabled && {
+                                            onClick: () => addToCart(product),
+                                        })}
                                         className={`group transition-colors ${
                                             isDisabled
                                                 ? "opacity-50 cursor-not-allowed select-none"
