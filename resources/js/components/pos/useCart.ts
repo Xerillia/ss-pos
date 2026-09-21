@@ -1,5 +1,5 @@
 import { Product } from "@/types/product";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface CartItem {
     product: Product;
@@ -8,8 +8,28 @@ export interface CartItem {
     flat_discount: number;
 }
 
+const CART_STORAGE_KEY = "shopping_cart";
+
 export function useCart() {
-    const [cart, setCart] = useState<CartItem[]>([]);
+    const [cart, setCart] = useState<CartItem[]>(() => {
+        if (typeof window === "undefined") return []; // SSR safeguard
+
+        try {
+            const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+            return savedCart ? JSON.parse(savedCart) : [];
+        } catch (error) {
+            console.error("Failed to load cart from localStorage:", error);
+            return [];
+        }
+    });
+
+    useEffect(() => {
+        try {
+            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+        } catch (error) {
+            console.error("Failed to save cart to localStorage:", error);
+        }
+    }, [cart]);
 
     const addToCart = (product: Product) => {
         if (product.quantity <= 0) return;
