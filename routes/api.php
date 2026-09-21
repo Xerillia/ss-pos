@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\POSCheckoutController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,6 @@ Route::middleware('auth:sanctum')->name('api.')->group(function () {
         Route::post('/backups/restore', [BackupController::class, 'uploadAndApply'])->name('uploadAndApply');
         Route::post('/backups/restore/{name}', [BackupController::class, 'apply'])->name('restore')->where('name', '.*\.(zip|sql)$');
     });
+
+    Route::post('/pos/checkout', [POSCheckoutController::class, 'store'])->name('checkout');
 });
