@@ -43,7 +43,7 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
             city: customer?.city || "",
             postal_code: customer?.postal_code || "",
             credit_limit: customer?.credit_limit || "",
-            is_active: customer?.is_active || true,
+            is_active: customer ? customer.is_active : true,
             notes: customer?.notes || "",
         });
 
