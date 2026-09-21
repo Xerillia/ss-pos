@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -31,9 +32,13 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request)
     {
-        //
+        $customer = Customer::create($request->validated());
+
+        return redirect()->route('customer.customers')->with('success', [
+            'message' => $customer->name.' added successfully.',
+        ]);
     }
 
     /**
