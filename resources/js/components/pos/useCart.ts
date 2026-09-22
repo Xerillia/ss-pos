@@ -11,25 +11,32 @@ export interface CartItem {
 const CART_STORAGE_KEY = "shopping_cart";
 
 export function useCart() {
-    const [cart, setCart] = useState<CartItem[]>(() => {
-        if (typeof window === "undefined") return []; // SSR safeguard
+    const [cart, setCart] = useState<CartItem[]>([]);
 
-        try {
-            const savedCart = localStorage.getItem(CART_STORAGE_KEY);
-            return savedCart ? JSON.parse(savedCart) : [];
-        } catch (error) {
-            console.error("Failed to load cart from localStorage:", error);
-            return [];
-        }
-    });
+    const [isHydrated, setIsHydrated] = useState(false);
 
     useEffect(() => {
+        try {
+            const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+            if (savedCart) {
+                setCart(JSON.parse(savedCart));
+            }
+        } catch (error) {
+            console.error("Failed to load cart from localStorage:", error);
+        } finally {
+            setIsHydrated(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!isHydrated) return; // wait until hydration is complete
+
         try {
             localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
         } catch (error) {
             console.error("Failed to save cart to localStorage:", error);
         }
-    }, [cart]);
+    }, [cart, isHydrated]);
 
     const addToCart = (product: Product) => {
         if (product.quantity <= 0) return;
