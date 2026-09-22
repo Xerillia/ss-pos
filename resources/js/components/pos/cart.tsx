@@ -70,9 +70,11 @@ export default function Cart({
                                         >
                                             <Minus className="p-0.5" />
                                         </Button>
-                                        <p className="font-bold text-sm">
-                                            {item.quantity}
-                                        </p>
+                                        <div className="w-2">
+                                            <p className="font-bold text-sm text-center">
+                                                {item.quantity}
+                                            </p>
+                                        </div>
                                         <Button
                                             className="w-6.5 h-6.5"
                                             onClick={() =>
