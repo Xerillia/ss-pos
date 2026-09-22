@@ -19,7 +19,8 @@ interface CheckoutProps {
 }
 
 export default function Checkout({ total }: CheckoutProps) {
-    const { paymentMethod, setPaymentMethod } = useCartContext();
+    const { paymentMethod, setPaymentMethod, payAmount, setPayAmount } =
+        useCartContext();
     const [open, setOpen] = useState(false);
 
     const handlePay = () => {
@@ -87,6 +88,10 @@ export default function Checkout({ total }: CheckoutProps) {
                                 <Input
                                     id="paid_amount"
                                     placeholder="0"
+                                    value={payAmount}
+                                    onChange={(e) =>
+                                        setPayAmount(Number(e.target.value))
+                                    }
                                     autoFocus
                                 />
                             </Field>

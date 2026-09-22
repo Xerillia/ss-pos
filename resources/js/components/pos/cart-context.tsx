@@ -15,6 +15,8 @@ interface CartContextType {
     setFlatDiscount: (productId: string | number, discount: number) => void;
     paymentMethod: string;
     setPaymentMethod: Dispatch<SetStateAction<PaymentMethod>>;
+    payAmount: number | undefined;
+    setPayAmount: Dispatch<SetStateAction<number | undefined>>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -32,6 +34,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setFlatDiscount,
         paymentMethod,
         setPaymentMethod,
+        payAmount,
+        setPayAmount,
     } = useCart();
 
     return (
@@ -48,6 +52,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 setFlatDiscount,
                 paymentMethod,
                 setPaymentMethod,
+                payAmount,
+                setPayAmount,
             }}
         >
             {children}

@@ -12,11 +12,12 @@ export interface CartItem {
 const CART_STORAGE_KEY = "shopping_cart";
 
 export function useCart() {
+    const [isHydrated, setIsHydrated] = useState(false);
     const [cart, setCart] = useState<CartItem[]>([]);
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
         PaymentMethod.CASH,
     );
-    const [isHydrated, setIsHydrated] = useState(false);
+    const [payAmount, setPayAmount] = useState<number>();
 
     useEffect(() => {
         try {
@@ -184,5 +185,7 @@ export function useCart() {
         setFlatDiscount,
         paymentMethod,
         setPaymentMethod,
+        payAmount,
+        setPayAmount,
     };
 }
