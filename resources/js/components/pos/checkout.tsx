@@ -10,12 +10,15 @@ import {
 } from "../ui/alert-dialog";
 import { Input } from "../ui/input";
 import { rupiah } from "@/lib/rupiah";
+import { useCartContext } from "./cart-context";
+import { PaymentMethod, PaymentMethodUtils } from "@/enums";
 
 interface CheckoutProps {
     total: number;
 }
 
 export default function Checkout({ total }: CheckoutProps) {
+    const { paymentMethod, setPaymentMethod } = useCartContext();
     const [open, setOpen] = useState(false);
 
     const handlePay = () => {
@@ -45,16 +48,41 @@ export default function Checkout({ total }: CheckoutProps) {
                     <FieldSet>
                         <Field>
                             <p className="text-muted-foreground font-bold text-sm">
-                                Payment Method
+                                Payment Method:{" "}
+                                {PaymentMethodUtils.label(
+                                    paymentMethod as PaymentMethod,
+                                )}
                             </p>
                             <div className="grid grid-cols-2 gap-3">
-                                <Button variant="outline">
+                                <Button
+                                    variant="outline"
+                                    onClick={() =>
+                                        setPaymentMethod(PaymentMethod.CASH)
+                                    }
+                                    disabled={
+                                        paymentMethod === PaymentMethod.CASH
+                                    }
+                                    className={`${paymentMethod === PaymentMethod.CASH ? "disabled:opacity-100 text-amber-500 border-amber-500 dark:border-amber-500 dark:bg-amber-600/10 bg-amber-600/10" : ""}`}
+                                >
                                     <Banknote data-icon="inline-start" />
-                                    Cash
+                                    {PaymentMethodUtils.label(
+                                        PaymentMethod.CASH,
+                                    )}
                                 </Button>
-                                <Button variant="outline">
+                                <Button
+                                    variant="outline"
+                                    onClick={() =>
+                                        setPaymentMethod(PaymentMethod.TRANSFER)
+                                    }
+                                    disabled={
+                                        paymentMethod === PaymentMethod.TRANSFER
+                                    }
+                                    className={`${paymentMethod === PaymentMethod.TRANSFER ? "disabled:opacity-100 text-amber-500 border-amber-500 dark:border-amber-500 dark:bg-amber-600/10 bg-amber-600/10" : ""}`}
+                                >
                                     <Landmark data-icon="inline-start" />
-                                    Transfer
+                                    {PaymentMethodUtils.label(
+                                        PaymentMethod.TRANSFER,
+                                    )}
                                 </Button>
                             </div>
                         </Field>

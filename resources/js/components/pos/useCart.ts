@@ -1,3 +1,4 @@
+import { PaymentMethod } from "@/enums";
 import { Product } from "@/types/product";
 import { useEffect, useState } from "react";
 
@@ -12,7 +13,9 @@ const CART_STORAGE_KEY = "shopping_cart";
 
 export function useCart() {
     const [cart, setCart] = useState<CartItem[]>([]);
-
+    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
+        PaymentMethod.CASH,
+    );
     const [isHydrated, setIsHydrated] = useState(false);
 
     useEffect(() => {
@@ -179,5 +182,7 @@ export function useCart() {
         cartTotal,
         setUnitDiscount,
         setFlatDiscount,
+        paymentMethod,
+        setPaymentMethod,
     };
 }
