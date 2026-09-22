@@ -15,6 +15,7 @@ interface CartProps {
     removeFromCart: (productId: string | number) => void;
     incrementItem: (productId: string | number) => void;
     decrementItem: (productId: string | number) => void;
+    subTotal: (productId: string | number) => number;
 }
 
 export default function Cart({
@@ -22,6 +23,7 @@ export default function Cart({
     removeFromCart,
     incrementItem,
     decrementItem,
+    subTotal,
 }: CartProps) {
     return (
         <Card className="max-h-dvh overflow-y-auto">
@@ -61,28 +63,33 @@ export default function Cart({
                                     </Button>
                                 </div>
                                 <div className="mt-2">
-                                    <div className="flex gap-1 items-center">
-                                        <Button
-                                            className="w-6.5 h-6.5"
-                                            onClick={() =>
-                                                decrementItem(product.id)
-                                            }
-                                        >
-                                            <Minus className="p-0.5" />
-                                        </Button>
-                                        <div className="w-12">
-                                            <p className="font-bold text-sm text-center">
-                                                {item.quantity}
-                                            </p>
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex gap-1 items-center">
+                                            <Button
+                                                className="w-6.5 h-6.5"
+                                                onClick={() =>
+                                                    decrementItem(product.id)
+                                                }
+                                            >
+                                                <Minus className="p-0.5" />
+                                            </Button>
+                                            <div className="w-12">
+                                                <p className="font-bold text-sm text-center">
+                                                    {item.quantity}
+                                                </p>
+                                            </div>
+                                            <Button
+                                                className="w-6.5 h-6.5"
+                                                onClick={() =>
+                                                    incrementItem(product.id)
+                                                }
+                                            >
+                                                <Plus className="p-0.5" />
+                                            </Button>
                                         </div>
-                                        <Button
-                                            className="w-6.5 h-6.5"
-                                            onClick={() =>
-                                                incrementItem(product.id)
-                                            }
-                                        >
-                                            <Plus className="p-0.5" />
-                                        </Button>
+                                        <p className="font-bold font-mono">
+                                            {rupiah(subTotal(product.id))}
+                                        </p>
                                     </div>
                                 </div>
                             </CardContent>

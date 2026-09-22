@@ -104,11 +104,32 @@ export function useCart() {
         );
     };
 
+    const subTotal = (productId: string | number) => {
+        const item = cart.find((i) => i.product.id === productId);
+
+        if (!item) return 0;
+
+        const discountedUnitPrice = Math.max(
+            0,
+            item.product.price - (item.unit_discount || 0),
+        );
+
+        const totalBeforeFlatDiscount = discountedUnitPrice * item.quantity;
+
+        const finalSubtotal = Math.max(
+            0,
+            totalBeforeFlatDiscount - (item.flat_discount || 0),
+        );
+
+        return finalSubtotal;
+    };
+
     return {
         cart,
         addToCart,
         removeFromCart,
         incrementItem,
         decrementItem,
+        subTotal,
     };
 }
