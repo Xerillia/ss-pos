@@ -1,4 +1,4 @@
-import { Banknote, Landmark, Receipt, X } from "lucide-react";
+import { Receipt, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "../ui/field";
 import { useState } from "react";
@@ -12,6 +12,7 @@ import { Input } from "../ui/input";
 import { rupiah } from "@/lib/rupiah";
 import { useCartContext } from "./cart-context";
 import { PaymentMethod, PaymentMethodUtils } from "@/enums";
+import PaymentMethodButton from "./payment-method-button";
 
 interface CheckoutProps {
     total: number;
@@ -54,36 +55,16 @@ export default function Checkout({ total }: CheckoutProps) {
                                 )}
                             </p>
                             <div className="grid grid-cols-2 gap-3">
-                                <Button
-                                    variant="outline"
-                                    onClick={() =>
-                                        setPaymentMethod(PaymentMethod.CASH)
-                                    }
-                                    disabled={
-                                        paymentMethod === PaymentMethod.CASH
-                                    }
-                                    className={`${paymentMethod === PaymentMethod.CASH ? "disabled:opacity-100 text-amber-500 border-amber-500 dark:border-amber-500 dark:bg-amber-600/10 bg-amber-600/10" : ""}`}
-                                >
-                                    <Banknote data-icon="inline-start" />
-                                    {PaymentMethodUtils.label(
-                                        PaymentMethod.CASH,
-                                    )}
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    onClick={() =>
-                                        setPaymentMethod(PaymentMethod.TRANSFER)
-                                    }
-                                    disabled={
-                                        paymentMethod === PaymentMethod.TRANSFER
-                                    }
-                                    className={`${paymentMethod === PaymentMethod.TRANSFER ? "disabled:opacity-100 text-amber-500 border-amber-500 dark:border-amber-500 dark:bg-amber-600/10 bg-amber-600/10" : ""}`}
-                                >
-                                    <Landmark data-icon="inline-start" />
-                                    {PaymentMethodUtils.label(
-                                        PaymentMethod.TRANSFER,
-                                    )}
-                                </Button>
+                                <PaymentMethodButton
+                                    paymentMethod={paymentMethod}
+                                    setPaymentMethod={setPaymentMethod}
+                                    label={PaymentMethod.CASH}
+                                />
+                                <PaymentMethodButton
+                                    paymentMethod={paymentMethod}
+                                    setPaymentMethod={setPaymentMethod}
+                                    label={PaymentMethod.TRANSFER}
+                                />
                             </div>
                         </Field>
                         <FieldGroup className="grid grid-cols-2 gap-3">
