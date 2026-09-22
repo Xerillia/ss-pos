@@ -69,9 +69,39 @@ export function useCart() {
         );
     };
 
+    const incrementItem = (productId: string | number) => {
+        setCart((prevCart) =>
+            prevCart.map((item) => {
+                if (item.product.id === productId) {
+                    // max item from stock
+                    if (item.quantity >= item.product.quantity) return item;
+
+                    return { ...item, quantity: item.quantity + 1 };
+                }
+                return item;
+            }),
+        );
+    };
+
+    const decrementItem = (productId: string | number) => {
+        setCart((prevCart) =>
+            prevCart
+                .map((item) => {
+                    if (item.product.id === productId) {
+                        return { ...item, quantity: item.quantity - 1 };
+                    }
+                    return item;
+                })
+                // remove items that reaches 0 or less qty
+                .filter((item) => item.quantity > 0),
+        );
+    };
+
     return {
         cart,
         addToCart,
         removeFromCart,
+        incrementItem,
+        decrementItem,
     };
 }

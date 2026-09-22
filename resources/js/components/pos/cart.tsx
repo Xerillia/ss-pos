@@ -1,4 +1,4 @@
-import { ShoppingCart, Trash } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Trash } from "lucide-react";
 import {
     Card,
     CardContent,
@@ -13,9 +13,16 @@ import { Button } from "../ui/button";
 interface CartProps {
     cart: CartItem[];
     removeFromCart: (productId: string | number) => void;
+    incrementItem: (productId: string | number) => void;
+    decrementItem: (productId: string | number) => void;
 }
 
-export default function Cart({ cart, removeFromCart }: CartProps) {
+export default function Cart({
+    cart,
+    removeFromCart,
+    incrementItem,
+    decrementItem,
+}: CartProps) {
     return (
         <Card>
             <CardHeader>
@@ -52,6 +59,29 @@ export default function Cart({ cart, removeFromCart }: CartProps) {
                                     >
                                         <Trash />
                                     </Button>
+                                </div>
+                                <div className="mt-2">
+                                    <div className="flex gap-6 items-center">
+                                        <Button
+                                            className="w-6.5 h-6.5"
+                                            onClick={() =>
+                                                decrementItem(product.id)
+                                            }
+                                        >
+                                            <Minus className="p-0.5" />
+                                        </Button>
+                                        <p className="font-bold text-sm">
+                                            {item.quantity}
+                                        </p>
+                                        <Button
+                                            className="w-6.5 h-6.5"
+                                            onClick={() =>
+                                                incrementItem(product.id)
+                                            }
+                                        >
+                                            <Plus className="p-0.5" />
+                                        </Button>
+                                    </div>
                                 </div>
                             </CardContent>
                         </Card>

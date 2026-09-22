@@ -8,12 +8,18 @@ interface PointOfSaleProps {
 }
 
 export default function PointOfSale({ products }: PointOfSaleProps) {
-    const { cart, addToCart, removeFromCart } = useCart();
+    const { cart, addToCart, removeFromCart, incrementItem, decrementItem } =
+        useCart();
 
     return (
         <div className="m-4 grid grid-cols-[7fr_5fr] gap-4">
             <ItemList products={products} addToCart={addToCart} />
-            <Cart cart={cart} removeFromCart={removeFromCart} />
+            <Cart
+                cart={cart}
+                removeFromCart={removeFromCart}
+                incrementItem={incrementItem}
+                decrementItem={decrementItem}
+            />
         </div>
     );
 }
