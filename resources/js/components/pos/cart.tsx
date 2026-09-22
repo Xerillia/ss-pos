@@ -24,7 +24,7 @@ export default function Cart({
     decrementItem,
 }: CartProps) {
     return (
-        <Card>
+        <Card className="max-h-dvh overflow-y-auto">
             <CardHeader>
                 <CardTitle className="flex gap-2 items-center">
                     <ShoppingCart
