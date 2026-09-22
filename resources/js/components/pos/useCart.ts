@@ -124,6 +124,20 @@ export function useCart() {
         return finalSubtotal;
     };
 
+    const cartTotal = () => {
+        return cart.reduce((total, item) => {
+            const discountedUnitPrice = Math.max(
+                0,
+                item.product.price - (item.unit_discount || 0),
+            );
+            const itemTotal = Math.max(
+                0,
+                discountedUnitPrice * item.quantity - (item.flat_discount || 0),
+            );
+            return total + itemTotal;
+        }, 0);
+    };
+
     return {
         cart,
         addToCart,
@@ -131,5 +145,6 @@ export function useCart() {
         incrementItem,
         decrementItem,
         subTotal,
+        cartTotal,
     };
 }
