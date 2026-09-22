@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction } from "react";
 
 interface PaymentMethodButtonProps {
     paymentMethod: string | undefined;
-    setPaymentMethod: Dispatch<SetStateAction<PaymentMethod | undefined>>;
+    setPaymentMethod: Dispatch<SetStateAction<PaymentMethod>>;
     label: PaymentMethod;
 }
 

@@ -13,8 +13,8 @@ interface CartContextType {
     cartTotal: () => number;
     setUnitDiscount: (productId: string | number, discount: number) => void;
     setFlatDiscount: (productId: string | number, discount: number) => void;
-    paymentMethod: string | undefined;
-    setPaymentMethod: Dispatch<SetStateAction<PaymentMethod | undefined>>;
+    paymentMethod: string;
+    setPaymentMethod: Dispatch<SetStateAction<PaymentMethod>>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
