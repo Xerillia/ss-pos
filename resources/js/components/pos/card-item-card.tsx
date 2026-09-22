@@ -4,30 +4,22 @@ import { CartItem } from "./useCart";
 import { Button } from "../ui/button";
 import { Minus, Plus, Tag, Trash } from "lucide-react";
 import CartDiscountForm from "./cart-discount-form";
+import { useCartContext } from "./cart-context";
 
 interface CartItemCardProps {
     item: CartItem;
     isExpanded: boolean;
     onToggleExpand: () => void;
-    removeFromCart: (productId: string | number) => void;
-    incrementItem: (productId: string | number) => void;
-    decrementItem: (productId: string | number) => void;
-    subTotal: (productId: string | number) => number;
-    setUnitDiscount: (productId: string | number, discount: number) => void;
-    setFlatDiscount: (productId: string | number, discount: number) => void;
 }
 
 export default function CardItemCard({
     item,
     isExpanded,
     onToggleExpand,
-    removeFromCart,
-    incrementItem,
-    decrementItem,
-    subTotal,
-    setUnitDiscount,
-    setFlatDiscount,
 }: CartItemCardProps) {
+    const { removeFromCart, incrementItem, decrementItem, subTotal } =
+        useCartContext();
+
     const { product } = item;
 
     return (
@@ -87,12 +79,7 @@ export default function CardItemCard({
             </CardContent>
             {isExpanded && (
                 <CardContent>
-                    <CartDiscountForm
-                        item={item}
-                        setUnitDiscount={setUnitDiscount}
-                        setFlatDiscount={setFlatDiscount}
-                        onClose={onToggleExpand}
-                    />
+                    <CartDiscountForm item={item} onClose={onToggleExpand} />
                 </CardContent>
             )}
         </Card>

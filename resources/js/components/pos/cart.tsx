@@ -1,33 +1,13 @@
 import { ShoppingCart } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { CartItem } from "./useCart";
-
 import { useState } from "react";
-
 import CardItemCard from "./card-item-card";
 import CartSummary from "./cart-summary";
+import { useCartContext } from "./cart-context";
 
-interface CartProps {
-    cart: CartItem[];
-    removeFromCart: (productId: string | number) => void;
-    incrementItem: (productId: string | number) => void;
-    decrementItem: (productId: string | number) => void;
-    subTotal: (productId: string | number) => number;
-    cartTotal: () => number;
-    setUnitDiscount: (productId: string | number, discount: number) => void;
-    setFlatDiscount: (productId: string | number, discount: number) => void;
-}
+export default function Cart() {
+    const { cart, cartTotal } = useCartContext();
 
-export default function Cart({
-    cart,
-    removeFromCart,
-    incrementItem,
-    decrementItem,
-    subTotal,
-    cartTotal,
-    setUnitDiscount,
-    setFlatDiscount,
-}: CartProps) {
     const [expandId, setExpandId] = useState<number | null>();
 
     const handleToggleExpand = (id: number) => {
@@ -58,12 +38,6 @@ export default function Cart({
                                 onToggleExpand={() =>
                                     handleToggleExpand(item.product.id)
                                 }
-                                removeFromCart={removeFromCart}
-                                incrementItem={incrementItem}
-                                decrementItem={decrementItem}
-                                subTotal={subTotal}
-                                setUnitDiscount={setUnitDiscount}
-                                setFlatDiscount={setFlatDiscount}
                             />
                         );
                     })}

@@ -3,20 +3,18 @@ import { Field, FieldGroup, FieldLabel } from "../ui/field";
 import { CartItem } from "./useCart";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useCartContext } from "./cart-context";
 
 interface CartDiscountFormProps {
     item: CartItem;
-    setUnitDiscount: (productId: string | number, discount: number) => void;
-    setFlatDiscount: (productId: string | number, discount: number) => void;
     onClose: () => void;
 }
 
 export default function CartDiscountForm({
     item,
-    setUnitDiscount,
-    setFlatDiscount,
     onClose,
 }: CartDiscountFormProps) {
+    const { setUnitDiscount, setFlatDiscount } = useCartContext();
     const { product } = item;
 
     return (

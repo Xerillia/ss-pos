@@ -10,15 +10,17 @@ import { Input } from "../ui/input";
 import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "@/lib/useDebounce";
 import { getPageRange } from "@/lib/pagination";
+import { useCartContext } from "./cart-context";
 
 interface ItemListProps {
     products: Product[];
-    addToCart: (product: Product) => void;
 }
 
 const ITEMS_PER_PAGE = 8;
 
-export default function ItemList({ products, addToCart }: ItemListProps) {
+export default function ItemList({ products }: ItemListProps) {
+    const { addToCart } = useCartContext();
+
     const stockLabel = (quantity: number) => {
         const style =
             quantity > 10

@@ -1,6 +1,6 @@
 import Cart from "@/components/pos/cart";
+import { CartProvider } from "@/components/pos/cart-context";
 import ItemList from "@/components/pos/item-list";
-import { useCart } from "@/components/pos/useCart";
 import { Product } from "@/types/product";
 
 interface PointOfSaleProps {
@@ -8,32 +8,13 @@ interface PointOfSaleProps {
 }
 
 export default function PointOfSale({ products }: PointOfSaleProps) {
-    const {
-        cart,
-        addToCart,
-        removeFromCart,
-        incrementItem,
-        decrementItem,
-        subTotal,
-        cartTotal,
-        setUnitDiscount,
-        setFlatDiscount,
-    } = useCart();
-
     return (
-        <div className="m-4 grid grid-cols-[7fr_5fr] gap-4">
-            <ItemList products={products} addToCart={addToCart} />
-            <Cart
-                cart={cart}
-                removeFromCart={removeFromCart}
-                incrementItem={incrementItem}
-                decrementItem={decrementItem}
-                subTotal={subTotal}
-                cartTotal={cartTotal}
-                setUnitDiscount={setUnitDiscount}
-                setFlatDiscount={setFlatDiscount}
-            />
-        </div>
+        <CartProvider>
+            <div className="m-4 grid grid-cols-[7fr_5fr] gap-4">
+                <ItemList products={products} />
+                <Cart />
+            </div>
+        </CartProvider>
     );
 }
 
