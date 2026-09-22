@@ -1,6 +1,6 @@
 import { rupiah } from "@/lib/rupiah";
 import { CardContent } from "../ui/card";
-
+import Checkout from "./checkout";
 interface CartSummaryProps {
     total: number;
 }
@@ -12,6 +12,8 @@ export default function CartSummary({ total }: CartSummaryProps) {
                 <p>Total Amount</p>
                 <p className="font-mono">{rupiah(total)}</p>
             </div>
+
+            <Checkout total={total} />
         </CardContent>
     );
 }
