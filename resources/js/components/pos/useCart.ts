@@ -138,6 +138,37 @@ export function useCart() {
         }, 0);
     };
 
+    const setUnitDiscount = (productId: string | number, discount: number) => {
+        const safeDiscount = Math.max(0, discount);
+
+        setCart((prevCart) =>
+            prevCart.map((item) => {
+                if (item.product.id === productId) {
+                    const cappedDiscount = Math.min(
+                        safeDiscount,
+                        item.product.price,
+                    );
+
+                    return { ...item, unit_discount: cappedDiscount };
+                }
+                return item;
+            }),
+        );
+    };
+
+    const setFlatDiscount = (productId: string | number, discount: number) => {
+        const safeDiscount = Math.max(0, discount);
+
+        setCart((prevCart) =>
+            prevCart.map((item) => {
+                if (item.product.id === productId) {
+                    return { ...item, flat_discount: safeDiscount };
+                }
+                return item;
+            }),
+        );
+    };
+
     return {
         cart,
         addToCart,
@@ -146,5 +177,7 @@ export function useCart() {
         decrementItem,
         subTotal,
         cartTotal,
+        setUnitDiscount,
+        setFlatDiscount,
     };
 }

@@ -16,6 +16,8 @@ export default function PointOfSale({ products }: PointOfSaleProps) {
         decrementItem,
         subTotal,
         cartTotal,
+        setUnitDiscount,
+        setFlatDiscount,
     } = useCart();
 
     return (
@@ -28,6 +30,8 @@ export default function PointOfSale({ products }: PointOfSaleProps) {
                 decrementItem={decrementItem}
                 subTotal={subTotal}
                 cartTotal={cartTotal}
+                setUnitDiscount={setUnitDiscount}
+                setFlatDiscount={setFlatDiscount}
             />
         </div>
     );

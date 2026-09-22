@@ -1,4 +1,4 @@
-import { Minus, Plus, ShoppingCart, Trash } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Tag, Trash } from "lucide-react";
 import {
     Card,
     CardContent,
@@ -9,6 +9,9 @@ import {
 import { CartItem } from "./useCart";
 import { rupiah } from "@/lib/rupiah";
 import { Button } from "../ui/button";
+import { useState } from "react";
+import { Field, FieldGroup, FieldLabel, FieldSet } from "../ui/field";
+import { Input } from "../ui/input";
 
 interface CartProps {
     cart: CartItem[];
@@ -17,6 +20,8 @@ interface CartProps {
     decrementItem: (productId: string | number) => void;
     subTotal: (productId: string | number) => number;
     cartTotal: () => number;
+    setUnitDiscount: (productId: string | number, discount: number) => void;
+    setFlatDiscount: (productId: string | number, discount: number) => void;
 }
 
 export default function Cart({
@@ -26,7 +31,16 @@ export default function Cart({
     decrementItem,
     subTotal,
     cartTotal,
+    setUnitDiscount,
+    setFlatDiscount,
 }: CartProps) {
+    const [expandId, setExpandId] = useState<number | null>();
+
+    const handleExpand = (id: number) => {
+        if (expandId === id) setExpandId(null);
+        else setExpandId(id);
+    };
+
     return (
         <Card className="max-h-dvh overflow-y-auto">
             <CardHeader>
@@ -43,6 +57,7 @@ export default function Cart({
                 <div className="space-y-2">
                     {cart.map((item) => {
                         const product = item.product;
+
                         return (
                             <Card key={product.id}>
                                 <CardContent>
@@ -67,31 +82,44 @@ export default function Cart({
                                     </div>
                                     <div className="mt-2">
                                         <div className="flex justify-between items-center">
-                                            <div className="flex gap-1 items-center">
-                                                <Button
-                                                    className="w-6.5 h-6.5"
-                                                    onClick={() =>
-                                                        decrementItem(
-                                                            product.id,
-                                                        )
-                                                    }
-                                                >
-                                                    <Minus className="p-0.5" />
-                                                </Button>
-                                                <div className="w-12">
-                                                    <p className="font-bold text-sm text-center">
-                                                        {item.quantity}
-                                                    </p>
+                                            <div className="flex gap-2 items-center">
+                                                <div className="flex gap-1 items-center">
+                                                    <Button
+                                                        className="w-6.5 h-6.5"
+                                                        onClick={() =>
+                                                            decrementItem(
+                                                                product.id,
+                                                            )
+                                                        }
+                                                    >
+                                                        <Minus className="p-0.5" />
+                                                    </Button>
+                                                    <div className="w-12">
+                                                        <p className="font-bold text-sm text-center">
+                                                            {item.quantity}
+                                                        </p>
+                                                    </div>
+                                                    <Button
+                                                        className="w-6.5 h-6.5"
+                                                        onClick={() =>
+                                                            incrementItem(
+                                                                product.id,
+                                                            )
+                                                        }
+                                                    >
+                                                        <Plus className="p-0.5" />
+                                                    </Button>
                                                 </div>
                                                 <Button
-                                                    className="w-6.5 h-6.5"
+                                                    size="xs"
+                                                    variant="outline"
+                                                    className="h-6.5"
                                                     onClick={() =>
-                                                        incrementItem(
-                                                            product.id,
-                                                        )
+                                                        handleExpand(product.id)
                                                     }
                                                 >
-                                                    <Plus className="p-0.5" />
+                                                    <Tag data-icon="inline-start" />{" "}
+                                                    Discount
                                                 </Button>
                                             </div>
                                             <p className="font-bold font-mono">
@@ -100,12 +128,101 @@ export default function Cart({
                                         </div>
                                     </div>
                                 </CardContent>
+                                {expandId === product.id && (
+                                    <CardContent>
+                                        <Card className="mt-2">
+                                            <CardContent className="-mx-2 px-4 -my-6 py-3">
+                                                <FieldGroup>
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        <Field>
+                                                            <FieldLabel
+                                                                htmlFor={`unit_discount_${product.id}`}
+                                                                className="text-xs -mb-2 text-muted-foreground"
+                                                            >
+                                                                Unit Discount
+                                                                (Rp)
+                                                            </FieldLabel>
+                                                            <Input
+                                                                id={`unit_discount_${product.id}`}
+                                                                placeholder="0"
+                                                                type="number"
+                                                                min="0"
+                                                                value={
+                                                                    item.unit_discount ||
+                                                                    ""
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setUnitDiscount(
+                                                                        product.id,
+                                                                        Math.max(
+                                                                            0,
+                                                                            Number(
+                                                                                e
+                                                                                    .target
+                                                                                    .value,
+                                                                            ) ||
+                                                                                0,
+                                                                        ),
+                                                                    )
+                                                                }
+                                                            />
+                                                        </Field>
+                                                        <Field>
+                                                            <FieldLabel
+                                                                htmlFor={`flat_discount_${product.id}`}
+                                                                className="text-xs -mb-2 text-muted-foreground"
+                                                            >
+                                                                Flat Discount
+                                                                (Rp)
+                                                            </FieldLabel>
+                                                            <Input
+                                                                id={`flat_discount_${product.id}`}
+                                                                placeholder="0"
+                                                                type="number"
+                                                                min="0"
+                                                                value={
+                                                                    item.flat_discount ||
+                                                                    ""
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setFlatDiscount(
+                                                                        product.id,
+                                                                        Math.max(
+                                                                            0,
+                                                                            Number(
+                                                                                e
+                                                                                    .target
+                                                                                    .value,
+                                                                            ) ||
+                                                                                0,
+                                                                        ),
+                                                                    )
+                                                                }
+                                                            />
+                                                        </Field>
+                                                    </div>
+                                                </FieldGroup>
+                                                <Field>
+                                                    <Button
+                                                        size="xs"
+                                                        className="mt-2"
+                                                        onClick={() =>
+                                                            setExpandId(null)
+                                                        }
+                                                    >
+                                                        Done
+                                                    </Button>
+                                                </Field>
+                                            </CardContent>
+                                        </Card>
+                                    </CardContent>
+                                )}
                             </Card>
                         );
                     })}
                 </div>
             </CardContent>
-            <CardContent className="mt-2 border-t py-4 sticky -bottom-6 bg-background -mb-6">
+            <CardContent className="mt-auto border-t py-4 sticky -bottom-6 bg-background -mb-6">
                 <div className="font-bold flex justify-between">
                     <p>Total Amount</p>
                     <p className="font-mono">{rupiah(cartTotal())}</p>
