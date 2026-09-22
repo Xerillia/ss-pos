@@ -1,0 +1,86 @@
+import { Card, CardContent } from "../ui/card";
+import { Field, FieldGroup, FieldLabel } from "../ui/field";
+import { CartItem } from "./useCart";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+
+interface CartDiscountFormProps {
+    item: CartItem;
+    setUnitDiscount: (productId: string | number, discount: number) => void;
+    setFlatDiscount: (productId: string | number, discount: number) => void;
+    onClose: () => void;
+}
+
+export default function CartDiscountForm({
+    item,
+    setUnitDiscount,
+    setFlatDiscount,
+    onClose,
+}: CartDiscountFormProps) {
+    const { product } = item;
+
+    return (
+        <Card className="mt-2">
+            <CardContent className="-mx-2 px-4 -my-6 py-3">
+                <FieldGroup>
+                    <div className="grid grid-cols-2 gap-2">
+                        <Field>
+                            <FieldLabel
+                                htmlFor={`unit_discount_${product.id}`}
+                                className="text-xs -mb-2 text-muted-foreground"
+                            >
+                                Unit Discount (Rp)
+                            </FieldLabel>
+                            <Input
+                                id={`unit_discount_${product.id}`}
+                                placeholder="0"
+                                type="number"
+                                min="0"
+                                value={item.unit_discount || ""}
+                                onChange={(e) =>
+                                    setUnitDiscount(
+                                        product.id,
+                                        Math.max(
+                                            0,
+                                            Number(e.target.value) || 0,
+                                        ),
+                                    )
+                                }
+                            />
+                        </Field>
+                        <Field>
+                            <FieldLabel
+                                htmlFor={`flat_discount_${product.id}`}
+                                className="text-xs -mb-2 text-muted-foreground"
+                            >
+                                Flat Discount (Rp)
+                            </FieldLabel>
+                            <Input
+                                id={`flat_discount_${product.id}`}
+                                placeholder="0"
+                                type="number"
+                                min="0"
+                                value={item.flat_discount || ""}
+                                onChange={(e) =>
+                                    setFlatDiscount(
+                                        product.id,
+                                        Math.max(
+                                            0,
+                                            Number(e.target.value) || 0,
+                                        ),
+                                    )
+                                }
+                            />
+                        </Field>
+                    </div>
+                </FieldGroup>
+
+                <Field>
+                    <Button size="xs" className="mt-2" onClick={onClose}>
+                        Done
+                    </Button>
+                </Field>
+            </CardContent>
+        </Card>
+    );
+}
