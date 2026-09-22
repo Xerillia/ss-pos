@@ -61,7 +61,7 @@ export default function Cart({
                                     </Button>
                                 </div>
                                 <div className="mt-2">
-                                    <div className="flex gap-6 items-center">
+                                    <div className="flex gap-1 items-center">
                                         <Button
                                             className="w-6.5 h-6.5"
                                             onClick={() =>
@@ -70,7 +70,7 @@ export default function Cart({
                                         >
                                             <Minus className="p-0.5" />
                                         </Button>
-                                        <div className="w-2">
+                                        <div className="w-12">
                                             <p className="font-bold text-sm text-center">
                                                 {item.quantity}
                                             </p>
