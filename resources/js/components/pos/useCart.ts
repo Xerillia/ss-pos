@@ -54,6 +54,7 @@ export function useCart() {
                 ...prevCart,
                 {
                     product: product,
+                    product_id: product.id,
                     quantity: 1,
                     unit_discount: 0,
                     flat_discount: 0,
@@ -62,8 +63,15 @@ export function useCart() {
         });
     };
 
+    const removeFromCart = (productId: string | number) => {
+        setCart((prevCart) =>
+            prevCart.filter((item) => item.product.id !== productId),
+        );
+    };
+
     return {
         cart,
         addToCart,
+        removeFromCart,
     };
 }
