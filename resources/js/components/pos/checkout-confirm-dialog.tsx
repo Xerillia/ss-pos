@@ -13,6 +13,7 @@ import SummaryItem from "./summary-item";
 import { useCartContext } from "./cart-context";
 import { WALK_IN_CUSTOMER } from "./customer-combobox";
 import CartItemsCompact from "./cart-items-compact";
+import { PaymentMethod, PaymentMethodUtils } from "@/enums";
 
 interface CheckoutConfirmDialogProps {
     open: boolean;
@@ -27,7 +28,8 @@ export function CheckoutConfirmDialog({
     onFinish,
     disabled,
 }: CheckoutConfirmDialogProps) {
-    const { selectedCustomer, payAmount, cartTotal } = useCartContext();
+    const { selectedCustomer, payAmount, cartTotal, paymentMethod } =
+        useCartContext();
 
     const total = cartTotal();
     const currentPayAmount = payAmount || 0;
@@ -38,7 +40,16 @@ export function CheckoutConfirmDialog({
         <AlertDialog open={open} onOpenChange={onOpenChange}>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Confirmation</AlertDialogTitle>
+                    <AlertDialogTitle asChild>
+                        <div className="flex justify-between w-full items-center">
+                            <p>Confirmation</p>
+                            <p>
+                                {PaymentMethodUtils.label(
+                                    paymentMethod as PaymentMethod,
+                                )}
+                            </p>
+                        </div>
+                    </AlertDialogTitle>
                     <AlertDialogDescription>
                         {selectedCustomer?.name || WALK_IN_CUSTOMER.name}
                     </AlertDialogDescription>
