@@ -23,6 +23,8 @@ interface CartContextType {
     setDiscountAmount: Dispatch<SetStateAction<number | undefined>>;
     selectedCustomer: Customer | undefined;
     setSelectedCustomer: Dispatch<SetStateAction<Customer | undefined>>;
+    clearCart: () => void;
+    finishTransaction: () => any;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -47,6 +49,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setDiscountAmount,
         selectedCustomer,
         setSelectedCustomer,
+        clearCart,
+        finishTransaction,
     } = useCart();
 
     return (
@@ -70,6 +74,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 setDiscountAmount,
                 selectedCustomer,
                 setSelectedCustomer,
+                clearCart,
+                finishTransaction,
             }}
         >
             {children}

@@ -20,10 +20,18 @@ interface CheckoutProps {
 }
 
 export default function Checkout({ total }: CheckoutProps) {
-    const { payAmount, setPayAmount, cart, discountAmount, setDiscountAmount } =
-        useCartContext();
+    const {
+        payAmount,
+        setPayAmount,
+        cart,
+        discountAmount,
+        setDiscountAmount,
+        finishTransaction,
+    } = useCartContext();
     const [checkoutOpen, setCheckoutOpen] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const sanitize = (value: string) => {
         const sanitized = Number(value.replace(/[^0-9+]/g, ""));
@@ -38,7 +46,20 @@ export default function Checkout({ total }: CheckoutProps) {
         setPayAmount(sanitize(value));
     };
 
-    const handleFinish = () => {};
+    const handleFinish = async () => {
+        setIsSubmitting(true);
+        setError(null);
+        try {
+            const result = await finishTransaction();
+            alert("Transaction complete!");
+        } catch (err: any) {
+            // Validation errors returned from backend via processCheckout exception handling
+            setError(err.message || "Failed to process sale.");
+        } finally {
+            setIsSubmitting(false);
+            setCheckoutOpen(false);
+        }
+    };
 
     return (
         <>

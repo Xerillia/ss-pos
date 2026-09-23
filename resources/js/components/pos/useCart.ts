@@ -1,3 +1,4 @@
+import { processCheckout } from "@/api/axios";
 import { PaymentMethod } from "@/enums";
 import { Customer } from "@/types/customer";
 import { Product } from "@/types/product";
@@ -188,6 +189,57 @@ export function useCart() {
         );
     };
 
+    const clearCart = () => {
+        setCart([]);
+        setPayAmount(undefined);
+        setDiscountAmount(undefined);
+        setSelectedCustomer(undefined);
+        setPaymentMethod(PaymentMethod.CASH);
+        try {
+            localStorage.removeItem(CART_STORAGE_KEY);
+        } catch (error) {
+            console.error("Failed to clear cart from localStorage:", error);
+        }
+    };
+
+    const finishTransaction = async (extraFields?: {
+        sale_number?: string;
+        tax_amount?: number;
+        currency?: string;
+        notes?: string;
+    }) => {
+        if (cart.length === 0) {
+            throw new Error("Cannot checkout with an empty cart.");
+        }
+
+        const totalToPay = cartTotal();
+
+        const payload = {
+            customer_id: selectedCustomer?.id ?? null,
+            payment_method: paymentMethod,
+            paid_amount: payAmount ?? totalToPay,
+            discount_amount: discountAmount ?? 0,
+            tax_amount: extraFields?.tax_amount ?? 0,
+            currency: extraFields?.currency ?? "IDR",
+            sale_number: extraFields?.sale_number ?? null,
+            notes: extraFields?.notes ?? null,
+            items: cart.map((item) => ({
+                product_id: item.product.id,
+                quantity: item.quantity,
+                unit_discount: item.unit_discount || 0,
+                flat_discount: item.flat_discount || 0,
+            })),
+        };
+
+        try {
+            const response = await processCheckout(payload);
+            clearCart();
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     return {
         cart,
         addToCart,
@@ -207,5 +259,7 @@ export function useCart() {
         setDiscountAmount,
         selectedCustomer,
         setSelectedCustomer,
+        clearCart,
+        finishTransaction,
     };
 }
