@@ -1,5 +1,5 @@
 import { Customer } from "@/types/customer";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
     Combobox,
     ComboboxContent,
@@ -31,40 +31,36 @@ interface CustomerComboboxProps {
 }
 
 export default function CustomerCombobox({ customers }: CustomerComboboxProps) {
-    const { setSelectedCustomer } = useCartContext();
-    const [localSelectedCustomer, setLocalSelectedCustomer] =
-        useState<Customer | null>(WALK_IN_CUSTOMER);
+    const { selectedCustomer, setSelectedCustomer } = useCartContext();
 
+    // prepend hardcoded customer
     const allCustomers = useMemo(
         () => [WALK_IN_CUSTOMER, ...customers],
         [customers],
     );
 
-    const handleValueChange = (customer: Customer | null) => {
-        setLocalSelectedCustomer(customer);
+    const handleValueChange = (customerName: string | null) => {
+        if (!customerName || customerName === WALK_IN_CUSTOMER.name) {
+            setSelectedCustomer(undefined);
+            return;
+        }
 
-        if (!customer || customer.id === 0) setSelectedCustomer(undefined);
-        else setSelectedCustomer(customer);
+        const customer = customers.find((c) => c.name === customerName);
+        setSelectedCustomer(customer);
     };
 
     return (
         <Combobox
             items={allCustomers}
-            value={localSelectedCustomer}
             onValueChange={handleValueChange}
-            itemToStringValue={(customer: Customer | null) =>
-                customer?.name ?? ""
-            }
+            value={selectedCustomer?.name ?? WALK_IN_CUSTOMER.name}
         >
-            <ComboboxInput
-                placeholder="Select customer..."
-                value={localSelectedCustomer?.name ?? ""}
-            />
+            <ComboboxInput placeholder="Select customer..." />
             <ComboboxContent>
                 <ComboboxEmpty>No customers found.</ComboboxEmpty>
                 <ComboboxList>
                     {(customer: Customer) => (
-                        <ComboboxItem key={customer.id} value={customer}>
+                        <ComboboxItem key={customer.id} value={customer.name}>
                             {customer.name}
                         </ComboboxItem>
                     )}
