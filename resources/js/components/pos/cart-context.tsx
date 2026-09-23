@@ -11,6 +11,7 @@ interface CartContextType {
     decrementItem: (productId: string | number) => void;
     subTotal: (productId: string | number) => number;
     cartTotal: () => number;
+    cartTotalWithoutDiscount: () => number;
     setUnitDiscount: (productId: string | number, discount: number) => void;
     setFlatDiscount: (productId: string | number, discount: number) => void;
     paymentMethod: string;
@@ -32,6 +33,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         decrementItem,
         subTotal,
         cartTotal,
+        cartTotalWithoutDiscount,
         setUnitDiscount,
         setFlatDiscount,
         paymentMethod,
@@ -52,6 +54,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 decrementItem,
                 subTotal,
                 cartTotal,
+                cartTotalWithoutDiscount,
                 setUnitDiscount,
                 setFlatDiscount,
                 paymentMethod,

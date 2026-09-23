@@ -6,7 +6,7 @@ import CartSummary from "./cart-summary";
 import { useCartContext } from "./cart-context";
 
 export default function Cart() {
-    const { cart, cartTotal } = useCartContext();
+    const { cart } = useCartContext();
 
     const [expandId, setExpandId] = useState<number | null>();
 
@@ -44,7 +44,7 @@ export default function Cart() {
                 </div>
             </CardContent>
 
-            <CartSummary total={cartTotal()} />
+            <CartSummary />
         </Card>
     );
 }
