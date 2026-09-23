@@ -31,13 +31,12 @@ export default function Checkout({ total }: CheckoutProps) {
         cart,
         discountAmount,
         setDiscountAmount,
-        cartTotal,
     } = useCartContext();
     const [checkoutOpen, setCheckoutOpen] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
 
-    const change = (payAmount || 0) - cartTotal();
-    const debt = cartTotal() - (payAmount || 0);
+    const change = (payAmount || 0) - total;
+    const debt = total - (payAmount || 0);
 
     const handleFinish = () => {};
 
@@ -113,6 +112,7 @@ export default function Checkout({ total }: CheckoutProps) {
                                 </FieldLabel>
                                 <Input
                                     id="order_discount"
+                                    type="number"
                                     placeholder="0"
                                     value={discountAmount}
                                     onChange={(e) =>
@@ -131,6 +131,7 @@ export default function Checkout({ total }: CheckoutProps) {
                                 </FieldLabel>
                                 <Input
                                     id="paid_amount"
+                                    type="number"
                                     placeholder="0"
                                     value={payAmount}
                                     onChange={(e) =>
@@ -141,7 +142,96 @@ export default function Checkout({ total }: CheckoutProps) {
                             </Field>
                         </FieldGroup>
                     </FieldSet>
-                    <div className="space-y-2">
+                    <div>
+                        <div className="grid grid-cols-5 gap-3">
+                            <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => setPayAmount(0)}
+                            >
+                                Reset
+                            </Button>
+                            <Button
+                                size="sm"
+                                onClick={() => setPayAmount(total)}
+                            >
+                                Exact
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={() =>
+                                    setPayAmount((payAmount || 0) + 1000)
+                                }
+                            >
+                                + 1k
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={() =>
+                                    setPayAmount((payAmount || 0) + 2000)
+                                }
+                            >
+                                + 2k
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={() =>
+                                    setPayAmount((payAmount || 0) + 5000)
+                                }
+                            >
+                                + 5k
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={() =>
+                                    setPayAmount((payAmount || 0) + 10000)
+                                }
+                            >
+                                + 10k
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={() =>
+                                    setPayAmount((payAmount || 0) + 20000)
+                                }
+                            >
+                                + 20k
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={() =>
+                                    setPayAmount((payAmount || 0) + 50000)
+                                }
+                            >
+                                + 50k
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={() =>
+                                    setPayAmount((payAmount || 0) + 100000)
+                                }
+                            >
+                                + 100k
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={() =>
+                                    setPayAmount((payAmount || 0) + 200000)
+                                }
+                            >
+                                + 200k
+                            </Button>
+                        </div>
+                    </div>
+                    <div>
                         <Button
                             className="w-full"
                             onClick={() => setConfirmOpen(true)}
