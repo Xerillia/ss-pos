@@ -17,12 +17,14 @@ interface CheckoutConfirmDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     onFinish: () => void;
+    disabled: boolean;
 }
 
 export function CheckoutConfirmDialog({
     open,
     onOpenChange,
     onFinish,
+    disabled,
 }: CheckoutConfirmDialogProps) {
     const { selectedCustomer, payAmount, cartTotal } = useCartContext();
 
@@ -63,8 +65,10 @@ export function CheckoutConfirmDialog({
                 )}
 
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Return</AlertDialogCancel>
-                    <AlertDialogAction onClick={onFinish}>
+                    <AlertDialogCancel disabled={disabled}>
+                        Return
+                    </AlertDialogCancel>
+                    <AlertDialogAction onClick={onFinish} disabled={disabled}>
                         Finish
                     </AlertDialogAction>
                 </AlertDialogFooter>

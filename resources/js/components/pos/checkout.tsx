@@ -14,6 +14,7 @@ import { useCartContext } from "./cart-context";
 import { PaymentMethodSelector } from "./payment-method-selector";
 import { QuickPayPresets } from "./quick-pay-presets";
 import { CheckoutConfirmDialog } from "./checkout-confirm-dialog";
+import { toast } from "sonner";
 
 interface CheckoutProps {
     total: number;
@@ -49,9 +50,16 @@ export default function Checkout({ total }: CheckoutProps) {
     const handleFinish = async () => {
         setIsSubmitting(true);
         setError(null);
+        const toastId = toast.loading("Checking out...");
+
         try {
-            const result = await finishTransaction();
-            alert("Transaction complete!");
+            const response = await finishTransaction();
+
+            if (response.success) {
+                toast.success(response.message, { id: toastId });
+            } else {
+                toast.error(response.message, { id: toastId });
+            }
         } catch (err: any) {
             // Validation errors returned from backend via processCheckout exception handling
             setError(err.message || "Failed to process sale.");
@@ -141,6 +149,7 @@ export default function Checkout({ total }: CheckoutProps) {
                 open={confirmOpen}
                 onOpenChange={setConfirmOpen}
                 onFinish={handleFinish}
+                disabled={isSubmitting}
             />
         </>
     );
