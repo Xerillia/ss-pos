@@ -27,6 +27,7 @@ class Sale extends Model
         'currency',
         'paid_amount',
         'change_amount',
+        'debt_amount',
         'notes',
     ];
 
@@ -37,6 +38,7 @@ class Sale extends Model
         'total_amount' => 'decimal:2',
         'paid_amount' => 'decimal:2',
         'change_amount' => 'decimal:2',
+        'debt_amount' => 'decimal:2',
         'payment_status' => PaymentStatus::class,
         'payment_method' => PaymentMethod::class,
     ];
