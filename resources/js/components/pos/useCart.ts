@@ -112,6 +112,14 @@ export function useCart() {
         );
     };
 
+    const subTotalWithoutDiscount = (productId: string | number) => {
+        const item = cart.find((i) => i.product.id === productId);
+
+        if (!item) return 0;
+
+        return item.product.price * item.quantity;
+    };
+
     const subTotal = (productId: string | number) => {
         const item = cart.find((i) => i.product.id === productId);
 
@@ -251,6 +259,7 @@ export function useCart() {
         incrementItem,
         decrementItem,
         subTotal,
+        subTotalWithoutDiscount,
         cartTotal,
         cartTotalWithoutDiscount,
         setUnitDiscount,

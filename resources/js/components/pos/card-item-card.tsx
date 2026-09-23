@@ -17,10 +17,18 @@ export default function CardItemCard({
     isExpanded,
     onToggleExpand,
 }: CartItemCardProps) {
-    const { removeFromCart, incrementItem, decrementItem, subTotal } =
-        useCartContext();
+    const {
+        removeFromCart,
+        incrementItem,
+        decrementItem,
+        subTotal,
+        subTotalWithoutDiscount,
+    } = useCartContext();
 
     const { product } = item;
+
+    const subtotal = subTotal(product.id);
+    const subtotalWithoutDiscount = subTotalWithoutDiscount(product.id);
 
     return (
         <Card>
@@ -71,9 +79,16 @@ export default function CardItemCard({
                                 <Tag data-icon="inline-start" /> Discount
                             </Button>
                         </div>
-                        <p className="font-bold font-mono">
-                            {rupiah(subTotal(product.id))}
-                        </p>
+                        <div className="flex flex-col">
+                            {subtotal !== subtotalWithoutDiscount && (
+                                <p className="text-muted-foreground font-mono text-xs text-right line-through">
+                                    {rupiah(subtotalWithoutDiscount)}
+                                </p>
+                            )}
+                            <p className="font-bold font-mono text-right">
+                                {rupiah(subtotal)}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </CardContent>
