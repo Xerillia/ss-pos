@@ -2,6 +2,7 @@ import { createContext, Dispatch, SetStateAction, useContext } from "react";
 import { CartItem, useCart } from "./useCart";
 import { Product } from "@/types/product";
 import { PaymentMethod } from "@/enums";
+import { Customer } from "@/types/customer";
 
 interface CartContextType {
     cart: CartItem[];
@@ -20,6 +21,8 @@ interface CartContextType {
     setPayAmount: Dispatch<SetStateAction<number | undefined>>;
     discountAmount: number | undefined;
     setDiscountAmount: Dispatch<SetStateAction<number | undefined>>;
+    selectedCustomer: Customer | undefined;
+    setSelectedCustomer: Dispatch<SetStateAction<Customer | undefined>>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -42,6 +45,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setPayAmount,
         discountAmount,
         setDiscountAmount,
+        selectedCustomer,
+        setSelectedCustomer,
     } = useCart();
 
     return (
@@ -63,6 +68,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 setPayAmount,
                 discountAmount,
                 setDiscountAmount,
+                selectedCustomer,
+                setSelectedCustomer,
             }}
         >
             {children}

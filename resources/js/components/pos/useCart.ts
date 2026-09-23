@@ -1,4 +1,5 @@
 import { PaymentMethod } from "@/enums";
+import { Customer } from "@/types/customer";
 import { Product } from "@/types/product";
 import { useEffect, useState } from "react";
 
@@ -19,6 +20,7 @@ export function useCart() {
     );
     const [payAmount, setPayAmount] = useState<number>();
     const [discountAmount, setDiscountAmount] = useState<number>();
+    const [selectedCustomer, setSelectedCustomer] = useState<Customer>();
 
     useEffect(() => {
         try {
@@ -203,5 +205,7 @@ export function useCart() {
         setPayAmount,
         discountAmount,
         setDiscountAmount,
+        selectedCustomer,
+        setSelectedCustomer,
     };
 }

@@ -8,6 +8,7 @@ import {
     ComboboxItem,
     ComboboxList,
 } from "../ui/combobox";
+import { useCartContext } from "./cart-context";
 
 // hardcoded
 export const WALK_IN_CUSTOMER: Customer = {
@@ -27,16 +28,12 @@ export const WALK_IN_CUSTOMER: Customer = {
 
 interface CustomerComboboxProps {
     customers: Customer[];
-    onSelect?: (customer: Customer | null) => void;
 }
 
-export default function CustomerCombobox({
-    customers,
-    onSelect,
-}: CustomerComboboxProps) {
-    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
-        WALK_IN_CUSTOMER,
-    );
+export default function CustomerCombobox({ customers }: CustomerComboboxProps) {
+    const { setSelectedCustomer } = useCartContext();
+    const [localSelectedCustomer, setLocalSelectedCustomer] =
+        useState<Customer | null>(WALK_IN_CUSTOMER);
 
     const allCustomers = useMemo(
         () => [WALK_IN_CUSTOMER, ...customers],
@@ -44,14 +41,16 @@ export default function CustomerCombobox({
     );
 
     const handleValueChange = (customer: Customer | null) => {
-        setSelectedCustomer(customer);
-        onSelect?.(customer);
+        setLocalSelectedCustomer(customer);
+
+        if (!customer || customer.id === 0) setSelectedCustomer(undefined);
+        else setSelectedCustomer(customer);
     };
 
     return (
         <Combobox
             items={allCustomers}
-            value={selectedCustomer}
+            value={localSelectedCustomer}
             onValueChange={handleValueChange}
             itemToStringValue={(customer: Customer | null) =>
                 customer?.name ?? ""
@@ -59,7 +58,7 @@ export default function CustomerCombobox({
         >
             <ComboboxInput
                 placeholder="Select customer..."
-                value={selectedCustomer?.name ?? ""}
+                value={localSelectedCustomer?.name ?? ""}
             />
             <ComboboxContent>
                 <ComboboxEmpty>No customers found.</ComboboxEmpty>
