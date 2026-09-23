@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Http\Request;
@@ -15,9 +16,11 @@ class SaleController extends Controller
     public function index()
     {
         $products = Product::all();
+        $customers = Customer::all();
 
         return Inertia::render('pos/pos', [
             'products' => $products,
+            'customers' => $customers,
         ]);
     }
 

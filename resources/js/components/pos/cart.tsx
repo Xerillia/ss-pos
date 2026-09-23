@@ -4,8 +4,14 @@ import { useState } from "react";
 import CardItemCard from "./card-item-card";
 import CartSummary from "./cart-summary";
 import { useCartContext } from "./cart-context";
+import { Customer } from "@/types/customer";
+import CustomerCombobox from "./customer-combobox";
 
-export default function Cart() {
+interface CartProps {
+    customers: Customer[];
+}
+
+export default function Cart({ customers }: CartProps) {
     const { cart } = useCartContext();
 
     const [expandId, setExpandId] = useState<number | null>();
@@ -17,12 +23,15 @@ export default function Cart() {
     return (
         <Card className="max-h-dvh overflow-y-auto">
             <CardHeader>
-                <CardTitle className="flex gap-2 items-center">
-                    <ShoppingCart
-                        data-icon="inline-start"
-                        className="w-4 h-4"
-                    />
-                    Cart
+                <CardTitle className="flex justify-between items-center">
+                    <div className="flex gap-2 items-center">
+                        <ShoppingCart
+                            data-icon="inline-start"
+                            className="w-4 h-4"
+                        />
+                        Cart
+                    </div>
+                    <CustomerCombobox customers={customers} />
                 </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col justify-between">
