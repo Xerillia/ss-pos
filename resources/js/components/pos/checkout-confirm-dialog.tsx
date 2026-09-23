@@ -12,6 +12,7 @@ import { rupiah } from "@/lib/rupiah";
 import SummaryItem from "./summary-item";
 import { useCartContext } from "./cart-context";
 import { WALK_IN_CUSTOMER } from "./customer-combobox";
+import CartItemsCompact from "./cart-items-compact";
 
 interface CheckoutConfirmDialogProps {
     open: boolean;
@@ -42,6 +43,8 @@ export function CheckoutConfirmDialog({
                         {selectedCustomer?.name || WALK_IN_CUSTOMER.name}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
+
+                <CartItemsCompact />
 
                 <SummaryItem />
 
