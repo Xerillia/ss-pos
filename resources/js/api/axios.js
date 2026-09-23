@@ -27,3 +27,18 @@ export const apiUpload = axios.create({
         "Content-Type": "multipart/form-data",
     },
 });
+
+export const processCheckout = async (payload) => {
+    try {
+        const response = await api.post("/pos/checkout", payload);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            throw error.response.data;
+        }
+        throw {
+            message:
+                "Network or server error. Please try again or notify admins.",
+        };
+    }
+};

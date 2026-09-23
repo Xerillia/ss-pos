@@ -21,9 +21,12 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        $this->call([
-            UserSeeder::class,
-            ProductSeeder::class,
-        ]);
+        if (app()->environment('local')) {
+            $this->call([
+                UserSeeder::class,
+                ProductSeeder::class,
+                CustomerSeeder::class,
+            ]);
+        }
     }
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import { createColumnHelper } from "@tanstack/react-table";
-import { type DataTableFeatures } from "./data-table-features";
+import { type DataTableFeatures } from "../../lib/data-table-features";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { ArrowUpDown, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { Product } from "@/types/product";
 import { rupiah } from "@/lib/rupiah";
 import { archive } from "@/lib/archive";
@@ -168,7 +168,7 @@ export const columns = columnHelper.columns([
                                     href={editItem(product)}
                                     className="flex gap-2 items-center"
                                 >
-                                    <Pencil /> Edit
+                                    <Edit /> Edit
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -176,7 +176,7 @@ export const columns = columnHelper.columns([
                             >
                                 <Dialog open={open} onOpenChange={setOpen}>
                                     <DialogTrigger className="flex gap-2 items-center">
-                                        <Trash2 /> Delete
+                                        <Trash /> Delete
                                     </DialogTrigger>
                                     <DialogContent>
                                         <DeleteDialogContent
