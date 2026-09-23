@@ -1,12 +1,13 @@
 import { Banknote, Landmark, Receipt, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "../ui/field";
-import { ChangeEventHandler, InputHTMLAttributes, useState } from "react";
+import { useState } from "react";
 import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
+    AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
@@ -17,6 +18,7 @@ import { useCartContext } from "./cart-context";
 import { PaymentMethod, PaymentMethodUtils } from "@/enums";
 import PaymentMethodButton from "./payment-method-button";
 import SummaryItem from "./summary-item";
+import { WALK_IN_CUSTOMER } from "./customer-combobox";
 
 interface CheckoutProps {
     total: number;
@@ -31,6 +33,7 @@ export default function Checkout({ total }: CheckoutProps) {
         cart,
         discountAmount,
         setDiscountAmount,
+        selectedCustomer,
     } = useCartContext();
     const [checkoutOpen, setCheckoutOpen] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
@@ -255,6 +258,9 @@ export default function Checkout({ total }: CheckoutProps) {
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Confirmation</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {selectedCustomer?.name || WALK_IN_CUSTOMER.name}
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <SummaryItem />
                     <div className="flex font-bold justify-between">
