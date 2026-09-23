@@ -230,7 +230,7 @@ export function useCart() {
             discount_amount: discountAmount ?? 0,
             tax_amount: extraFields?.tax_amount ?? 0,
             currency: extraFields?.currency ?? "IDR",
-            sale_number: extraFields?.sale_number ?? null,
+            sale_number: saleNumber ?? null,
             notes: extraFields?.notes ?? null,
             items: cart.map((item) => ({
                 product_id: item.product.id,
