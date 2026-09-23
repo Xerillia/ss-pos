@@ -18,6 +18,7 @@ export function useCart() {
         PaymentMethod.CASH,
     );
     const [payAmount, setPayAmount] = useState<number>();
+    const [discountAmount, setDiscountAmount] = useState<number>();
 
     useEffect(() => {
         try {
@@ -129,7 +130,7 @@ export function useCart() {
     };
 
     const cartTotal = () => {
-        return cart.reduce((total, item) => {
+        const totalBeforeDiscount = cart.reduce((total, item) => {
             const discountedUnitPrice = Math.max(
                 0,
                 item.product.price - (item.unit_discount || 0),
@@ -140,6 +141,12 @@ export function useCart() {
             );
             return total + itemTotal;
         }, 0);
+
+        const finalTotal = Math.max(
+            0,
+            totalBeforeDiscount - (discountAmount || 0),
+        );
+        return finalTotal;
     };
 
     const setUnitDiscount = (productId: string | number, discount: number) => {
@@ -187,5 +194,7 @@ export function useCart() {
         setPaymentMethod,
         payAmount,
         setPayAmount,
+        discountAmount,
+        setDiscountAmount,
     };
 }

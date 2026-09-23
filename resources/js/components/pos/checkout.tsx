@@ -19,8 +19,15 @@ interface CheckoutProps {
 }
 
 export default function Checkout({ total }: CheckoutProps) {
-    const { paymentMethod, setPaymentMethod, payAmount, setPayAmount, cart } =
-        useCartContext();
+    const {
+        paymentMethod,
+        setPaymentMethod,
+        payAmount,
+        setPayAmount,
+        cart,
+        discountAmount,
+        setDiscountAmount,
+    } = useCartContext();
     const [open, setOpen] = useState(false);
 
     const handlePay = () => {
@@ -97,7 +104,16 @@ export default function Checkout({ total }: CheckoutProps) {
                                 >
                                     Order Discount (Rp)
                                 </FieldLabel>
-                                <Input id="order_discount" placeholder="0" />
+                                <Input
+                                    id="order_discount"
+                                    placeholder="0"
+                                    value={discountAmount}
+                                    onChange={(e) =>
+                                        setDiscountAmount(
+                                            Number(e.target.value),
+                                        )
+                                    }
+                                />
                             </Field>
                             <Field>
                                 <FieldLabel
