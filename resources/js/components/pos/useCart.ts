@@ -233,7 +233,11 @@ export function useCart() {
 
         try {
             const response = await processCheckout(payload);
-            clearCart();
+
+            if (response.success) {
+                clearCart();
+            }
+
             return response;
         } catch (error) {
             throw error;
