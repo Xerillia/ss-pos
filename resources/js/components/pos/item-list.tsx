@@ -93,7 +93,7 @@ export default function ItemList({ products }: ItemListProps) {
                                         {...(!isDisabled && {
                                             onClick: () => addToCart(product),
                                         })}
-                                        className={`group transition-colors ${
+                                        className={`group transition-colors hover:border hover:border-black/60 dark:hover:border-white/30 ${
                                             isDisabled
                                                 ? "opacity-50 cursor-not-allowed select-none"
                                                 : "hover:bg-black/5 hover:dark:bg-white/5 hover:cursor-pointer"

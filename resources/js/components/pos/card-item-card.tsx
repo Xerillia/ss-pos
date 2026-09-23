@@ -31,7 +31,7 @@ export default function CardItemCard({
     const subtotalWithoutDiscount = subTotalWithoutDiscount(product.id);
 
     return (
-        <Card>
+        <Card className="hover:border hover:border-black/60 transition-colors dark:hover:border-white/30">
             <CardContent>
                 <div className="flex justify-between items-start">
                     <div>
