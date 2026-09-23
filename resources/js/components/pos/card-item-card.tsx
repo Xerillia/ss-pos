@@ -73,10 +73,19 @@ export default function CardItemCard({
                             <Button
                                 size="xs"
                                 variant="outline"
-                                className="h-6.5"
+                                className={`h-6.5 ${
+                                    subtotal === subtotalWithoutDiscount
+                                        ? ""
+                                        : "border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950 hover:text-amber-700 dark:hover:text-amber-300"
+                                }`}
                                 onClick={onToggleExpand}
                             >
-                                <Tag data-icon="inline-start" /> Discount
+                                <Tag data-icon="inline-start" />{" "}
+                                {subtotal === subtotalWithoutDiscount
+                                    ? "Discount"
+                                    : rupiah(
+                                          subtotal - subtotalWithoutDiscount,
+                                      )}
                             </Button>
                         </div>
                         <div className="flex flex-col">
