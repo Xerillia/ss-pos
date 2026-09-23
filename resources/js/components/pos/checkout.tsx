@@ -19,7 +19,7 @@ interface CheckoutProps {
 }
 
 export default function Checkout({ total }: CheckoutProps) {
-    const { paymentMethod, setPaymentMethod, payAmount, setPayAmount } =
+    const { paymentMethod, setPaymentMethod, payAmount, setPayAmount, cart } =
         useCartContext();
     const [open, setOpen] = useState(false);
 
@@ -30,7 +30,7 @@ export default function Checkout({ total }: CheckoutProps) {
     return (
         <>
             <Field className="mt-3">
-                <Button onClick={() => setOpen(true)}>
+                <Button onClick={() => setOpen(true)} disabled={cart.length === 0}>
                     <Receipt data-icon="inline-start" /> Checkout
                 </Button>
             </Field>
