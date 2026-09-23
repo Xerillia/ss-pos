@@ -1,4 +1,4 @@
-import { Receipt, X } from "lucide-react";
+import { Banknote, Landmark, Receipt, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "../ui/field";
 import { useState } from "react";
@@ -30,7 +30,10 @@ export default function Checkout({ total }: CheckoutProps) {
     return (
         <>
             <Field className="mt-3">
-                <Button onClick={() => setOpen(true)} disabled={cart.length === 0}>
+                <Button
+                    onClick={() => setOpen(true)}
+                    disabled={cart.length === 0}
+                >
                     <Receipt data-icon="inline-start" /> Checkout
                 </Button>
             </Field>
@@ -60,12 +63,30 @@ export default function Checkout({ total }: CheckoutProps) {
                                     paymentMethod={paymentMethod}
                                     setPaymentMethod={setPaymentMethod}
                                     label={PaymentMethod.CASH}
-                                />
+                                >
+                                    <Banknote data-icon="inline-start" />
+                                </PaymentMethodButton>
                                 <PaymentMethodButton
                                     paymentMethod={paymentMethod}
                                     setPaymentMethod={setPaymentMethod}
-                                    label={PaymentMethod.TRANSFER}
-                                />
+                                    label={PaymentMethod.TRANSFER_BCA}
+                                >
+                                    <Landmark data-icon="inline-start" />
+                                </PaymentMethodButton>
+                                <PaymentMethodButton
+                                    paymentMethod={paymentMethod}
+                                    setPaymentMethod={setPaymentMethod}
+                                    label={PaymentMethod.TRANSFER_BRI}
+                                >
+                                    <Landmark data-icon="inline-start" />
+                                </PaymentMethodButton>
+                                <PaymentMethodButton
+                                    paymentMethod={paymentMethod}
+                                    setPaymentMethod={setPaymentMethod}
+                                    label={PaymentMethod.TRANSFER_MANDIRI}
+                                >
+                                    <Landmark data-icon="inline-start" />
+                                </PaymentMethodButton>
                             </div>
                         </Field>
                         <FieldGroup className="grid grid-cols-2 gap-3">

@@ -1,18 +1,19 @@
 import { PaymentMethod, PaymentMethodUtils } from "@/enums";
-import { Banknote } from "lucide-react";
 import { Button } from "../ui/button";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 
 interface PaymentMethodButtonProps {
     paymentMethod: string | undefined;
     setPaymentMethod: Dispatch<SetStateAction<PaymentMethod>>;
     label: PaymentMethod;
+    children: ReactNode;
 }
 
 export default function PaymentMethodButton({
     paymentMethod,
     setPaymentMethod,
     label,
+    children,
 }: PaymentMethodButtonProps) {
     return (
         <Button
@@ -21,7 +22,7 @@ export default function PaymentMethodButton({
             disabled={paymentMethod === label}
             className={`${paymentMethod === label ? "disabled:opacity-100 text-amber-500 border-amber-500 dark:border-amber-500 dark:bg-amber-600/10 bg-amber-600/10" : ""}`}
         >
-            <Banknote data-icon="inline-start" />
+            {children}
             {PaymentMethodUtils.label(label)}
         </Button>
     );
