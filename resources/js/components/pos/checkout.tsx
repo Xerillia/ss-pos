@@ -1,7 +1,7 @@
 import { Banknote, Landmark, Receipt, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "../ui/field";
-import { useState } from "react";
+import { ChangeEventHandler, InputHTMLAttributes, useState } from "react";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -37,6 +37,19 @@ export default function Checkout({ total }: CheckoutProps) {
 
     const change = (payAmount || 0) - total;
     const debt = total - (payAmount || 0);
+
+    const sanitize = (value: string) => {
+        const sanitized = Number(value.replace(/[^0-9+]/g, ""));
+        return isNaN(sanitized) ? 0 : sanitized;
+    };
+
+    const handleDiscountInput = (value: string) => {
+        setDiscountAmount(sanitize(value));
+    };
+
+    const handlePayAmountInput = (value: string) => {
+        setPayAmount(sanitize(value));
+    };
 
     const handleFinish = () => {};
 
@@ -112,13 +125,10 @@ export default function Checkout({ total }: CheckoutProps) {
                                 </FieldLabel>
                                 <Input
                                     id="order_discount"
-                                    type="number"
                                     placeholder="0"
-                                    value={discountAmount}
+                                    value={discountAmount || 0}
                                     onChange={(e) =>
-                                        setDiscountAmount(
-                                            Number(e.target.value),
-                                        )
+                                        handleDiscountInput(e.target.value)
                                     }
                                 />
                             </Field>
@@ -131,11 +141,10 @@ export default function Checkout({ total }: CheckoutProps) {
                                 </FieldLabel>
                                 <Input
                                     id="paid_amount"
-                                    type="number"
                                     placeholder="0"
-                                    value={payAmount}
+                                    value={payAmount || 0}
                                     onChange={(e) =>
-                                        setPayAmount(Number(e.target.value))
+                                        handlePayAmountInput(e.target.value)
                                     }
                                     autoFocus
                                 />
