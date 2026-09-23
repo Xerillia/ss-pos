@@ -22,6 +22,7 @@ export function useCart() {
     const [payAmount, setPayAmount] = useState<number>();
     const [discountAmount, setDiscountAmount] = useState<number>();
     const [selectedCustomer, setSelectedCustomer] = useState<Customer>();
+    const [saleNumber, setSaleNumber] = useState<string>();
 
     useEffect(() => {
         try {
@@ -203,6 +204,7 @@ export function useCart() {
         setDiscountAmount(undefined);
         setSelectedCustomer(undefined);
         setPaymentMethod(PaymentMethod.CASH);
+        setSaleNumber(undefined);
         try {
             localStorage.removeItem(CART_STORAGE_KEY);
         } catch (error) {
@@ -211,7 +213,6 @@ export function useCart() {
     };
 
     const finishTransaction = async (extraFields?: {
-        sale_number?: string;
         tax_amount?: number;
         currency?: string;
         notes?: string;
@@ -274,5 +275,7 @@ export function useCart() {
         setSelectedCustomer,
         clearCart,
         finishTransaction,
+        saleNumber,
+        setSaleNumber,
     };
 }
