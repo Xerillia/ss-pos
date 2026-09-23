@@ -15,6 +15,7 @@ import { PaymentMethodSelector } from "./payment-method-selector";
 import { QuickPayPresets } from "./quick-pay-presets";
 import { CheckoutConfirmDialog } from "./checkout-confirm-dialog";
 import { toast } from "sonner";
+import { router } from "@inertiajs/react";
 
 interface CheckoutProps {
     total: number;
@@ -57,6 +58,8 @@ export default function Checkout({ total }: CheckoutProps) {
 
             if (response.success) {
                 toast.success(response.message, { id: toastId });
+
+                router.reload({ only: ["products"] });
             } else {
                 toast.error(response.message, { id: toastId });
             }
