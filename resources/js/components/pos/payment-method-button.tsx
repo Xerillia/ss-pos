@@ -1,20 +1,21 @@
 import { PaymentMethod, PaymentMethodUtils } from "@/enums";
 import { Button } from "../ui/button";
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { ReactNode } from "react";
+import { useCartContext } from "./cart-context";
 
 interface PaymentMethodButtonProps {
     paymentMethod: string | undefined;
-    setPaymentMethod: Dispatch<SetStateAction<PaymentMethod>>;
     label: PaymentMethod;
     children: ReactNode;
 }
 
 export default function PaymentMethodButton({
     paymentMethod,
-    setPaymentMethod,
     label,
     children,
 }: PaymentMethodButtonProps) {
+    const { setPaymentMethod } = useCartContext();
+
     return (
         <Button
             variant="outline"
