@@ -32,7 +32,7 @@ class POSCheckoutController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Checkout failed. Please try again.',
+                'message' => $e->getMessage(),
             ], 500);
         }
     }
