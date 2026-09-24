@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
+use App\Enums\SaleStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,6 +42,7 @@ class Sale extends Model
         'debt_amount' => 'decimal:2',
         'payment_status' => PaymentStatus::class,
         'payment_method' => PaymentMethod::class,
+        'status' => SaleStatus::class,
     ];
 
     /**
