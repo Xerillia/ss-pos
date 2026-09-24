@@ -1,4 +1,4 @@
-import { PaymentMethodUtils, PaymentStatusUtils } from "@/enums";
+import { PaymentMethodUtils, PaymentStatus, PaymentStatusUtils } from "@/enums";
 import { DataTableFeatures } from "@/lib/data-table-features";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
@@ -30,6 +30,8 @@ import {
     AlertDialogTitle,
 } from "../ui/alert-dialog";
 import { toast } from "sonner";
+import { styleVariants } from "@/lib/style";
+import { VariantProps } from "class-variance-authority";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Sale>();
 
@@ -61,6 +63,16 @@ const handleDelete = (sale: Sale) => {
             id: toastId,
         });
     }
+};
+
+const statusVariantMap: Record<
+    PaymentStatus,
+    VariantProps<typeof styleVariants>["variant"]
+> = {
+    [PaymentStatus.PAID]: "green",
+    [PaymentStatus.PARTIAL]: "yellow",
+    [PaymentStatus.PARTIALLY_REFUNDED]: "yellow",
+    [PaymentStatus.UNPAID]: "red",
 };
 
 export const columns = [
@@ -137,8 +149,12 @@ export const columns = [
         header: "Status",
         cell: (info) => {
             const status = info.getValue();
+
+            const variant = statusVariantMap[status] ?? "red";
+            const className = styleVariants({ variant });
+
             return (
-                <Badge variant={status === "paid" ? "default" : "destructive"}>
+                <Badge className={className}>
                     {PaymentStatusUtils.label(status)}
                 </Badge>
             );
