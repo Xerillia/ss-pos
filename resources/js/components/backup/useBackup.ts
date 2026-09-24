@@ -124,9 +124,9 @@ export function useBackup() {
             router.visit(inventory(), { only: ["products"] });
         } catch (err: any) {
             const errorMessage =
-                err.response?.data?.error || "Failed to restore database.";
+                err.response?.data?.message || "Failed to restore database.";
 
-            toast.error(errorMessage || "Failed to restore database.", {
+            toast.error(errorMessage, {
                 id: toastId,
             });
         } finally {
@@ -140,6 +140,24 @@ export function useBackup() {
         setIsDeleting(true);
 
         const toastId = toast.loading("Deleting backup...");
+
+        try {
+            const response = await api.delete(`/backups/delete/${filename}`);
+
+            toast.success(
+                response.data.message || "Database deleted successfully!",
+                { id: toastId },
+            );
+        } catch (err: any) {
+            const errorMessage =
+                err.response?.data?.message || "Failed to delete database.";
+
+            toast.error(errorMessage, {
+                id: toastId,
+            });
+        } finally {
+            setIsDeleting(false);
+        }
     };
 
     return {
