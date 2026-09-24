@@ -102,7 +102,7 @@ class BackupController extends Controller
 
             return [
                 'filename' => $filename,
-                'name' => self::extractName($filename),
+                'name' => $this->extractName($filename),
                 'size' => round($disk->size($file) / 1024, 2).' KB',
                 'date' => $timestamp, // to millisecond
             ];
