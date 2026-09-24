@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -12,6 +13,28 @@ use Illuminate\Support\Str;
 class BackupController extends Controller
 {
     protected const DISK = 'local';
+
+    /**
+     * Helper to sanitize and validate file paths against Path Traversal attacks.
+     *
+     * @return string|null Returns relative path inside disk or null if unsafe/invalid.
+     */
+    protected function getSafeBackupPath(string $fileName): ?string
+    {
+        $cleanName = basename($fileName);
+
+        if (empty($cleanName) || str_starts_with($cleanName, '.')) {
+            return null;
+        }
+
+        $relativePath = config('app.name').'/'.$cleanName;
+
+        if (! Storage::disk(self::DISK)->exists($relativePath)) {
+            return null;
+        }
+
+        return $relativePath;
+    }
 
     /**
      * Extract the name from a filename
@@ -30,6 +53,35 @@ class BackupController extends Controller
     }
 
     /**
+     * Extract the date timestamp in milliseconds from a filename.
+     *
+     * @param  string  $fileName  In format YYYY-MM-DD-HH-mm-ss-name.zip
+     */
+    protected function extractTimestamp(string $fileName): ?int
+    {
+        if (preg_match('/^(\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})/', $fileName, $matches)) {
+            $date = DateTime::createFromFormat('Y-m-d-H-i-s', $matches[1]);
+
+            if ($date) {
+                return $date->getTimestamp() * 1000;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Helper to return a consistent 404 response for missing/invalid backup files.
+     */
+    protected function fileNotFoundResponse(): JsonResponse
+    {
+        return response()->json([
+            'success' => false,
+            'message' => 'Backup file not found or invalid filename.',
+        ], 404);
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
@@ -40,11 +92,19 @@ class BackupController extends Controller
         $backups = collect($files)->map(function ($file) use ($disk) {
             $filename = basename($file);
 
+            // try to parse from filename first
+            $timestamp = $this->extractTimestamp($filename);
+
+            // fallback to
+            if ($timestamp === null) {
+                $timestamp = (int) ($disk->lastModified($file) * 1000);
+            }
+
             return [
                 'filename' => $filename,
-                'name' => self::extractName($filename),
+                'name' => $this->extractName($filename),
                 'size' => round($disk->size($file) / 1024, 2).' KB',
-                'date' => $disk->lastModified($file) * 1000, // to millisecond
+                'date' => $timestamp, // to millisecond
             ];
         })->sortByDesc('date')->values();
 
@@ -90,7 +150,13 @@ class BackupController extends Controller
 
     public function download(string $name)
     {
-        return Storage::disk(self::DISK)->download(config('app.name').'/'.$name);
+        $filePath = $this->getSafeBackupPath($name);
+
+        if (! $filePath) {
+            return $this->fileNotFoundResponse();
+        }
+
+        return Storage::disk(self::DISK)->download($filePath);
     }
 
     public function uploadAndApply(Request $request)
@@ -102,17 +168,14 @@ class BackupController extends Controller
 
         // temp storage
         $file = $request->file('backup_file');
-        $fileName = time().'_'.$file->getClientOriginalName();
-        $filePath = $file->storeAs('temp-backups', $fileName, 'local');
+        $fileName = time().'_'.basename($file->getClientOriginalName());
+        $filePath = $file->storeAs('temp', $fileName, 'local');
 
         try {
             Artisan::call('backup:restore', [
                 '--backup' => $filePath,
                 '--no-interaction' => true,
             ]);
-
-            // delete on success
-            Storage::disk('local')->delete($filePath);
 
             return response()->json([
                 'success' => true,
@@ -125,12 +188,18 @@ class BackupController extends Controller
                 'success' => false,
                 'message' => 'Restore failed. Check server logs.',
             ], 500);
+        } finally {
+            Storage::disk('local')->delete($filePath);
         }
     }
 
     public function apply(string $name)
     {
-        $filePath = config('app.name').'/'.$name;
+        $filePath = $this->getSafeBackupPath($name);
+
+        if (! $filePath) {
+            return $this->fileNotFoundResponse();
+        }
 
         try {
             Artisan::call('backup:restore', [
@@ -148,6 +217,31 @@ class BackupController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Backup failed. Check server logs.',
+            ], 500);
+        }
+    }
+
+    public function delete(string $name)
+    {
+        $filePath = $this->getSafeBackupPath($name);
+
+        if (! $filePath) {
+            return $this->fileNotFoundResponse();
+        }
+
+        try {
+            Storage::disk(self::DISK)->delete($filePath);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Backup file deleted successfully.',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Delete backup failed: '.$e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete backup file. Check server logs.',
             ], 500);
         }
     }

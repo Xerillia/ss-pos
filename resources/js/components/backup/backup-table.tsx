@@ -14,6 +14,7 @@ import RestoreTo from "./restore-to";
 import slugify from "react-slugify";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import DeleteBackup from "./delete-backup";
 
 dayjs.extend(utc);
 
@@ -29,6 +30,7 @@ interface BackupTableProps {
     loading: boolean;
     error: string;
     handleApply: (filename: string) => void;
+    handleDelete: (filename: string) => void;
 }
 
 export default function BackupTable({
@@ -36,6 +38,7 @@ export default function BackupTable({
     loading,
     error,
     handleApply,
+    handleDelete,
 }: BackupTableProps) {
     if (loading) return <div>Loading backups...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -51,6 +54,7 @@ export default function BackupTable({
                     <TableHead>Size</TableHead>
                     <TableHead className="text-center">Download</TableHead>
                     <TableHead className="text-center">Restore</TableHead>
+                    <TableHead className="text-center">Delete</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -78,6 +82,12 @@ export default function BackupTable({
                                 <RestoreTo
                                     handleApply={handleApply}
                                     filename={filename}
+                                />
+                            </TableCell>
+                            <TableCell className="text-center">
+                                <DeleteBackup
+                                    filename={filename}
+                                    handleDelete={handleDelete}
                                 />
                             </TableCell>
                         </TableRow>

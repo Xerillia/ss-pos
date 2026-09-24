@@ -10,12 +10,13 @@ Route::middleware('auth:sanctum')->name('api.')->group(function () {
         return $request->user();
     })->name('user');
 
-    Route::name('backup.')->group(function () {
-        Route::get('/backups', [BackupController::class, 'index'])->name('index');
-        Route::post('/backups', [BackupController::class, 'generate'])->name('generate');
-        Route::get('/backups/{name}', [BackupController::class, 'download'])->name('download')->where('name', '.*\.(zip|sql)$');
-        Route::post('/backups/restore', [BackupController::class, 'uploadAndApply'])->name('uploadAndApply');
-        Route::post('/backups/restore/{name}', [BackupController::class, 'apply'])->name('restore')->where('name', '.*\.(zip|sql)$');
+    Route::name('backup.')->prefix('/backups')->group(function () {
+        Route::get('/', [BackupController::class, 'index'])->name('index');
+        Route::post('/', [BackupController::class, 'generate'])->name('generate');
+        Route::get('/{name}', [BackupController::class, 'download'])->name('download')->where('name', '.*\.(zip|sql)$');
+        Route::post('/restore', [BackupController::class, 'uploadAndApply'])->name('uploadAndApply');
+        Route::post('/restore/{name}', [BackupController::class, 'apply'])->name('restore')->where('name', '.*\.(zip|sql)$');
+        Route::delete('/delete/{name}', [BackupController::class, 'delete'])->name('delete')->where('name', '.*\.(zip|sql)$');
     });
 
     Route::post('/pos/checkout', [POSCheckoutController::class, 'store'])->name('checkout');
