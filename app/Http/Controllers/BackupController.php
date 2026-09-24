@@ -126,7 +126,7 @@ class BackupController extends Controller
         $filePath = $this->getSafeBackupPath($name);
 
         if (! $filePath) {
-            $this->fileNotFoundResponse();
+            return $this->fileNotFoundResponse();
         }
 
         return Storage::disk(self::DISK)->download($filePath);
@@ -171,7 +171,7 @@ class BackupController extends Controller
         $filePath = $this->getSafeBackupPath($name);
 
         if (! $filePath) {
-            $this->fileNotFoundResponse();
+            return $this->fileNotFoundResponse();
         }
 
         try {
@@ -199,7 +199,7 @@ class BackupController extends Controller
         $filePath = $this->getSafeBackupPath($name);
 
         if (! $filePath) {
-            $this->fileNotFoundResponse();
+            return $this->fileNotFoundResponse();
         }
 
         try {
