@@ -18,7 +18,7 @@ export default function Sales({ sales, filters }: SalesProps) {
     return (
         <>
             <Head title="Sales" />
-            <div className="p-6 space-y-6 max-w-7xl mx-auto">
+            <div className="m-4 space-y-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold tracking-tight">
                         Sales Transactions

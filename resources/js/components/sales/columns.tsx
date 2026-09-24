@@ -102,7 +102,9 @@ export const columns = [
         header: "Total",
         cell: (info) => {
             return (
-                <span className="font-semibold">{rupiah(info.getValue())}</span>
+                <span className="font-semibold font-mono">
+                    {rupiah(info.getValue())}
+                </span>
             );
         },
     }),
@@ -125,39 +127,37 @@ export const columns = [
     // Actions Column
     columnHelper.display({
         id: "actions",
-        header: () => <div className="text-right">Actions</div>,
+        header: "Actions",
         cell: ({ row }) => {
             const sale = row.original;
 
             return (
-                <div className="text-right">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem asChild>
-                                <Link
-                                    href={showSale(sale.id)}
-                                    className="cursor-pointer flex items-center"
-                                >
-                                    <Eye className="mr-2 h-4 w-4" /> View / Edit
-                                </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                // onClick={() => handleDelete(sale.id)}
-                                className="text-red-600 cursor-pointer flex items-center"
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem asChild>
+                            <Link
+                                href={showSale(sale.id)}
+                                className="cursor-pointer flex items-center"
                             >
-                                <Trash className="mr-2 h-4 w-4" /> Delete Sale
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
+                                <Eye className="mr-2 h-4 w-4" /> View / Edit
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                            // onClick={() => handleDelete(sale.id)}
+                            className="text-red-600 cursor-pointer flex items-center"
+                        >
+                            <Trash className="mr-2 h-4 w-4" /> Delete Sale
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             );
         },
     }),
