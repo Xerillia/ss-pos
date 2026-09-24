@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -52,6 +53,24 @@ class BackupController extends Controller
     }
 
     /**
+     * Extract the date timestamp in milliseconds from a filename.
+     *
+     * @param  string  $fileName  In format YYYY-MM-DD-HH-mm-ss-name.zip
+     */
+    protected function extractTimestamp(string $fileName): ?int
+    {
+        if (preg_match('/^(\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})/', $fileName, $matches)) {
+            $date = DateTime::createFromFormat('Y-m-d-H-i-s', $matches[1]);
+
+            if ($date) {
+                return $date->getTimestamp() * 1000;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Helper to return a consistent 404 response for missing/invalid backup files.
      */
     protected function fileNotFoundResponse(): JsonResponse
@@ -73,11 +92,19 @@ class BackupController extends Controller
         $backups = collect($files)->map(function ($file) use ($disk) {
             $filename = basename($file);
 
+            // try to parse from filename first
+            $timestamp = $this->extractTimestamp($filename);
+
+            // fallback to
+            if ($timestamp === null) {
+                $timestamp = (int) ($disk->lastModified($file) * 1000);
+            }
+
             return [
                 'filename' => $filename,
                 'name' => self::extractName($filename),
                 'size' => round($disk->size($file) / 1024, 2).' KB',
-                'date' => $disk->lastModified($file) * 1000, // to millisecond
+                'date' => $timestamp, // to millisecond
             ];
         })->sortByDesc('date')->values();
 
