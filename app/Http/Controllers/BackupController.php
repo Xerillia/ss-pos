@@ -121,7 +121,7 @@ class BackupController extends Controller
             ], 404);
         }
 
-        return Storage::disk(self::DISK)->download(config('app.name').'/'.$name);
+        return Storage::disk(self::DISK)->download($filePath);
     }
 
     public function uploadAndApply(Request $request)
@@ -133,7 +133,7 @@ class BackupController extends Controller
 
         // temp storage
         $file = $request->file('backup_file');
-        $fileName = time().'_'.$file->getClientOriginalName();
+        $fileName = time().'_'.basename($file->getClientOriginalName());
         $filePath = $file->storeAs('temp', $fileName, 'local');
 
         try {
@@ -141,9 +141,6 @@ class BackupController extends Controller
                 '--backup' => $filePath,
                 '--no-interaction' => true,
             ]);
-
-            // delete on success
-            Storage::disk('local')->delete($filePath);
 
             return response()->json([
                 'success' => true,
@@ -156,6 +153,8 @@ class BackupController extends Controller
                 'success' => false,
                 'message' => 'Restore failed. Check server logs.',
             ], 500);
+        } finally {
+            Storage::disk('local')->delete($filePath);
         }
     }
 
