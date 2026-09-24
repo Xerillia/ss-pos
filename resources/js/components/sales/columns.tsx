@@ -1,4 +1,4 @@
-import { PaymentMethodUtils, SaleStatusUtils } from "@/enums";
+import { PaymentMethodUtils, PaymentStatusUtils } from "@/enums";
 import { DataTableFeatures } from "@/lib/data-table-features";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
@@ -15,11 +15,53 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { Eye, MoreHorizontal, Trash } from "lucide-react";
-import { Link } from "@inertiajs/react";
-import { showSale } from "@/routes/sales";
+import { Link, router } from "@inertiajs/react";
+import { destroySale, showSale } from "@/routes/sales";
 import { Sale } from "@/types/sale";
+import { useState } from "react";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "../ui/alert-dialog";
+import { toast } from "sonner";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Sale>();
+
+const handleDelete = (sale: Sale) => {
+    const toastId = toast.loading("Deleting sale...");
+
+    try {
+        router.delete(destroySale(sale.id), {
+            onSuccess: (page) => {
+                const props = page.props as typeof page.props & {
+                    flash?: { success?: string };
+                };
+
+                toast.success(
+                    props.flash?.success || "Sale deleted successfully!",
+                    {
+                        id: toastId,
+                    },
+                );
+            },
+            onError: () => {
+                toast.error("Failed to delete sale. Contact Admin.", {
+                    id: toastId,
+                });
+            },
+        });
+    } catch (err: any) {
+        toast.error(err.message || "Failed to delete sale. Contact Admin.", {
+            id: toastId,
+        });
+    }
+};
 
 export const columns = [
     // Selection Column
@@ -91,15 +133,13 @@ export const columns = [
     }),
 
     // Status
-    columnHelper.accessor("status", {
+    columnHelper.accessor("payment_status", {
         header: "Status",
         cell: (info) => {
             const status = info.getValue();
             return (
-                <Badge
-                    variant={status === "completed" ? "default" : "destructive"}
-                >
-                    {SaleStatusUtils.label(status)}
+                <Badge variant={status === "paid" ? "default" : "destructive"}>
+                    {PaymentStatusUtils.label(status)}
                 </Badge>
             );
         },
@@ -108,37 +148,64 @@ export const columns = [
     // Actions Column
     columnHelper.display({
         id: "actions",
-        header: "Actions",
+        header: () => {},
         cell: ({ row }) => {
             const sale = row.original;
 
+            const [open, setOpen] = useState(false);
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem asChild>
-                            <Link
-                                href={showSale(sale.id)}
-                                className="cursor-pointer flex items-center"
+                <>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem asChild>
+                                <Link
+                                    href={showSale(sale.id)}
+                                    className="cursor-pointer flex items-center"
+                                >
+                                    <Eye className="mr-2 h-4 w-4" /> View / Edit
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                onClick={() => setOpen(true)}
+                                className="dark:text-rose-400 text-rose-600 cursor-pointer flex items-center"
                             >
-                                <Eye className="mr-2 h-4 w-4" /> View / Edit
-                            </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            // onClick={() => handleDelete(sale.id)}
-                            className="text-red-600 cursor-pointer flex items-center"
-                        >
-                            <Trash className="mr-2 h-4 w-4" /> Delete Sale
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                                <Trash className="mr-2 h-4 w-4" /> Delete Sale
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    <AlertDialog open={open} onOpenChange={setOpen}>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                    Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Deleting this sale will restore item stock.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel variant="default">
+                                    Cancel
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                    variant="destructive"
+                                    onClick={() => handleDelete(sale)}
+                                >
+                                    Delete
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </>
             );
         },
     }),
