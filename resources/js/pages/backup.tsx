@@ -16,6 +16,7 @@ export default function Backup() {
         isRestoring,
         handleUploadAndApply,
         handleApply,
+        handleDelete,
     } = useBackup();
 
     useEffect(() => {
@@ -45,6 +46,7 @@ export default function Backup() {
                         loading={loading}
                         error={error}
                         handleApply={handleApply}
+                        handleDelete={handleDelete}
                     />
                 </div>
             </div>

@@ -30,6 +30,7 @@ interface BackupTableProps {
     loading: boolean;
     error: string;
     handleApply: (filename: string) => void;
+    handleDelete: (filename: string) => void;
 }
 
 export default function BackupTable({
@@ -37,11 +38,12 @@ export default function BackupTable({
     loading,
     error,
     handleApply,
+    handleDelete,
 }: BackupTableProps) {
     if (loading) return <div>Loading backups...</div>;
     if (error) return <div>Error: {error}</div>;
 
-    const { handleDownload, handleDelete } = useBackup();
+    const { handleDownload } = useBackup();
 
     return (
         <Table>
