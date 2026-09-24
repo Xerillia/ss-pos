@@ -1,11 +1,4 @@
-import {
-    PaymentMethod,
-    PaymentMethodUtils,
-    PaymentStatus,
-    PaymentStatusUtils,
-    SaleStatus,
-    SaleStatusUtils,
-} from "@/enums";
+import { PaymentMethodUtils, SaleStatusUtils } from "@/enums";
 import { DataTableFeatures } from "@/lib/data-table-features";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
@@ -24,21 +17,9 @@ import { Button } from "../ui/button";
 import { Eye, MoreHorizontal, Trash } from "lucide-react";
 import { Link } from "@inertiajs/react";
 import { showSale } from "@/routes/sales";
+import { Sale } from "@/types/sale";
 
-export interface SaleRecord {
-    id: number;
-    sale_number: string;
-    customer?: { id: number; name: string };
-    user?: { id: number; name: string };
-    payment_method: PaymentMethod;
-    total_amount: number;
-    currency: string;
-    status: SaleStatus;
-    payment_status: PaymentStatus;
-    created_at: string;
-}
-
-const columnHelper = createColumnHelper<DataTableFeatures, SaleRecord>();
+const columnHelper = createColumnHelper<DataTableFeatures, Sale>();
 
 export const columns = [
     // Selection Column
