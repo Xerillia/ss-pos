@@ -25,7 +25,7 @@ import {
 import { backup, converter, dashboard } from "@/routes";
 import type { NavItem } from "@/types";
 import { inventory } from "@/routes/product";
-import { posIndex } from "@/routes/pos";
+import { pos } from "@/routes/pos";
 import { customers } from "@/routes/customer";
 
 const mainNavItems: NavItem[] = [
@@ -36,7 +36,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: "Point of Sale",
-        href: posIndex(),
+        href: pos(),
         icon: Receipt,
     },
     {

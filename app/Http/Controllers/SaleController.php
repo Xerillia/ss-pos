@@ -13,7 +13,7 @@ class SaleController extends Controller
     /**
      * Display POS
      */
-    public function index()
+    public function pos()
     {
         $products = Product::all();
         $customers = Customer::all();
