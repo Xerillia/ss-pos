@@ -221,12 +221,10 @@ export function useCart() {
             throw new Error("Cannot checkout with an empty cart.");
         }
 
-        const totalToPay = cartTotal();
-
         const payload = {
             customer_id: selectedCustomer?.id ?? null,
             payment_method: paymentMethod,
-            paid_amount: payAmount ?? totalToPay,
+            paid_amount: payAmount ?? 0,
             discount_amount: discountAmount ?? 0,
             tax_amount: extraFields?.tax_amount ?? 0,
             currency: extraFields?.currency ?? "IDR",
