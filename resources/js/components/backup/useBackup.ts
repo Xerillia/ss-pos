@@ -10,6 +10,7 @@ export function useBackup() {
     const [error, setError] = useState("");
     const [isBackingUp, setIsBackingUp] = useState(false);
     const [isRestoring, setIsRestoring] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const fetchBackups = async () => {
         try {
@@ -133,6 +134,14 @@ export function useBackup() {
         }
     };
 
+    const handleDelete = async (filename: string) => {
+        if (isDeleting) return;
+
+        setIsDeleting(true);
+
+        const toastId = toast.loading("Deleting backup...");
+    };
+
     return {
         backups,
         loading,
@@ -144,5 +153,6 @@ export function useBackup() {
         isRestoring,
         handleUploadAndApply,
         handleApply,
+        handleDelete,
     };
 }
