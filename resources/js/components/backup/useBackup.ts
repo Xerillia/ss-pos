@@ -14,7 +14,7 @@ export function useBackup() {
 
     const fetchBackups = async () => {
         try {
-            const response = await api.get("backups");
+            const response = await api.get("/backups");
             setBackups(response.data);
             setError("");
         } catch (err: any) {
@@ -88,13 +88,15 @@ export function useBackup() {
         try {
             const response = await apiUpload.post("/backups/restore", formData);
 
-            toast.success(
-                response.data.message || "Database restored successfully!",
-                { id: toastId },
-            );
+            if (response.data.success) {
+                toast.success(response.data.message, { id: toastId });
 
-            // visit then refresh prop
-            router.visit(inventory(), { only: ["products"] });
+                await fetchBackups();
+
+                router.visit(inventory(), { only: ["products"] });
+            } else {
+                toast.error(response.data.message, { id: toastId });
+            }
         } catch (err: any) {
             const errorMessage =
                 err.response?.data?.error || "Failed to restore database.";
@@ -115,13 +117,15 @@ export function useBackup() {
         try {
             const response = await api.post(`/backups/restore/${filename}`);
 
-            toast.success(
-                response.data.message || "Database restored successfully!",
-                { id: toastId },
-            );
+            if (response.data.success) {
+                toast.success(response.data.message, { id: toastId });
 
-            // visit then refresh prop
-            router.visit(inventory(), { only: ["products"] });
+                await fetchBackups();
+
+                router.visit(inventory(), { only: ["products"] });
+            } else {
+                toast.error(response.data.message, { id: toastId });
+            }
         } catch (err: any) {
             const errorMessage =
                 err.response?.data?.message || "Failed to restore database.";
@@ -144,10 +148,13 @@ export function useBackup() {
         try {
             const response = await api.delete(`/backups/delete/${filename}`);
 
-            toast.success(
-                response.data.message || "Database deleted successfully!",
-                { id: toastId },
-            );
+            if (response.data.success) {
+                toast.success(response.data.message, { id: toastId });
+
+                await fetchBackups();
+            } else {
+                toast.error(response.data.message, { id: toastId });
+            }
         } catch (err: any) {
             const errorMessage =
                 err.response?.data?.message || "Failed to delete database.";
