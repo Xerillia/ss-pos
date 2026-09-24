@@ -14,6 +14,28 @@ class BackupController extends Controller
     protected const DISK = 'local';
 
     /**
+     * Helper to sanitize and validate file paths against Path Traversal attacks.
+     *
+     * @return string|null Returns relative path inside disk or null if unsafe/invalid.
+     */
+    protected function getSafeBackupPath(string $fileName): ?string
+    {
+        $cleanName = basename($fileName);
+
+        if (empty($cleanName) || str_starts_with($cleanName, '.')) {
+            return null;
+        }
+
+        $relativePath = config('app.name').'/'.$cleanName;
+
+        if (! Storage::disk(self::DISK)->exists($relativePath)) {
+            return null;
+        }
+
+        return $relativePath;
+    }
+
+    /**
      * Extract the name from a filename
      *
      * @param  string  $fileName  In the format YYYY-MM-DD-HH-mm-ss-name.zip
@@ -90,6 +112,15 @@ class BackupController extends Controller
 
     public function download(string $name)
     {
+        $filePath = $this->getSafeBackupPath($name);
+
+        if (! $filePath) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Backup file not found or invalid filename.',
+            ], 404);
+        }
+
         return Storage::disk(self::DISK)->download(config('app.name').'/'.$name);
     }
 
@@ -103,7 +134,7 @@ class BackupController extends Controller
         // temp storage
         $file = $request->file('backup_file');
         $fileName = time().'_'.$file->getClientOriginalName();
-        $filePath = $file->storeAs('temp-backups', $fileName, 'local');
+        $filePath = $file->storeAs('temp', $fileName, 'local');
 
         try {
             Artisan::call('backup:restore', [
@@ -130,7 +161,14 @@ class BackupController extends Controller
 
     public function apply(string $name)
     {
-        $filePath = config('app.name').'/'.$name;
+        $filePath = $this->getSafeBackupPath($name);
+
+        if (! $filePath) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Backup file not found or invalid filename.',
+            ], 404);
+        }
 
         try {
             Artisan::call('backup:restore', [
