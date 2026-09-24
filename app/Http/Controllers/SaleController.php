@@ -69,14 +69,6 @@ class SaleController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Sale $sale)
-    {
-        //
-    }
-
-    /**
      * Update sale notes or status.
      */
     public function update(Request $request, Sale $sale)
