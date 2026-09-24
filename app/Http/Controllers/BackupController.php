@@ -52,6 +52,17 @@ class BackupController extends Controller
     }
 
     /**
+     * Helper to return a consistent 404 response for missing/invalid backup files.
+     */
+    protected function fileNotFoundResponse(): JsonResponse
+    {
+        return response()->json([
+            'success' => false,
+            'message' => 'Backup file not found or invalid filename.',
+        ], 404);
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
@@ -115,10 +126,7 @@ class BackupController extends Controller
         $filePath = $this->getSafeBackupPath($name);
 
         if (! $filePath) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Backup file not found or invalid filename.',
-            ], 404);
+            $this->fileNotFoundResponse();
         }
 
         return Storage::disk(self::DISK)->download($filePath);
@@ -163,10 +171,7 @@ class BackupController extends Controller
         $filePath = $this->getSafeBackupPath($name);
 
         if (! $filePath) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Backup file not found or invalid filename.',
-            ], 404);
+            $this->fileNotFoundResponse();
         }
 
         try {
