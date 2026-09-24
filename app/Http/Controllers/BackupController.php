@@ -193,4 +193,29 @@ class BackupController extends Controller
             ], 500);
         }
     }
+
+    public function delete(string $name)
+    {
+        $filePath = $this->getSafeBackupPath($name);
+
+        if (! $filePath) {
+            $this->fileNotFoundResponse();
+        }
+
+        try {
+            Storage::disk(self::DISK)->delete($filePath);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Backup file deleted successfully.',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Delete backup failed: '.$e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete backup file. Check server logs.',
+            ], 500);
+        }
+    }
 }
