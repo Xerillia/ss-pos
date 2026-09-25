@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
@@ -42,10 +43,16 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Customer $customer)
+    public function show(Customer $customer, Request $request)
     {
         return Inertia::render('customers/show-customer', [
             'customer' => $customer,
+            'sales' => $customer->sales()
+                ->select(['id', 'customer_id', 'sale_number', 'total_amount', 'status', 'created_at'])
+                ->withCount('saleProducts as unique_products_count')
+                ->latest()
+                ->paginate($request->input('per_page', 10))
+                ->withQueryString(),
         ]);
     }
 

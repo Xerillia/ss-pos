@@ -2,16 +2,24 @@ import CustomerTabs from "@/components/customers/customer-tabs";
 import { Button } from "@/components/ui/button";
 import { customers } from "@/routes/customer";
 import { Customer } from "@/types/customer";
+import { Sale } from "@/types/sale";
 import { Head, router } from "@inertiajs/react";
 import { Undo2 } from "lucide-react";
 import { useState } from "react";
 
 interface ShowCustomerProps {
     customer: Customer;
+    sales: {
+        data: Sale[];
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+        links: { url: string | null; label: string; active: boolean }[];
+    };
 }
 
-export default function ShowCustomer({ customer }: ShowCustomerProps) {
-    const [activeTab, setActiveTab] = useState("info");
+export default function ShowCustomer({ customer, sales }: ShowCustomerProps) {
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleCancel = () => {
@@ -29,7 +37,7 @@ export default function ShowCustomer({ customer }: ShowCustomerProps) {
                     <Undo2 /> Return
                 </Button>
 
-                <CustomerTabs customer={customer} />
+                <CustomerTabs customer={customer} sales={sales.data} />
             </div>
         </>
     );

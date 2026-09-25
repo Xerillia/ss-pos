@@ -3,14 +3,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import CustomerContact from "./customer-contact";
 import CustomerAddress from "./customer-address";
 import CustomerNotes from "./customer-notes";
+import CustomerTransactions from "./customer-transactions";
+import { Sale } from "@/types/sale";
+import { useRemember } from "@inertiajs/react";
 
 interface CustomerTabsProps {
     customer: Customer;
+    sales: Sale[];
 }
 
-export default function CustomerTabs({ customer }: CustomerTabsProps) {
+export default function CustomerTabs({ customer, sales }: CustomerTabsProps) {
+    const [activeTab, setActiveTab] = useRemember(
+        "information",
+        `customer-tab-${customer.id}`,
+    );
+
     return (
-        <Tabs defaultValue="information" className="gap-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="gap-6">
             <TabsList>
                 <TabsTrigger value="information">
                     Customer Information
@@ -24,7 +33,9 @@ export default function CustomerTabs({ customer }: CustomerTabsProps) {
                 <CustomerAddress customer={customer} />
                 <CustomerNotes customer={customer} />
             </TabsContent>
-            <TabsContent value="order_transaction">2</TabsContent>
+            <TabsContent value="order_transaction">
+                <CustomerTransactions sales={sales} />
+            </TabsContent>
         </Tabs>
     );
 }
