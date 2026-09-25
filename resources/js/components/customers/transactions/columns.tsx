@@ -2,27 +2,18 @@
 
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { SaleStatus, SaleStatusUtils } from "@/enums";
+import { PaymentStatusUtils } from "@/enums";
 import { ymd } from "@/lib/archive";
 import { DataTableFeatures } from "@/lib/data-table-features";
 import { rupiah } from "@/lib/rupiah";
+import { statusVariantMap } from "@/lib/statusVariantMap";
 import { styleVariants } from "@/lib/style";
 import { showSale } from "@/routes/sales";
 import { Sale } from "@/types/sale";
 import { Link } from "@inertiajs/react";
 import { createColumnHelper } from "@tanstack/react-table";
-import { VariantProps } from "class-variance-authority";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Sale>();
-
-const statusVariantMap: Record<
-    SaleStatus,
-    VariantProps<typeof styleVariants>["variant"]
-> = {
-    [SaleStatus.COMPLETED]: "green",
-    [SaleStatus.PENDING]: "yellow",
-    [SaleStatus.REFUNDED]: "red",
-};
 
 export const columns = columnHelper.columns([
     columnHelper.accessor("sale_number", {
@@ -45,14 +36,14 @@ export const columns = columnHelper.columns([
         cell: (info) => rupiah(info.getValue()),
     }),
 
-    columnHelper.accessor("status", {
-        header: "Status",
+    columnHelper.accessor("payment_status", {
+        header: "Payment Status",
         cell: (info) => {
             const variant = statusVariantMap[info.getValue()] ?? "red";
             const className = styleVariants({ variant });
             return (
                 <Badge className={className}>
-                    {SaleStatusUtils.label(info.getValue())}
+                    {PaymentStatusUtils.label(info.getValue())}
                 </Badge>
             );
         },
