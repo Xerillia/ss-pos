@@ -1,11 +1,11 @@
 import CustomerStats from "@/components/customers/customer-stats";
 import CustomerTabs from "@/components/customers/customer-tabs";
 import { Button } from "@/components/ui/button";
-import { customers } from "@/routes/customer";
+import { customers, editCustomer } from "@/routes/customer";
 import { Customer } from "@/types/customer";
 import { Sale } from "@/types/sale";
 import { Head, router } from "@inertiajs/react";
-import { Undo2 } from "lucide-react";
+import { Edit, Undo2 } from "lucide-react";
 import { useState } from "react";
 
 interface ShowCustomerProps {
@@ -34,9 +34,24 @@ export default function ShowCustomer({ customer, sales }: ShowCustomerProps) {
         <>
             <Head title={`Customer ${customer.name}`} />
             <div className="m-4 space-y-4">
-                <Button variant="destructive" size="sm" onClick={handleCancel}>
-                    <Undo2 /> Return
-                </Button>
+                <div className="flex justify-between items-center">
+                    <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={handleCancel}
+                    >
+                        <Undo2 /> Return
+                    </Button>
+
+                    <div>
+                        <Button
+                            size="sm"
+                            onClick={() => router.visit(editCustomer(customer))}
+                        >
+                            <Edit /> Edit Customer
+                        </Button>
+                    </div>
+                </div>
 
                 <CustomerStats customer={customer} />
 
