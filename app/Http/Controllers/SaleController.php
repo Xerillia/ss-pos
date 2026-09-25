@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\SaleStatus;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class SaleController extends Controller
@@ -13,7 +16,7 @@ class SaleController extends Controller
     /**
      * Display POS
      */
-    public function index()
+    public function pos()
     {
         $products = Product::all();
         $customers = Customer::all();
@@ -25,50 +28,81 @@ class SaleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a paginated listing of sales.
      */
-    public function create()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->input('per_page', 10);
+        $search = $request->input('search', '');
+
+        $sales = Sale::query()
+            ->with(['user:id,name', 'customer:id,name'])
+            ->when($search, function ($query, $search) {
+                $query->where('sale_number', 'like', "%{$search}%")
+                    ->orWhereHas('customer', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
+            })
+            ->latest()
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return Inertia::render('sales/sales', [
+            'sales' => $sales,
+            'filters' => [
+                'search' => $search,
+                'per_page' => (int) $perPage,
+            ],
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * Display sale details
      */
     public function show(Sale $sale)
     {
-        //
+        $sale->load(['user:id,name', 'customer:id,name', 'saleProducts']);
+
+        return Inertia::render('sales/show-sale', [
+            'sale' => $sale,
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Sale $sale)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Update sale notes or status.
      */
     public function update(Request $request, Sale $sale)
     {
-        //
+        $validated = $request->validate([
+            'notes' => ['nullable', 'string', 'max:500'],
+            'status' => ['required', 'string', Rule::enum(SaleStatus::class)],
+        ]);
+
+        $sale->update($validated);
+
+        return back()->with('success', 'Sale updated successfully.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Cancel a sale and restore stock.
      */
     public function destroy(Sale $sale)
     {
-        //
+        DB::transaction(function () use ($sale) {
+            // Restore inventory stock for each product in the sale
+            foreach ($sale->saleProducts as $saleProduct) {
+                if ($saleProduct->product) {
+                    $saleProduct->product->increment('quantity', $saleProduct->quantity);
+                }
+            }
+
+            // Delete associated line items first
+            $sale->saleProducts()->delete();
+
+            // Delete the primary sale record
+            $sale->delete();
+        });
+
+        return redirect()->route('sales.sales')->with('success', 'Sale deleted and inventory restored.');
     }
 }
