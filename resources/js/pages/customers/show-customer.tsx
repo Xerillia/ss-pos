@@ -1,3 +1,4 @@
+import CustomerStats from "@/components/customers/customer-stats";
 import CustomerTabs from "@/components/customers/customer-tabs";
 import { Button } from "@/components/ui/button";
 import { customers } from "@/routes/customer";
@@ -36,6 +37,8 @@ export default function ShowCustomer({ customer, sales }: ShowCustomerProps) {
                 <Button variant="destructive" size="sm" onClick={handleCancel}>
                     <Undo2 /> Return
                 </Button>
+
+                <CustomerStats customer={customer} />
 
                 <CustomerTabs customer={customer} sales={sales.data} />
             </div>

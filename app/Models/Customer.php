@@ -45,7 +45,7 @@ class Customer extends Model
     /**
      * Calculate ALL unpaid debts
      */
-    protected function totalDebt(): Attribute
+    public function totalDebt(): Attribute
     {
         return Attribute::make(
             get: function ($value, array $attributes) {
@@ -61,6 +61,28 @@ class Customer extends Model
                         PaymentStatus::PARTIAL,
                     ])
                     ->sum('debt_amount');
+            }
+        );
+    }
+
+    /**
+     * Calculate total orders
+     */
+    public function totalOrder(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value, array $attributes) {
+                // If loaded via withCount('sales') or withCount('sales as total_order')
+                if (array_key_exists('sales_count', $attributes)) {
+                    return (int) $attributes['sales_count'];
+                }
+
+                if (array_key_exists('total_order', $attributes)) {
+                    return (int) $attributes['total_order'];
+                }
+
+                // Fallback for a single Customer model instance
+                return (int) $this->sales()->count();
             }
         );
     }

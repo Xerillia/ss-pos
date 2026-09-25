@@ -45,6 +45,8 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer, Request $request)
     {
+        $customer->append(['total_debt', 'total_order']);
+
         return Inertia::render('customers/show-customer', [
             'customer' => $customer,
             'sales' => $customer->sales()
