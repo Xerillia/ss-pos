@@ -14,7 +14,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Link } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 import { editItem } from "@/routes/product";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { DialogTrigger } from "@radix-ui/react-dialog";
@@ -163,13 +163,10 @@ export const columns = columnHelper.columns([
                             <DropdownMenuLabel className="text-xs text-muted-foreground">
                                 Actions
                             </DropdownMenuLabel>
-                            <DropdownMenuItem>
-                                <Link
-                                    href={editItem(product)}
-                                    className="flex gap-2 items-center"
-                                >
-                                    <Edit /> Edit
-                                </Link>
+                            <DropdownMenuItem
+                                onSelect={() => router.visit(editItem(product))}
+                            >
+                                <Edit /> Edit
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 onSelect={(e) => e.preventDefault()}
