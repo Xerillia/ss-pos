@@ -1,12 +1,21 @@
 import CustomerStats from "@/components/customers/customer-stats";
 import CustomerTabs from "@/components/customers/customer-tabs";
+import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { customers, editCustomer } from "@/routes/customer";
+import { customers, destroyCustomer, editCustomer } from "@/routes/customer";
 import { Customer } from "@/types/customer";
 import { Sale } from "@/types/sale";
-import { Head, router } from "@inertiajs/react";
-import { Edit, Undo2 } from "lucide-react";
+import { Head, router, useForm } from "@inertiajs/react";
+import { Edit, Trash, Undo2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface ShowCustomerProps {
     customer: Customer;
@@ -21,7 +30,8 @@ interface ShowCustomerProps {
 }
 
 export default function ShowCustomer({ customer, sales }: ShowCustomerProps) {
-    const [isDeleting, setIsDeleting] = useState(false);
+    const [open, setOpen] = useState(false);
+    const { delete: destroy, processing } = useForm();
 
     const handleCancel = () => {
         if (window.history.length <= 2) {
@@ -30,6 +40,31 @@ export default function ShowCustomer({ customer, sales }: ShowCustomerProps) {
             window.history.back();
         }
     };
+
+    const handleDelete = (
+        e: React.SubmitEvent<HTMLFormElement>,
+        customer: Customer,
+    ) => {
+        e.preventDefault();
+
+        const toastId = toast.loading("Deleting customer...");
+
+        destroy(destroyCustomer(customer).url, {
+            onSuccess: (page) => {
+                const props = page.props as typeof page.props & {
+                    flash?: { success?: string };
+                };
+
+                toast.success(props.flash?.success || "Customer deleted!", {
+                    id: toastId,
+                });
+            },
+            onError: () =>
+                toast.error("An error has occured!", { id: toastId }),
+            onFinish: () => setOpen(false),
+        });
+    };
+
     return (
         <>
             <Head title={`Customer ${customer.name}`} />
@@ -43,12 +78,19 @@ export default function ShowCustomer({ customer, sales }: ShowCustomerProps) {
                         <Undo2 /> Return
                     </Button>
 
-                    <div>
+                    <div className="flex gap-2">
                         <Button
                             size="sm"
                             onClick={() => router.visit(editCustomer(customer))}
                         >
                             <Edit /> Edit Customer
+                        </Button>
+                        <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => setOpen(true)}
+                        >
+                            <Trash /> Delete Customer
                         </Button>
                     </div>
                 </div>
@@ -57,6 +99,38 @@ export default function ShowCustomer({ customer, sales }: ShowCustomerProps) {
 
                 <CustomerTabs customer={customer} sales={sales.data} />
             </div>
+
+            <AlertDialog open={open} onOpenChange={setOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete{" "}
+                            <span className="font-semibold">
+                                {customer.name}
+                            </span>{" "}
+                            from the server. Please confirm that you want to
+                            proceed.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <Button onClick={() => setOpen(false)}>Cancel</Button>
+
+                        <form onSubmit={(e) => handleDelete(e, customer)}>
+                            <Button
+                                type="submit"
+                                variant="destructive"
+                                disabled={processing}
+                            >
+                                Delete
+                            </Button>
+                        </form>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     );
 }
