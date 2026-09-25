@@ -269,7 +269,11 @@ export const columns = [
                                 <form
                                     onSubmit={(e) => handleDelete(e, customer)}
                                 >
-                                    <Button type="submit" variant="destructive">
+                                    <Button
+                                        type="submit"
+                                        variant="destructive"
+                                        disabled={processing}
+                                    >
                                         Delete
                                     </Button>
                                 </form>
