@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Customer extends Model
 {
@@ -40,6 +41,25 @@ class Customer extends Model
                 PaymentStatus::UNPAID,
                 PaymentStatus::PARTIAL,
             ]);
+    }
+
+    /**
+     * Calculate total money spent by the customer.
+     */
+    public function totalSpent(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value, array $attributes) {
+                // Eager-loaded / aggregated alias via withSum() or addSelect()
+                if (array_key_exists('total_spent', $attributes)) {
+                    return (float) ($attributes['total_spent'] ?? 0.00);
+                }
+
+                // Fallback for single model instance
+                return (float) $this->sales()
+                    ->sum(DB::raw('paid_amount - change_amount'));
+            }
+        );
     }
 
     /**
