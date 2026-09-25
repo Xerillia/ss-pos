@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
+use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -36,7 +37,8 @@ class CustomerController extends Controller
     {
         $customer = Customer::create($request->validated());
 
-        return redirect()->route('customer.customers')
+        return redirect()
+            ->back()
             ->with('success', 'Customer '.$customer->name.' added successfully.');
     }
 
@@ -71,11 +73,12 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CustomerRequest $request, Customer $customer)
+    public function update(UpdateCustomerRequest $request, Customer $customer)
     {
         $customer->update($request->validated());
 
-        return redirect()->route('customer.customers')
+        return redirect()
+            ->back()
             ->with('success', 'Customer '.$customer->name.' updated successfully.',
             );
     }
@@ -87,7 +90,8 @@ class CustomerController extends Controller
     {
         $customer->delete();
 
-        return redirect()->route('customer.customers')
+        return redirect()
+            ->back()
             ->with('success', 'Customer '.$customer->name.' deleted successfully.',
             );
     }
