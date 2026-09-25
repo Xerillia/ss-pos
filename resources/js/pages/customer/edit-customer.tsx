@@ -30,3 +30,17 @@ export default function EditCustomer({ customer }: EditCustomerProps) {
         </>
     );
 }
+
+EditCustomer.layout = (page: any) => {
+    return {
+        breadcrumbs: [
+            {
+                title: "Customers",
+                href: customers(),
+            },
+            {
+                title: `${page.customer.name} (editing)`,
+            },
+        ],
+    };
+};
