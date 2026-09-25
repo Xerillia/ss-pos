@@ -194,14 +194,16 @@ export default function ShowSale({ sale }: ShowSaleProps) {
     );
 }
 
-ShowSale.layout = {
-    breadcrumbs: [
-        {
-            title: "Sales",
-            href: sales(),
-        },
-        {
-            title: "Edit Sale",
-        },
-    ],
+ShowSale.layout = (page: any) => {
+    return {
+        breadcrumbs: [
+            {
+                title: "Sales",
+                href: sales(),
+            },
+            {
+                title: page.sale.sale_number,
+            },
+        ],
+    };
 };

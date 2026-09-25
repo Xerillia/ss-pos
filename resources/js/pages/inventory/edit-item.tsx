@@ -31,14 +31,16 @@ export default function EditItem({ product }: EditItemProps) {
     );
 }
 
-EditItem.layout = {
-    breadcrumbs: [
-        {
-            title: "Inventory",
-            href: inventory(),
-        },
-        {
-            title: "Edit Item",
-        },
-    ],
+EditItem.layout = (page: any) => {
+    return {
+        breadcrumbs: [
+            {
+                title: "Inventory",
+                href: inventory(),
+            },
+            {
+                title: `${page.product.name} (editing)`,
+            },
+        ],
+    };
 };
