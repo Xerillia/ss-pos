@@ -1,8 +1,0 @@
-packages:
-    - '.'
-
-minimumReleaseAgeExclude:
-  - fontaine@0.8.2
-
-publicHoistPattern:
-    - '@inertiajs/core'
