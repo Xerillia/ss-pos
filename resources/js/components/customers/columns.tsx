@@ -34,7 +34,7 @@ import {
     AlertDialogTitle,
 } from "../ui/alert-dialog";
 import { router, useForm } from "@inertiajs/react";
-import { destroyCustomer, editCustomer } from "@/routes/customer";
+import { destroyCustomer, editCustomer, showCustomer } from "@/routes/customer";
 import { toast } from "sonner";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Customer>();
@@ -219,7 +219,12 @@ export const columns = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem className="gap-2">
+                            <DropdownMenuItem
+                                className="gap-2"
+                                onSelect={() =>
+                                    router.visit(showCustomer(customer))
+                                }
+                            >
                                 <Eye className="h-4 w-4" /> View Profile
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -264,7 +269,11 @@ export const columns = [
                                 <form
                                     onSubmit={(e) => handleDelete(e, customer)}
                                 >
-                                    <Button type="submit" variant="destructive">
+                                    <Button
+                                        type="submit"
+                                        variant="destructive"
+                                        disabled={processing}
+                                    >
                                         Delete
                                     </Button>
                                 </form>

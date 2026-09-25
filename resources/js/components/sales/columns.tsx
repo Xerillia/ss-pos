@@ -1,7 +1,6 @@
-import { PaymentMethodUtils, PaymentStatus, PaymentStatusUtils } from "@/enums";
+import { PaymentMethodUtils, PaymentStatusUtils } from "@/enums";
 import { DataTableFeatures } from "@/lib/data-table-features";
 import { createColumnHelper } from "@tanstack/react-table";
-import { Checkbox } from "../ui/checkbox";
 import { WALK_IN_CUSTOMER } from "../pos/customer-combobox";
 import { rupiah } from "@/lib/rupiah";
 import { Badge } from "../ui/badge";
@@ -32,6 +31,7 @@ import {
 import { toast } from "sonner";
 import { styleVariants } from "@/lib/style";
 import { VariantProps } from "class-variance-authority";
+import { statusVariantMap } from "@/lib/statusVariantMap";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Sale>();
 
@@ -63,16 +63,6 @@ const handleDelete = (sale: Sale) => {
             id: toastId,
         });
     }
-};
-
-const statusVariantMap: Record<
-    PaymentStatus,
-    VariantProps<typeof styleVariants>["variant"]
-> = {
-    [PaymentStatus.PAID]: "green",
-    [PaymentStatus.PARTIAL]: "yellow",
-    [PaymentStatus.PARTIALLY_REFUNDED]: "yellow",
-    [PaymentStatus.UNPAID]: "red",
 };
 
 export const columns = [

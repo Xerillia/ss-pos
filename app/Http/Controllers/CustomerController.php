@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
+use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
@@ -35,16 +37,27 @@ class CustomerController extends Controller
     {
         $customer = Customer::create($request->validated());
 
-        return redirect()->route('customer.customers')
+        return redirect()
+            ->back()
             ->with('success', 'Customer '.$customer->name.' added successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Customer $customer)
+    public function show(Customer $customer, Request $request)
     {
-        //
+        $customer->append(['total_debt', 'total_order']);
+
+        return Inertia::render('customers/show-customer', [
+            'customer' => $customer,
+            'sales' => $customer->sales()
+                ->select(['id', 'customer_id', 'sale_number', 'total_amount', 'payment_status', 'created_at'])
+                ->withCount('saleProducts as unique_products_count')
+                ->latest()
+                ->paginate($request->input('per_page', 10))
+                ->withQueryString(),
+        ]);
     }
 
     /**
@@ -60,11 +73,12 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CustomerRequest $request, Customer $customer)
+    public function update(UpdateCustomerRequest $request, Customer $customer)
     {
         $customer->update($request->validated());
 
-        return redirect()->route('customer.customers')
+        return redirect()
+            ->back()
             ->with('success', 'Customer '.$customer->name.' updated successfully.',
             );
     }
@@ -76,7 +90,8 @@ class CustomerController extends Controller
     {
         $customer->delete();
 
-        return redirect()->route('customer.customers')
+        return redirect()
+            ->route('customer.customers')
             ->with('success', 'Customer '.$customer->name.' deleted successfully.',
             );
     }

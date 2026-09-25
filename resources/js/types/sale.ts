@@ -28,6 +28,7 @@ export type Sale = {
     debt_amount: number;
     notes?: string;
     created_at: string;
+    unique_products_count?: number;
 };
 
 export type SaleProduct = {

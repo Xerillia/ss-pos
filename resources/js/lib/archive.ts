@@ -8,6 +8,16 @@ import dayjs from "dayjs";
  * ```
  */
 export function archive(value: string | number | Date): string {
-    const date = new Date(value);
-    return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
+    return dayjs(new Date(value)).format("YYYY-MM-DD HH:mm:ss");
+}
+
+/**
+ * Format date into YYYY-MM-DD format.
+ *
+ * ```
+ * archive(1789623412) // 1970-01-22
+ * ```
+ */
+export function ymd(value: string | number | Date): string {
+    return dayjs(new Date(value)).format("YYYY-MM-DD");
 }
