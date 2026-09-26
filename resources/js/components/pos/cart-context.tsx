@@ -10,6 +10,7 @@ interface CartContextType {
     removeFromCart: (productId: string | number) => void;
     incrementItem: (productId: string | number) => void;
     decrementItem: (productId: string | number) => void;
+    setItemCount: (productId: string | number, quantity: number) => void;
     subTotal: (productId: string | number) => number;
     subTotalWithoutDiscount: (productId: string | number) => number;
     cartTotal: () => number;
@@ -39,6 +40,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         removeFromCart,
         incrementItem,
         decrementItem,
+        setItemCount,
         subTotal,
         subTotalWithoutDiscount,
         cartTotal,
@@ -67,6 +69,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 removeFromCart,
                 incrementItem,
                 decrementItem,
+                setItemCount,
                 subTotal,
                 subTotalWithoutDiscount,
                 cartTotal,
