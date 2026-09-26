@@ -22,7 +22,7 @@ export default function Cart({ customers }: CartProps) {
     };
 
     return (
-        <Card className="max-h-dvh overflow-y-auto">
+        <Card className="max-h-dvh h-dvh overflow-y-auto">
             <CardHeader className="border-b">
                 <CardTitle className="flex justify-between items-center">
                     <div className="flex gap-2 items-center">
