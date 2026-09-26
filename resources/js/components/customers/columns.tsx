@@ -104,7 +104,7 @@ export const columns = [
         },
     }),
 
-    columnHelper.accessor("credit_limit", {
+    columnHelper.accessor("total_debt", {
         header: ({ column }) => (
             <Button
                 variant="ghost"
@@ -112,7 +112,7 @@ export const columns = [
                     column.toggleSorting(column.getIsSorted() === "asc")
                 }
             >
-                Credit Limit <ArrowUpDown className="ml-2 h-4 w-4" />
+                Total Debt <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),
         cell: (info) => {

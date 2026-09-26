@@ -15,7 +15,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = Customer::all();
+        $customers = Customer::all()->append(['total_spent', 'total_debt', 'total_order']);
 
         return Inertia::render('customer/customers', [
             'customers' => $customers,
