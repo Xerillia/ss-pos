@@ -28,7 +28,6 @@ interface CustomerForm {
     address: string;
     city: string;
     postal_code: string;
-    credit_limit: number | string;
     is_active: boolean;
     notes: string;
 }
@@ -42,19 +41,12 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
             address: customer?.address || "",
             city: customer?.city || "",
             postal_code: customer?.postal_code || "",
-            credit_limit: customer?.credit_limit || "",
             is_active: customer ? customer.is_active : true,
             notes: customer?.notes || "",
         });
 
     const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        transform((data) => ({
-            ...data,
-            credit_limit:
-                data.credit_limit !== "" ? Number(data.credit_limit) : null,
-        }));
 
         if (mode === "create") {
             const toastId = toast.loading("Adding customer...");
@@ -97,10 +89,6 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
 
     const handlePhoneInput = (value: string) => {
         setData("phone", value.replace(/[^\d]/g, ""));
-    };
-
-    const handleCreditLimitInput = (value: string) => {
-        setData("credit_limit", value.replace(/[^\d.]/g, ""));
     };
 
     return (
@@ -204,22 +192,6 @@ export default function CustomerForm({ customer, mode }: CustomerFormProps) {
                                 <ErrorLabel error={errors.postal_code} />
                             </Field>
                         </div>
-                        <Field>
-                            <FieldLabel htmlFor="credit_limit">
-                                Credit Limit
-                                <span className="text-red-500">*</span>
-                            </FieldLabel>
-                            <Input
-                                id="credit_limit"
-                                type="text"
-                                placeholder="200000"
-                                value={data.credit_limit}
-                                onChange={(e) =>
-                                    handleCreditLimitInput(e.target.value)
-                                }
-                            />
-                            <ErrorLabel error={errors.credit_limit} />
-                        </Field>
                     </FieldGroup>
                 </FieldSet>
                 <FieldSeparator />

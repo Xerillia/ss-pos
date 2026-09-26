@@ -38,7 +38,7 @@ class CustomerController extends Controller
         $customer = Customer::create($request->validated());
 
         return redirect()
-            ->back()
+            ->route('customer.customers')
             ->with('success', 'Customer '.$customer->name.' added successfully.');
     }
 
@@ -78,7 +78,7 @@ class CustomerController extends Controller
         $customer->update($request->validated());
 
         return redirect()
-            ->back()
+            ->route('customer.customers')
             ->with('success', 'Customer '.$customer->name.' updated successfully.',
             );
     }

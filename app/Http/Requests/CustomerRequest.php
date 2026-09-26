@@ -29,7 +29,6 @@ class CustomerRequest extends FormRequest
             'address' => ['nullable', 'string', 'max:255'],
             'city' => ['nullable', 'string', 'max:255'],
             'postal_code' => ['nullable', 'string', 'max:255'],
-            'credit_limit' => ['required', 'numeric', 'min:0'],
             'is_active' => ['required', 'boolean'],
             'notes' => ['nullable', 'string', 'max:255'],
         ];
