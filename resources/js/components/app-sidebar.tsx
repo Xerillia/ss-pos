@@ -1,5 +1,6 @@
 import { Link } from "@inertiajs/react";
 import {
+    BanknoteArrowDown,
     BookOpen,
     DatabaseBackup,
     FolderGit2,
@@ -29,6 +30,7 @@ import { inventory } from "@/routes/product";
 import { pos } from "@/routes/pos";
 import { customers } from "@/routes/customer";
 import { sales } from "@/routes/sales";
+import { expenditures } from "@/routes/expenditure";
 
 const mainNavItems: NavItem[] = [
     {
@@ -45,6 +47,11 @@ const mainNavItems: NavItem[] = [
         title: "Sales",
         href: sales(),
         icon: ReceiptText,
+    },
+    {
+        title: "Expenditures",
+        href: expenditures(),
+        icon: BanknoteArrowDown,
     },
     {
         title: "Customers",
