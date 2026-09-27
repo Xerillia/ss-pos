@@ -1,11 +1,11 @@
-import { TableCell, TableRow } from "../ui/table";
+import { TableCell, TableRow } from "./ui/table";
 
-interface ItemTableRowProps {
+interface KeyValueRowProps {
     label: string;
     value: number | string;
 }
 
-export default function ItemTableRow({ label, value }: ItemTableRowProps) {
+export default function KeyValueRow({ label, value }: KeyValueRowProps) {
     return (
         <TableRow>
             <TableCell className="font-medium bg-accent-foreground/20 dark:bg-accent/40">

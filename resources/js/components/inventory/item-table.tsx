@@ -1,6 +1,6 @@
 import { Product } from "@/types/product";
 import { Table, TableBody, TableRow } from "../ui/table";
-import ItemTableRow from "./item-table-row";
+import KeyValueRow from "../key-value-row";
 import { rupiah } from "@/lib/rupiah";
 import { archive } from "@/lib/archive";
 
@@ -13,23 +13,23 @@ export default function ItemTable({ product }: ItemTableProps) {
         <div className="overflow-hidden rounded-md border">
             <Table>
                 <TableBody>
-                    <ItemTableRow label="ID" value={product.id} />
-                    <ItemTableRow label="Name" value={product.name} />
-                    <ItemTableRow
+                    <KeyValueRow label="ID" value={product.id} />
+                    <KeyValueRow label="Name" value={product.name} />
+                    <KeyValueRow
                         label="Description"
                         value={product.description}
                     />
-                    <ItemTableRow
+                    <KeyValueRow
                         label="Capital"
                         value={rupiah(product.capital)}
                     />
-                    <ItemTableRow label="Price" value={rupiah(product.price)} />
-                    <ItemTableRow label="Quantity" value={product.quantity} />
-                    <ItemTableRow
+                    <KeyValueRow label="Price" value={rupiah(product.price)} />
+                    <KeyValueRow label="Quantity" value={product.quantity} />
+                    <KeyValueRow
                         label="Created At"
                         value={archive(product.created_at)}
                     />
-                    <ItemTableRow
+                    <KeyValueRow
                         label="Updated At"
                         value={archive(product.updated_at)}
                     />

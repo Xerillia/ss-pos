@@ -1,4 +1,4 @@
-import ItemTableRow from "@/components/inventory/item-table-row";
+import KeyValueRow from "@/components/key-value-row";
 import { Table, TableBody } from "@/components/ui/table";
 import { PaymentMethodUtils, PaymentStatusUtils } from "@/enums";
 import { archive, ymd } from "@/lib/archive";
@@ -16,50 +16,50 @@ export default function ExpenditureTable({
         <div className="overflow-hidden rounded-md border">
             <Table>
                 <TableBody>
-                    <ItemTableRow
+                    <KeyValueRow
                         label="Expense Number"
                         value={expenditure.expense_number}
                     />
-                    <ItemTableRow
+                    <KeyValueRow
                         label="Category"
                         value={expenditure.category?.name ?? "Uncategorized"}
                     />
-                    <ItemTableRow
+                    <KeyValueRow
                         label="User"
                         value={expenditure.user?.name ?? "Unknown"}
                     />
-                    <ItemTableRow label="Name" value={expenditure.title} />
-                    <ItemTableRow
+                    <KeyValueRow label="Name" value={expenditure.title} />
+                    <KeyValueRow
                         label="Amount"
                         value={rupiah(Number(expenditure.amount))}
                     />
-                    <ItemTableRow
+                    <KeyValueRow
                         label="Payment Method"
                         value={PaymentMethodUtils.label(
                             expenditure.payment_method,
                         )}
                     />
-                    <ItemTableRow
+                    <KeyValueRow
                         label="Expense Date"
                         value={ymd(expenditure.expense_date)}
                     />
-                    <ItemTableRow
+                    <KeyValueRow
                         label="Status"
                         value={PaymentStatusUtils.label(expenditure.status)}
                     />
-                    <ItemTableRow
+                    <KeyValueRow
                         label="Reference Number"
                         value={expenditure.reference_number ?? ""}
                     />
-                    <ItemTableRow
+                    <KeyValueRow
                         label="Notes"
                         value={expenditure.notes ?? "No notes yet."}
                     />
-                    <ItemTableRow
+                    <KeyValueRow
                         label="Created At"
                         value={archive(expenditure.created_at)}
                     />
-                    <ItemTableRow
+                    <KeyValueRow
                         label="Updated At"
                         value={archive(expenditure.updated_at)}
                     />
