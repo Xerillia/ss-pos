@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { Minus, Plus, Tag, Trash } from "lucide-react";
 import CartDiscountForm from "./cart-discount-form";
 import { useCartContext } from "./cart-context";
+import { useState } from "react";
 
 interface CartItemCardProps {
     item: CartItem;
@@ -21,6 +22,7 @@ export default function CardItemCard({
         removeFromCart,
         incrementItem,
         decrementItem,
+        setItemCount,
         subTotal,
         subTotalWithoutDiscount,
     } = useCartContext();
@@ -29,6 +31,19 @@ export default function CardItemCard({
 
     const subtotal = subTotal(product.id);
     const subtotalWithoutDiscount = subTotalWithoutDiscount(product.id);
+
+    const [input, setInput] = useState(item.quantity);
+
+    const getNumber = (value: string) => Number(value.replace(/[^0-9]/gi, ""));
+
+    const handleChange = (value: string) => {
+        const number = getNumber(value);
+        setInput(number);
+    };
+
+    const handleBlur = () => {
+        setItemCount(product.id, input);
+    };
 
     return (
         <Card className="hover:border hover:border-black/60 transition-colors dark:hover:border-white/30">
@@ -59,9 +74,15 @@ export default function CardItemCard({
                                     <Minus className="p-0.5" />
                                 </Button>
                                 <div className="w-12">
-                                    <p className="font-bold text-sm text-center">
-                                        {item.quantity}
-                                    </p>
+                                    <input
+                                        type="text"
+                                        className="font-bold text-sm text-center block w-12"
+                                        onBlur={handleBlur}
+                                        value={input}
+                                        onChange={(e) =>
+                                            handleChange(e.target.value)
+                                        }
+                                    />
                                 </div>
                                 <Button
                                     className="w-6.5 h-6.5"

@@ -113,6 +113,19 @@ export function useCart() {
         );
     };
 
+    const setItemCount = (productId: string | number, quantity: number) => {
+        setCart((prevCart) =>
+            prevCart
+                .map((item) => {
+                    if (item.product.id === productId) {
+                        return { ...item, quantity: quantity };
+                    }
+                    return item;
+                })
+                .filter((item) => item.quantity > 0),
+        );
+    };
+
     const subTotalWithoutDiscount = (productId: string | number) => {
         const item = cart.find((i) => i.product.id === productId);
 
@@ -257,6 +270,7 @@ export function useCart() {
         removeFromCart,
         incrementItem,
         decrementItem,
+        setItemCount,
         subTotal,
         subTotalWithoutDiscount,
         cartTotal,
