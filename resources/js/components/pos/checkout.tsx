@@ -31,8 +31,6 @@ export default function Checkout({ total }: CheckoutProps) {
         discountAmount,
         setDiscountAmount,
         finishTransaction,
-        saleNumber,
-        setSaleNumber,
         selectedCustomer,
     } = useCartContext();
     const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -108,21 +106,6 @@ export default function Checkout({ total }: CheckoutProps) {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <FieldSet>
-                        <Field>
-                            <FieldLabel
-                                htmlFor="sale_number"
-                                className="text-muted-foreground text-sm"
-                            >
-                                Sale Number
-                            </FieldLabel>
-                            <Input
-                                id="sale_number"
-                                placeholder="A00000"
-                                value={saleNumber}
-                                onChange={(e) => setSaleNumber(e.target.value)}
-                            />
-                        </Field>
-
                         <PaymentMethodSelector />
 
                         <FieldGroup className="grid grid-cols-2 gap-3">
