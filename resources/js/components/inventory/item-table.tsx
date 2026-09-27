@@ -13,26 +13,26 @@ export default function ItemTable({ product }: ItemTableProps) {
         <div className="overflow-hidden rounded-md border">
             <Table>
                 <TableBody>
-                    <KeyValueRow label="ID" value={product.id} />
-                    <KeyValueRow label="Name" value={product.name} />
-                    <KeyValueRow
-                        label="Description"
-                        value={product.description}
-                    />
-                    <KeyValueRow
-                        label="Capital"
-                        value={rupiah(product.capital)}
-                    />
-                    <KeyValueRow label="Price" value={rupiah(product.price)} />
-                    <KeyValueRow label="Quantity" value={product.quantity} />
-                    <KeyValueRow
-                        label="Created At"
-                        value={archive(product.created_at)}
-                    />
-                    <KeyValueRow
-                        label="Updated At"
-                        value={archive(product.updated_at)}
-                    />
+                    <KeyValueRow label="ID">{product.id}</KeyValueRow>
+                    <KeyValueRow label="Name">{product.name}</KeyValueRow>
+                    <KeyValueRow label="Description">
+                        {product.description}
+                    </KeyValueRow>
+                    <KeyValueRow label="Capital">
+                        {rupiah(product.capital)}
+                    </KeyValueRow>
+                    <KeyValueRow label="Price">
+                        {rupiah(product.price)}
+                    </KeyValueRow>
+                    <KeyValueRow label="Quantity">
+                        {product.quantity}
+                    </KeyValueRow>
+                    <KeyValueRow label="Created At">
+                        {archive(product.created_at)}
+                    </KeyValueRow>
+                    <KeyValueRow label="Updated At">
+                        {archive(product.updated_at)}
+                    </KeyValueRow>
                 </TableBody>
             </Table>
         </div>

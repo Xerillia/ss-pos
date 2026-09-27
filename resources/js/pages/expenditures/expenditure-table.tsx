@@ -16,53 +16,40 @@ export default function ExpenditureTable({
         <div className="overflow-hidden rounded-md border">
             <Table>
                 <TableBody>
-                    <KeyValueRow
-                        label="Expense Number"
-                        value={expenditure.expense_number}
-                    />
-                    <KeyValueRow
-                        label="Category"
-                        value={expenditure.category?.name ?? "Uncategorized"}
-                    />
-                    <KeyValueRow
-                        label="User"
-                        value={expenditure.user?.name ?? "Unknown"}
-                    />
-                    <KeyValueRow label="Name" value={expenditure.title} />
-                    <KeyValueRow
-                        label="Amount"
-                        value={rupiah(Number(expenditure.amount))}
-                    />
-                    <KeyValueRow
-                        label="Payment Method"
-                        value={PaymentMethodUtils.label(
-                            expenditure.payment_method,
-                        )}
-                    />
-                    <KeyValueRow
-                        label="Expense Date"
-                        value={ymd(expenditure.expense_date)}
-                    />
-                    <KeyValueRow
-                        label="Status"
-                        value={PaymentStatusUtils.label(expenditure.status)}
-                    />
-                    <KeyValueRow
-                        label="Reference Number"
-                        value={expenditure.reference_number ?? ""}
-                    />
-                    <KeyValueRow
-                        label="Notes"
-                        value={expenditure.notes ?? "No notes yet."}
-                    />
-                    <KeyValueRow
-                        label="Created At"
-                        value={archive(expenditure.created_at)}
-                    />
-                    <KeyValueRow
-                        label="Updated At"
-                        value={archive(expenditure.updated_at)}
-                    />
+                    <KeyValueRow label="Expense Number">
+                        {expenditure.expense_number}
+                    </KeyValueRow>
+                    <KeyValueRow label="Category">
+                        {expenditure.category?.name ?? "Uncategorized"}
+                    </KeyValueRow>
+                    <KeyValueRow label="User">
+                        {expenditure.user?.name ?? "Unknown"}
+                    </KeyValueRow>
+                    <KeyValueRow label="Name">{expenditure.title}</KeyValueRow>
+                    <KeyValueRow label="Amount">
+                        {rupiah(Number(expenditure.amount))}
+                    </KeyValueRow>
+                    <KeyValueRow label="Payment Method">
+                        {PaymentMethodUtils.label(expenditure.payment_method)}
+                    </KeyValueRow>
+                    <KeyValueRow label="Expense Date">
+                        {ymd(expenditure.expense_date)}
+                    </KeyValueRow>
+                    <KeyValueRow label="Status">
+                        {PaymentStatusUtils.label(expenditure.status)}
+                    </KeyValueRow>
+                    <KeyValueRow label="Reference Number">
+                        {expenditure.reference_number ?? ""}
+                    </KeyValueRow>
+                    <KeyValueRow label="Notes">
+                        {expenditure.notes ?? "No notes yet."}
+                    </KeyValueRow>
+                    <KeyValueRow label="Created At">
+                        {archive(expenditure.created_at)}
+                    </KeyValueRow>
+                    <KeyValueRow label="Updated At">
+                        {archive(expenditure.updated_at)}
+                    </KeyValueRow>
                 </TableBody>
             </Table>
         </div>
