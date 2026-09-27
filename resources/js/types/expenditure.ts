@@ -10,11 +10,14 @@ export type Expenditure = {
     id: number;
     expense_number: string;
     title: string;
-    amount: string | number;
+    amount: number;
     expense_date: string;
     payment_method: PaymentMethod;
     status: PaymentStatus;
     reference_number?: string;
     category?: ExpenseCategory;
     user?: User;
+    notes?: string;
+    created_at: string;
+    updated_at: string;
 };
