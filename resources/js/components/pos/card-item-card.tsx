@@ -21,6 +21,7 @@ export default function CardItemCard({
         removeFromCart,
         incrementItem,
         decrementItem,
+        setItemCount,
         subTotal,
         subTotalWithoutDiscount,
     } = useCartContext();
@@ -29,6 +30,11 @@ export default function CardItemCard({
 
     const subtotal = subTotal(product.id);
     const subtotalWithoutDiscount = subTotalWithoutDiscount(product.id);
+
+    const handleBlur = (productId: string | number, value: string) => {
+        const number = Number(value.replace(/[^0-9]/gi, ""));
+        setItemCount(productId, number);
+    };
 
     return (
         <Card className="hover:border hover:border-black/60 transition-colors dark:hover:border-white/30">
@@ -59,9 +65,17 @@ export default function CardItemCard({
                                     <Minus className="p-0.5" />
                                 </Button>
                                 <div className="w-12">
-                                    <p className="font-bold text-sm text-center">
-                                        {item.quantity}
-                                    </p>
+                                    <input
+                                        type="text"
+                                        className="font-bold text-sm text-center block w-12"
+                                        onBlur={(e) =>
+                                            handleBlur(
+                                                product.id,
+                                                e.target.value,
+                                            )
+                                        }
+                                        defaultValue={item.quantity}
+                                    />
                                 </div>
                                 <Button
                                     className="w-6.5 h-6.5"
