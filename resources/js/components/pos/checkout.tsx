@@ -5,6 +5,7 @@ import { useState } from "react";
 import {
     AlertDialog,
     AlertDialogContent,
+    AlertDialogDescription,
     AlertDialogHeader,
     AlertDialogTitle,
 } from "../ui/alert-dialog";
@@ -16,6 +17,7 @@ import { QuickPayPresets } from "./quick-pay-presets";
 import { CheckoutConfirmDialog } from "./checkout-confirm-dialog";
 import { toast } from "sonner";
 import { router } from "@inertiajs/react";
+import { WALK_IN_CUSTOMER } from "./customer-combobox";
 
 interface CheckoutProps {
     total: number;
@@ -31,6 +33,7 @@ export default function Checkout({ total }: CheckoutProps) {
         finishTransaction,
         saleNumber,
         setSaleNumber,
+        selectedCustomer,
     } = useCartContext();
     const [checkoutOpen, setCheckoutOpen] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
@@ -89,15 +92,20 @@ export default function Checkout({ total }: CheckoutProps) {
 
             <AlertDialog open={checkoutOpen} onOpenChange={setCheckoutOpen}>
                 <AlertDialogContent>
-                    <AlertDialogHeader className="flex justify-between items-center">
-                        <AlertDialogTitle>{rupiah(total)}</AlertDialogTitle>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setCheckoutOpen(false)}
-                        >
-                            <X />
-                        </Button>
+                    <AlertDialogHeader>
+                        <div className="flex justify-between items-center w-full">
+                            <AlertDialogTitle>{rupiah(total)}</AlertDialogTitle>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setCheckoutOpen(false)}
+                            >
+                                <X />
+                            </Button>
+                        </div>
+                        <AlertDialogDescription>
+                            {selectedCustomer?.name || WALK_IN_CUSTOMER.name}
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <FieldSet>
                         <Field>
