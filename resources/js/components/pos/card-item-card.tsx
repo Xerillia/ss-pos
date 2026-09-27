@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { Minus, Plus, Tag, Trash } from "lucide-react";
 import CartDiscountForm from "./cart-discount-form";
 import { useCartContext } from "./cart-context";
+import { useState } from "react";
 
 interface CartItemCardProps {
     item: CartItem;
@@ -31,9 +32,17 @@ export default function CardItemCard({
     const subtotal = subTotal(product.id);
     const subtotalWithoutDiscount = subTotalWithoutDiscount(product.id);
 
-    const handleBlur = (productId: string | number, value: string) => {
-        const number = Number(value.replace(/[^0-9]/gi, ""));
-        setItemCount(productId, number);
+    const [input, setInput] = useState(item.quantity);
+
+    const getNumber = (value: string) => Number(value.replace(/[^0-9]/gi, ""));
+
+    const handleChange = (value: string) => {
+        const number = getNumber(value);
+        setInput(number);
+    };
+
+    const handleBlur = () => {
+        setItemCount(product.id, input);
     };
 
     return (
@@ -68,13 +77,11 @@ export default function CardItemCard({
                                     <input
                                         type="text"
                                         className="font-bold text-sm text-center block w-12"
-                                        onBlur={(e) =>
-                                            handleBlur(
-                                                product.id,
-                                                e.target.value,
-                                            )
+                                        onBlur={handleBlur}
+                                        value={input}
+                                        onChange={(e) =>
+                                            handleChange(e.target.value)
                                         }
-                                        defaultValue={item.quantity}
                                     />
                                 </div>
                                 <Button
