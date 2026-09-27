@@ -2,14 +2,7 @@ import { DataTableFeatures } from "@/lib/data-table-features";
 import { Expenditure } from "@/types/expenditure";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Button } from "../ui/button";
-import {
-    ArrowUpDown,
-    Edit,
-    Eye,
-    Link,
-    MoreHorizontal,
-    Trash2,
-} from "lucide-react";
+import { ArrowUpDown, Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { rupiah } from "@/lib/rupiah";
 import { PaymentMethodUtils, PaymentStatusUtils } from "@/enums";
 import { archive } from "@/lib/archive";
@@ -24,6 +17,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { showExpenditure } from "@/routes/expenditure";
+import { Link } from "@inertiajs/react";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Expenditure>();
 
@@ -123,9 +118,9 @@ export const columns = columnHelper.columns([
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem asChild>
-                            {/* <Link href={route("expenditures.show", item.id)}>
+                            <Link href={showExpenditure(item.id)}>
                                 <Eye className="mr-2 h-4 w-4" /> View Details
-                            </Link> */}
+                            </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                             {/* <Link href={route("expenditures.edit", item.id)}>
