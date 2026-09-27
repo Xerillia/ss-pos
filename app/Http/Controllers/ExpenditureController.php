@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreExpenditureRequest;
 use App\Models\Expenditure;
 use App\Models\ExpenseCategory;
 use Illuminate\Http\Request;
@@ -44,9 +45,20 @@ class ExpenditureController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreExpenditureRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $validated['user_id'] = $request->user()->id;
+
+        if ($request->hasFile('attachment')) {
+            $path = $request->file('attachment')->store('expenditures/receipts', 'public');
+            $validated['attachment_path'] = $path;
+        }
+
+        Expenditure::create($validated);
+
+        return redirect()->back()->with('success', 'Expenditure created successfully.');
     }
 
     /**
