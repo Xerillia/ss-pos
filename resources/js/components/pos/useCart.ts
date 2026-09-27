@@ -118,7 +118,10 @@ export function useCart() {
             prevCart
                 .map((item) => {
                     if (item.product.id === productId) {
-                        return { ...item, quantity: quantity };
+                        return {
+                            ...item,
+                            quantity: Math.min(quantity, item.product.quantity),
+                        };
                     }
                     return item;
                 })
