@@ -10,4 +10,6 @@ export const statusVariantMap: Record<
     [PaymentStatus.PARTIAL]: "yellow",
     [PaymentStatus.PARTIALLY_REFUNDED]: "yellow",
     [PaymentStatus.UNPAID]: "red",
+    [PaymentStatus.PENDING]: "yellow",
+    [PaymentStatus.CANCELLED]: "red",
 };
