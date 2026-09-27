@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { Minus, Plus, Tag, Trash } from "lucide-react";
 import CartDiscountForm from "./cart-discount-form";
 import { useCartContext } from "./cart-context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface CartItemCardProps {
     item: CartItem;
@@ -32,17 +32,43 @@ export default function CardItemCard({
     const subtotal = subTotal(product.id);
     const subtotalWithoutDiscount = subTotalWithoutDiscount(product.id);
 
-    const [input, setInput] = useState(item.quantity);
+    const [inputValue, setInputValue] = useState<string>(String(item.quantity));
+    const [isFocused, setIsFocused] = useState(false);
 
-    const getNumber = (value: string) => Number(value.replace(/[^0-9]/gi, ""));
+    useEffect(() => {
+        if (!isFocused) {
+            setInputValue(String(item.quantity));
+        }
+    }, [item.quantity, isFocused]);
 
-    const handleChange = (value: string) => {
-        const number = getNumber(value);
-        setInput(number);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const rawValue = e.target.value.replace(/[^0-9]/g, "");
+        setInputValue(rawValue);
     };
 
-    const handleBlur = () => {
-        setItemCount(product.id, input);
+    const handleFocus = () => {
+        setIsFocused(true);
+    };
+
+    const commitChange = () => {
+        setIsFocused(false);
+        const parsedNumber = parseInt(inputValue, 10);
+
+        // fallback to 1 (or current quantity) if field is empty or zero
+        if (isNaN(parsedNumber) || parsedNumber <= 0) {
+            setInputValue(String(item.quantity));
+            setItemCount(product.id, item.quantity);
+            return;
+        }
+
+        setInputValue(String(parsedNumber));
+        setItemCount(product.id, parsedNumber);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            e.currentTarget.blur();
+        }
     };
 
     return (
@@ -76,12 +102,13 @@ export default function CardItemCard({
                                 <div className="w-12">
                                     <input
                                         type="text"
+                                        inputMode="numeric"
                                         className="font-bold text-sm text-center block w-12"
-                                        onBlur={handleBlur}
-                                        value={input}
-                                        onChange={(e) =>
-                                            handleChange(e.target.value)
-                                        }
+                                        value={inputValue}
+                                        onFocus={handleFocus}
+                                        onChange={handleChange}
+                                        onBlur={commitChange}
+                                        onKeyDown={handleKeyDown}
                                     />
                                 </div>
                                 <Button
