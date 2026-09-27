@@ -28,15 +28,6 @@ import {
 const columnHelper = createColumnHelper<DataTableFeatures, Expenditure>();
 
 export const columns = columnHelper.columns([
-    columnHelper.accessor("expense_number", {
-        header: "Expense #",
-        cell: (info) => (
-            <span className="font-mono text-xs font-semibold">
-                {info.getValue()}
-            </span>
-        ),
-    }),
-
     columnHelper.accessor("title", {
         header: "Title / Description",
         cell: (info) => (
@@ -51,11 +42,6 @@ export const columns = columnHelper.columns([
                 )}
             </div>
         ),
-    }),
-
-    columnHelper.accessor("category.name", {
-        header: "Category",
-        cell: (info) => info.getValue() || "Uncategorized",
     }),
 
     columnHelper.accessor("amount", {
@@ -73,7 +59,7 @@ export const columns = columnHelper.columns([
         ),
         cell: (info) => {
             return (
-                <span className="font-semibold">
+                <span className="font-semibold font-mono">
                     {rupiah(Number(info.getValue()))}
                 </span>
             );
@@ -90,7 +76,18 @@ export const columns = columnHelper.columns([
     }),
 
     columnHelper.accessor("expense_date", {
-        header: "Date",
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                className="-ml-3 h-8 text-xs font-medium"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                }
+            >
+                Expense Date
+                <ArrowUpDown className="ml-2 h-3.5 w-3.5" />
+            </Button>
+        ),
         cell: (info) => archive(info.getValue()),
     }),
 
