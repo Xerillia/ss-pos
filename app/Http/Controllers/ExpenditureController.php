@@ -66,7 +66,11 @@ class ExpenditureController extends Controller
      */
     public function show(Expenditure $expenditure)
     {
-        //
+        $expenditure->load(['category:name']);
+
+        return Inertia::render('expenditures/show-expenditure', [
+            'expenditure' => $expenditure,
+        ]);
     }
 
     /**
