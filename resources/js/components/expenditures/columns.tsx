@@ -17,10 +17,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { showExpenditure } from "@/routes/expenditure";
-import { Link } from "@inertiajs/react";
+import { destroyExpenditure, showExpenditure } from "@/routes/expenditure";
+import { Link, router } from "@inertiajs/react";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Expenditure>();
+
+const handleDelete = (id: number) => {
+    router.delete(destroyExpenditure(id));
+};
 
 export const columns = columnHelper.columns([
     columnHelper.accessor("title", {
@@ -128,12 +132,12 @@ export const columns = columnHelper.columns([
                             </Link> */}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        {/* <DropdownMenuItem
-                            className="text-destructive focus:text-destructive"
+                        <DropdownMenuItem
+                            className="dark:text-rose-400 text-rose-600"
                             onClick={() => handleDelete(item.id)}
                         >
                             <Trash2 className="mr-2 h-4 w-4" /> Delete
-                        </DropdownMenuItem> */}
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );
