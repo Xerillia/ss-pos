@@ -90,6 +90,8 @@ class ExpenditureController extends Controller
      */
     public function destroy(Expenditure $expenditure)
     {
-        //
+        $expenditure->delete();
+
+        return redirect()->back()->with('success', 'Expenditure deleted successfully.');
     }
 }
