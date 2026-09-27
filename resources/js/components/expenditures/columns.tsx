@@ -46,7 +46,7 @@ export const columns = columnHelper.columns([
                 </div>
                 {info.row.original.reference_number && (
                     <div className="text-xs text-muted-foreground">
-                        Ref: {info.row.original.reference_number}
+                        {info.row.original.reference_number}
                     </div>
                 )}
             </div>
@@ -81,7 +81,7 @@ export const columns = columnHelper.columns([
     }),
 
     columnHelper.accessor("payment_method", {
-        header: "Payment Method",
+        header: "Method",
         cell: (info) => (
             <span className="capitalize text-xs font-medium">
                 {PaymentMethodUtils.label(info.getValue())}
