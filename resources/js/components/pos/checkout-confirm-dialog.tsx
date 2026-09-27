@@ -14,6 +14,8 @@ import { useCartContext } from "./cart-context";
 import { WALK_IN_CUSTOMER } from "./customer-combobox";
 import CartItemsCompact from "./cart-items-compact";
 import { PaymentMethod, PaymentMethodUtils } from "@/enums";
+import { Field, FieldLabel } from "../ui/field";
+import { Input } from "../ui/input";
 
 interface CheckoutConfirmDialogProps {
     open: boolean;
@@ -28,8 +30,14 @@ export function CheckoutConfirmDialog({
     onFinish,
     disabled,
 }: CheckoutConfirmDialogProps) {
-    const { selectedCustomer, payAmount, cartTotal, paymentMethod } =
-        useCartContext();
+    const {
+        selectedCustomer,
+        payAmount,
+        cartTotal,
+        paymentMethod,
+        saleNumber,
+        setSaleNumber,
+    } = useCartContext();
 
     const total = cartTotal();
     const currentPayAmount = payAmount || 0;
@@ -54,6 +62,21 @@ export function CheckoutConfirmDialog({
                         {selectedCustomer?.name || WALK_IN_CUSTOMER.name}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
+
+                <Field>
+                    <FieldLabel
+                        htmlFor="sale_number"
+                        className="text-muted-foreground text-xs"
+                    >
+                        Sale Number
+                    </FieldLabel>
+                    <Input
+                        id="sale_number"
+                        placeholder="A00000"
+                        value={saleNumber}
+                        onChange={(e) => setSaleNumber(e.target.value)}
+                    />
+                </Field>
 
                 <CartItemsCompact />
 
