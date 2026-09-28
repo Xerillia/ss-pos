@@ -64,7 +64,7 @@ export function DataTable<TData extends RowData>({
         router.get(
             expenditures(),
             { search, per_page: filters.per_page, page: targetPage },
-            { preserveState: true },
+            { preserveState: true, preserveScroll: true },
         );
     };
 
