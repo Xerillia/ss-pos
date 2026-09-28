@@ -36,7 +36,11 @@ export default function Expenditures({
                     <Banknote data-icon="inline-start" /> Add Expenditure
                 </Link>
 
-                <DataTable columns={columns} data={expenditures.data} />
+                <DataTable
+                    filters={filters}
+                    columns={columns as any}
+                    pagination={expenditures}
+                />
             </div>
         </>
     );
