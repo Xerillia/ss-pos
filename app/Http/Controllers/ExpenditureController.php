@@ -39,7 +39,9 @@ class ExpenditureController extends Controller
      */
     public function create()
     {
-        return Inertia::render('expenditures/create-expenditure');
+        return Inertia::render('expenditures/create-expenditure', [
+            'categories' => ExpenseCategory::active()->select('id', 'name')->get(),
+        ]);
     }
 
     /**
