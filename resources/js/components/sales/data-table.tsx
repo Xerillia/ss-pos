@@ -1,12 +1,6 @@
 import { DataTableFeatures, features } from "@/lib/data-table-features";
 import { router } from "@inertiajs/react";
-import {
-    ColumnDef,
-    RowData,
-    useTable,
-    coreRowModelsFeature,
-    flexRender,
-} from "@tanstack/react-table";
+import { ColumnDef, RowData, useTable } from "@tanstack/react-table";
 import React from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -18,16 +12,8 @@ import {
     TableHeader,
     TableRow,
 } from "../ui/table";
-import { getPageRange } from "@/lib/pagination";
-
-interface LaravelPaginationProps<TData> {
-    data: TData[];
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    links: { url: string | null; label: string; active: boolean }[];
-}
+import Pagination from "../pagination";
+import { LaravelPaginationProps } from "@/types/laravel-pagination-props";
 
 interface DataTableProps<TData extends RowData> {
     columns: ColumnDef<DataTableFeatures, TData>[];
@@ -79,8 +65,6 @@ export function DataTable<TData extends RowData>({
             { preserveState: true },
         );
     };
-
-    const pageRange = getPageRange(currentPage, lastPage);
 
     return (
         <div className="space-y-4">
@@ -156,45 +140,11 @@ export function DataTable<TData extends RowData>({
             </div>
 
             {/* Pagination Footer */}
-            <div className="flex items-center justify-center space-x-2 py-2">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handlePageChange(currentPage - 2)}
-                    disabled={currentPage <= 1}
-                >
-                    Previous
-                </Button>
-
-                {pageRange.map((page, index) => {
-                    if (page === "ellipsis") {
-                        return <span key={`ellipsis-${index}`}>...</span>;
-                    }
-
-                    return (
-                        <Button
-                            key={page}
-                            variant={
-                                currentPage === page ? "default" : "outline"
-                            }
-                            size="sm"
-                            className="aspect-square"
-                            onClick={() => handlePageChange(page - 1)}
-                        >
-                            {page}
-                        </Button>
-                    );
-                })}
-
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handlePageChange(currentPage)}
-                    disabled={currentPage >= lastPage}
-                >
-                    Next
-                </Button>
-            </div>
+            <Pagination
+                currentPage={currentPage}
+                lastPage={lastPage}
+                onPageChange={handlePageChange}
+            />
         </div>
     );
 }

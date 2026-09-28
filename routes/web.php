@@ -14,3 +14,4 @@ require __DIR__.'/settings.php';
 require __DIR__.'/inventory.php';
 require __DIR__.'/sale.php';
 require __DIR__.'/customer.php';
+require __DIR__.'/expenditure.php';
