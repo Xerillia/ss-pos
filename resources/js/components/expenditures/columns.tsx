@@ -31,6 +31,7 @@ import {
     AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { toast } from "sonner";
+import DeleteDialog from "./delete-dialog";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Expenditure>();
 
@@ -174,38 +175,13 @@ export const columns = columnHelper.columns([
                         </DropdownMenuContent>
                     </DropdownMenu>
 
-                    <AlertDialog open={open} onOpenChange={setOpen}>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                    {" "}
-                                    Are you absolutely sure?
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    This action cannot be undone. This will
-                                    permanently delete{" "}
-                                    <span className="font-semibold">
-                                        {item.title}
-                                    </span>{" "}
-                                    from the server. Please confirm that you
-                                    want to proceed.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel variant="default">
-                                    Cancel
-                                </AlertDialogCancel>
-                                <AlertDialogTrigger asChild>
-                                    <Button
-                                        variant="destructive"
-                                        onClick={() => handleDelete(item.id)}
-                                    >
-                                        Delete
-                                    </Button>
-                                </AlertDialogTrigger>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
+                    <DeleteDialog
+                        open={open}
+                        setOpen={setOpen}
+                        title={item.title}
+                        id={item.id}
+                        handleDelete={handleDelete}
+                    />
                 </>
             );
         },
