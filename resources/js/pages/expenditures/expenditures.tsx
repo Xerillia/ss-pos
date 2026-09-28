@@ -1,7 +1,10 @@
 import { columns } from "@/components/expenditures/columns";
 import { DataTable } from "@/components/expenditures/data-table";
+import { buttonVariants } from "@/components/ui/button";
+import { createExpenditure } from "@/routes/expenditure";
 import { Expenditure, ExpenseCategory } from "@/types/expenditure";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
+import { Banknote } from "lucide-react";
 
 interface ExpendituresProps {
     expenditures: {
@@ -24,7 +27,15 @@ export default function Expenditures({
     return (
         <>
             <Head title="Expenditures" />
-            <div className="m-4">
+            <div className="m-4 space-y-4">
+                <Link
+                    as="button"
+                    href={createExpenditure()}
+                    className={buttonVariants({ size: "sm" })}
+                >
+                    <Banknote data-icon="inline-start" /> Add Expenditure
+                </Link>
+
                 <DataTable columns={columns} data={expenditures.data} />
             </div>
         </>
