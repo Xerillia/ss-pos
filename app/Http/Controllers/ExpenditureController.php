@@ -96,6 +96,6 @@ class ExpenditureController extends Controller
     {
         $expenditure->delete();
 
-        return redirect()->back()->with('success', 'Expenditure deleted successfully.');
+        return redirect()->route('expenditure.expenditures')->with('success', 'Expenditure deleted successfully.');
     }
 }
