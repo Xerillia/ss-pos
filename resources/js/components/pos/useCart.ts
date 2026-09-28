@@ -1,5 +1,6 @@
 import { processCheckout } from "@/api/axios";
 import { PaymentMethod } from "@/enums";
+import { localToUtcIso, utcToLocalIso } from "@/lib/archive";
 import { Customer } from "@/types/customer";
 import { Product } from "@/types/product";
 import { useEffect, useState } from "react";
@@ -23,6 +24,7 @@ export function useCart() {
     const [discountAmount, setDiscountAmount] = useState<number>();
     const [selectedCustomer, setSelectedCustomer] = useState<Customer>();
     const [saleNumber, setSaleNumber] = useState<string>();
+    const [saleDate, setSaleDate] = useState<string>(utcToLocalIso());
 
     useEffect(() => {
         try {
@@ -221,6 +223,7 @@ export function useCart() {
         setSelectedCustomer(undefined);
         setPaymentMethod(PaymentMethod.CASH);
         setSaleNumber(undefined);
+        setSaleDate(utcToLocalIso());
         try {
             localStorage.removeItem(CART_STORAGE_KEY);
         } catch (error) {
@@ -246,6 +249,7 @@ export function useCart() {
             currency: extraFields?.currency ?? "IDR",
             sale_number: saleNumber ?? null,
             notes: extraFields?.notes ?? null,
+            sale_date: localToUtcIso(saleDate),
             items: cart.map((item) => ({
                 product_id: item.product.id,
                 quantity: item.quantity,
@@ -292,5 +296,7 @@ export function useCart() {
         finishTransaction,
         saleNumber,
         setSaleNumber,
+        saleDate,
+        setSaleDate,
     };
 }

@@ -32,6 +32,8 @@ export default function Checkout({ total }: CheckoutProps) {
         setDiscountAmount,
         finishTransaction,
         selectedCustomer,
+        saleDate,
+        setSaleDate,
     } = useCartContext();
     const [checkoutOpen, setCheckoutOpen] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
@@ -107,6 +109,19 @@ export default function Checkout({ total }: CheckoutProps) {
                     </AlertDialogHeader>
                     <FieldSet>
                         <PaymentMethodSelector />
+
+                        <Field>
+                            <FieldLabel htmlFor="sale_date">
+                                Sale Date
+                            </FieldLabel>
+                            <Input
+                                type="datetime-local"
+                                step="1"
+                                id="sale_date"
+                                value={saleDate}
+                                onChange={(e) => setSaleDate(e.target.value)}
+                            />
+                        </Field>
 
                         <FieldGroup className="grid grid-cols-2 gap-3">
                             <Field>

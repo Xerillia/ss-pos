@@ -100,6 +100,7 @@ class POSCheckoutService
                 'change_amount' => $changeAmount,
                 'debt_amount' => $debtAmount,
                 'notes' => $data['notes'] ?? null,
+                'sale_date' => $data['sale_date'],
             ]);
 
             // create SaleProduct records
