@@ -28,7 +28,7 @@ class ExpenditureController extends Controller
             );
 
         return Inertia::render('expenditures/expenditures', [
-            'expenditures' => $query->latest('expense_date')->paginate($request->input('per_page', 15))->withQueryString(),
+            'expenditures' => $query->latest('expense_date')->paginate($request->input('per_page', 10))->withQueryString(),
             'categories' => ExpenseCategory::active()->select('id', 'name')->get(),
             'filters' => $request->only(['search', 'expense_category_id', 'start_date', 'end_date']),
         ]);
