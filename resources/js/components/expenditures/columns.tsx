@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { ArrowUpDown, Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { rupiah } from "@/lib/rupiah";
 import { PaymentMethodUtils, PaymentStatusUtils } from "@/enums";
-import { archive } from "@/lib/archive";
+import { ymd } from "@/lib/archive";
 import { statusVariantMap } from "@/lib/statusVariantMap";
 import { styleVariants } from "@/lib/style";
 import { Badge } from "../ui/badge";
@@ -112,7 +112,7 @@ export const columns = columnHelper.columns([
                 <ArrowUpDown className="ml-2 h-3.5 w-3.5" />
             </Button>
         ),
-        cell: (info) => archive(info.getValue()),
+        cell: (info) => ymd(info.getValue()),
     }),
 
     columnHelper.accessor("status", {
