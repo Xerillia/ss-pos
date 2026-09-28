@@ -60,7 +60,7 @@ class ExpenditureController extends Controller
 
         Expenditure::create($validated);
 
-        return redirect()->back()->with('success', 'Expenditure created successfully.');
+        return redirect()->route('expenditure.expenditures')->with('success', 'Expenditure created successfully.');
     }
 
     /**

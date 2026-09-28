@@ -7,6 +7,7 @@ Route::middleware(['auth'])->prefix('expenditures')->name('expenditure.')->group
     Route::get('/', [ExpenditureController::class, 'index'])->name('expenditures');
 
     Route::get('/create', [ExpenditureController::class, 'create'])->name('createExpenditure');
+    Route::post('/create', [ExpenditureController::class, 'store'])->name('storeExpenditure');
 
     Route::get('/show/{expenditure}', [ExpenditureController::class, 'show'])->name('showExpenditure');
 

@@ -26,6 +26,8 @@ import {
     ComboboxList,
 } from "../ui/combobox";
 import { Textarea } from "../ui/textarea";
+import { storeExpenditure } from "@/routes/expenditure";
+import { toast } from "sonner";
 
 interface ExpenditureFormProps {
     expenditure?: Expenditure;
@@ -68,7 +70,23 @@ export default function ExpenditureForm({
         }));
 
         if (mode === "create") {
-            // post(storeItem().url);
+            const toastId = toast.loading("Creating expenditure...");
+
+            post(storeExpenditure().url, {
+                onSuccess: () => {
+                    toast.success("Expenditure created successfully!", {
+                        id: toastId,
+                    });
+                },
+                onError: (error) => {
+                    toast.error(
+                        error.message || "Failed to create expenditure",
+                        {
+                            id: toastId,
+                        },
+                    );
+                },
+            });
         } else {
             if (!expenditure) {
                 console.error("Expenditure is required for edit mode.");
