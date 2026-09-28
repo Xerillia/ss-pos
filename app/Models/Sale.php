@@ -32,6 +32,7 @@ class Sale extends Model
         'change_amount',
         'debt_amount',
         'notes',
+        'sale_date',
     ];
 
     protected $casts = [
@@ -45,6 +46,7 @@ class Sale extends Model
         'payment_status' => PaymentStatus::class,
         'payment_method' => PaymentMethod::class,
         'status' => SaleStatus::class,
+        'sale_date' => 'datetime',
     ];
 
     /**
