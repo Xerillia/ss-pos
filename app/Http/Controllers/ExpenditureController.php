@@ -39,7 +39,7 @@ class ExpenditureController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('expenditures/create-expenditure');
     }
 
     /**
