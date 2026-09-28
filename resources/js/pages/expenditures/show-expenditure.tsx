@@ -3,7 +3,7 @@ import { destroyExpenditure, expenditures } from "@/routes/expenditure";
 import { Expenditure } from "@/types/expenditure";
 import { Head, Link, router } from "@inertiajs/react";
 import { Undo2 } from "lucide-react";
-import ExpenditureTable from "./expenditure-table";
+import ExpenditureTable from "../../components/expenditures/expenditure-table";
 import { ButtonGroup } from "@/components/ui/button-group";
 import DeleteDialog from "@/components/expenditures/delete-dialog";
 import { useState } from "react";
