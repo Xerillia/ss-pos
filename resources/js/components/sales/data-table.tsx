@@ -12,17 +12,8 @@ import {
     TableHeader,
     TableRow,
 } from "../ui/table";
-import { getPageRange } from "@/lib/pagination";
 import Pagination from "../pagination";
-
-interface LaravelPaginationProps<TData> {
-    data: TData[];
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    links: { url: string | null; label: string; active: boolean }[];
-}
+import { LaravelPaginationProps } from "@/types/laravel-pagination-props";
 
 interface DataTableProps<TData extends RowData> {
     columns: ColumnDef<DataTableFeatures, TData>[];
