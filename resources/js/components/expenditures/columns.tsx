@@ -17,19 +17,13 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { destroyExpenditure, showExpenditure } from "@/routes/expenditure";
+import {
+    destroyExpenditure,
+    editExpenditure,
+    showExpenditure,
+} from "@/routes/expenditure";
 import { Link, router } from "@inertiajs/react";
 import { useState } from "react";
-import {
-    AlertDialog,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "../ui/alert-dialog";
 import { toast } from "sonner";
 import DeleteDialog from "./delete-dialog";
 
@@ -161,9 +155,10 @@ export const columns = columnHelper.columns([
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                                {/* <Link href={route("expenditures.edit", item.id)}>
-                                    <Edit className="mr-2 h-4 w-4" /> Edit Record
-                                </Link> */}
+                                <Link href={editExpenditure(item.id)}>
+                                    <Edit className="mr-2 h-4 w-4" /> Edit
+                                    Record
+                                </Link>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem

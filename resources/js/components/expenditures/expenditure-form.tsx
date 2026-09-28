@@ -26,8 +26,9 @@ import {
     ComboboxList,
 } from "../ui/combobox";
 import { Textarea } from "../ui/textarea";
-import { storeExpenditure } from "@/routes/expenditure";
+import { storeExpenditure, updateExpenditure } from "@/routes/expenditure";
 import { toast } from "sonner";
+import { ymd } from "@/lib/archive";
 
 interface ExpenditureFormProps {
     expenditure?: Expenditure;
@@ -52,7 +53,9 @@ export default function ExpenditureForm({
         {
             title: expenditure?.title || "",
             amount: expenditure?.amount || 0,
-            expense_date: expenditure?.expense_date || getLocalTodayDate(),
+            expense_date:
+                ymd(expenditure?.expense_date ?? getLocalTodayDate()) ||
+                getLocalTodayDate(),
             payment_method: expenditure?.payment_method || PaymentMethod.CASH,
             status: expenditure?.status || PaymentStatus.PAID,
             reference_number: expenditure?.reference_number || "",
@@ -92,7 +95,24 @@ export default function ExpenditureForm({
                 console.error("Expenditure is required for edit mode.");
                 return;
             }
-            // put(updateItem(product.id).url);
+
+            const toastId = toast.loading("Updating expenditure...");
+
+            put(updateExpenditure(expenditure).url, {
+                onSuccess: () => {
+                    toast.success("Expenditure updated successfully!", {
+                        id: toastId,
+                    });
+                },
+                onError: (error) => {
+                    toast.error(
+                        error.message || "Failed to update expenditure",
+                        {
+                            id: toastId,
+                        },
+                    );
+                },
+            });
         }
     };
 

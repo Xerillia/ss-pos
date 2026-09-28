@@ -80,15 +80,20 @@ class ExpenditureController extends Controller
      */
     public function edit(Expenditure $expenditure)
     {
-        //
+        return Inertia::render('expenditures/edit-expenditure', [
+            'expenditure' => $expenditure,
+            'categories' => ExpenseCategory::active()->select('id', 'name')->get(),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Expenditure $expenditure)
+    public function update(StoreExpenditureRequest $request, Expenditure $expenditure)
     {
-        //
+        $expenditure->update($request->validated());
+
+        return redirect()->route('expenditure.expenditures');
     }
 
     /**

@@ -11,5 +11,8 @@ Route::middleware(['auth'])->prefix('expenditures')->name('expenditure.')->group
 
     Route::get('/show/{expenditure}', [ExpenditureController::class, 'show'])->name('showExpenditure');
 
+    Route::get('/edit/{expenditure}', [ExpenditureController::class, 'edit'])->name('editExpenditure');
+    Route::put('/edit/{expenditure}', [ExpenditureController::class, 'update'])->name('updateExpenditure');
+
     Route::delete('/delete/{expenditure}', [ExpenditureController::class, 'destroy'])->name('destroyExpenditure');
 });
