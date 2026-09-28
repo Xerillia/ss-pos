@@ -19,11 +19,41 @@ import {
 } from "../ui/dropdown-menu";
 import { destroyExpenditure, showExpenditure } from "@/routes/expenditure";
 import { Link, router } from "@inertiajs/react";
+import { useState } from "react";
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "../ui/alert-dialog";
+import { toast } from "sonner";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Expenditure>();
 
 const handleDelete = (id: number) => {
-    router.delete(destroyExpenditure(id));
+    const toastId = toast.loading("Deleting expenditure...");
+
+    try {
+        router.delete(destroyExpenditure(id), {
+            preserveScroll: true,
+            onSuccess: (page) => {
+                toast.success("Expenditure deleted successfully!", {
+                    id: toastId,
+                });
+            },
+            onError: (error) => {
+                toast.error(`Error: ${error.message}`, { id: toastId });
+            },
+        });
+    } catch (error: any) {
+        toast.error(error?.message ?? "Error deleting expenditure!", {
+            id: toastId,
+        });
+    }
 };
 
 export const columns = columnHelper.columns([
@@ -111,35 +141,72 @@ export const columns = columnHelper.columns([
         header: "Actions",
         cell: ({ row }) => {
             const item = row.original;
+            const [open, setOpen] = useState(false);
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem asChild>
-                            <Link href={showExpenditure(item.id)}>
-                                <Eye className="mr-2 h-4 w-4" /> View Details
-                            </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                            {/* <Link href={route("expenditures.edit", item.id)}>
-                                <Edit className="mr-2 h-4 w-4" /> Edit Record
-                            </Link> */}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            className="dark:text-rose-400 text-rose-600"
-                            onClick={() => handleDelete(item.id)}
-                        >
-                            <Trash2 className="mr-2 h-4 w-4" /> Delete
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem asChild>
+                                <Link href={showExpenditure(item.id)}>
+                                    <Eye className="mr-2 h-4 w-4" /> View
+                                    Details
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                {/* <Link href={route("expenditures.edit", item.id)}>
+                                    <Edit className="mr-2 h-4 w-4" /> Edit Record
+                                </Link> */}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                className="dark:text-rose-400 text-rose-600"
+                                onClick={() => setOpen(true)}
+                            >
+                                <Trash2 className="mr-2 h-4 w-4" /> Delete
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    <AlertDialog open={open} onOpenChange={setOpen}>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                    {" "}
+                                    Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will
+                                    permanently delete{" "}
+                                    <span className="font-semibold">
+                                        {item.title}
+                                    </span>{" "}
+                                    from the server. Please confirm that you
+                                    want to proceed.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel variant="default">
+                                    Cancel
+                                </AlertDialogCancel>
+                                <AlertDialogTrigger asChild>
+                                    <Button
+                                        variant="destructive"
+                                        onClick={() => handleDelete(item.id)}
+                                    >
+                                        Delete
+                                    </Button>
+                                </AlertDialogTrigger>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </>
             );
         },
     }),
