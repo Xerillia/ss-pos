@@ -25,6 +25,8 @@ import { LaravelPaginationProps } from "@/types/laravel-pagination-props";
 import { router } from "@inertiajs/react";
 import { expenditures } from "@/routes/expenditure";
 import Pagination from "../pagination";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 interface DataTableProps<TData extends RowData> {
     columns: ColumnDef<DataTableFeatures, TData>[];
@@ -59,6 +61,15 @@ export function DataTable<TData extends RowData>({
         },
     });
 
+    const handleSearchSubmit = (e: React.SubmitEvent) => {
+        e.preventDefault();
+        router.get(
+            expenditures(),
+            { search, per_page: filters.per_page },
+            { preserveState: true },
+        );
+    };
+
     const handlePageChange = (pageIndex: number) => {
         const targetPage = pageIndex + 1;
         router.get(
@@ -69,7 +80,22 @@ export function DataTable<TData extends RowData>({
     };
 
     return (
-        <>
+        <div className="space-y-4">
+            {/* Search Bar */}
+            <form
+                onSubmit={handleSearchSubmit}
+                className="flex items-center gap-2 max-w-md"
+            >
+                <Input
+                    placeholder="Search title, expense number, or reference number..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+                <Button type="submit" variant="secondary">
+                    Search
+                </Button>
+            </form>
+
             <div className="overflow-hidden rounded-md border">
                 <Table>
                     <TableHeader>
@@ -128,6 +154,6 @@ export function DataTable<TData extends RowData>({
                     onPageChange={handlePageChange}
                 />
             </div>
-        </>
+        </div>
     );
 }
