@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { SaleStatus, SaleStatusUtils } from "@/enums";
+import { archive } from "@/lib/archive";
 import { sales, updateSale } from "@/routes/sales";
 import { Sale } from "@/types/sale";
 import { Head, router, useForm } from "@inertiajs/react";
@@ -68,7 +69,7 @@ export default function ShowSale({ sale }: ShowSaleProps) {
                         <div>
                             <CardTitle>{sale.sale_number}</CardTitle>
                             <p className="text-sm text-muted-foreground">
-                                {new Date(sale.created_at).toLocaleString()}
+                                {archive(sale.sale_date)}
                             </p>
                         </div>
                         <Badge variant="outline">{sale.payment_status}</Badge>
