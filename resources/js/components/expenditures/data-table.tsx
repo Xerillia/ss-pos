@@ -147,13 +147,13 @@ export function DataTable<TData extends RowData>({
                         )}
                     </TableBody>
                 </Table>
-
-                <Pagination
-                    currentPage={currentPage}
-                    lastPage={lastPage}
-                    onPageChange={handlePageChange}
-                />
             </div>
+
+            <Pagination
+                currentPage={currentPage}
+                lastPage={lastPage}
+                onPageChange={handlePageChange}
+            />
         </div>
     );
 }
