@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import CheckerInputCard from "./checker-input-card";
+import { StartingFloatForm } from "./starting-float-form";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { router } from "@inertiajs/react";
-import { registerChecker } from "@/routes";
+import { useRegisterChecker } from "@/hooks/use-register-checker";
 
 interface CheckerInputProps {
     setCountedCash: (cash: number) => void;
@@ -14,216 +13,44 @@ interface CheckerInputProps {
     };
 }
 
-const DENOMINATIONS = [
-    { key: "coin_500", value: 500, qty: 0 },
-    { key: "coin_1000", value: 1000, qty: 0 },
-    { key: "note_1000", value: 1000, qty: 0 },
-    { key: "note_2000", value: 2000, qty: 0 },
-    { key: "note_5000", value: 5000, qty: 0 },
-    { key: "note_10000", value: 10000, qty: 0 },
-    { key: "note_20000", value: 20000, qty: 0 },
-    { key: "note_50000", value: 50000, qty: 0 },
-    { key: "note_100000", value: 100000, qty: 0 },
-];
-
-const BUNDLES = [
-    { key: "bundle_10000", value: 10000, qty: 0 },
-    { key: "bundle_100000", value: 100000, qty: 0 },
-    { key: "bundle_1000000", value: 1000000, qty: 0 },
-    { key: "bundle_10000000", value: 10000000, qty: 0 },
-];
-
-const STARTING_STORAGE_KEY = "checker_starting";
-const DENOMINATION_STORAGE_KEY = "checker_denomination";
-const BUNDLE_STORAGE_KEY = "checker_bundle";
-
 export default function CheckerInput({
     setCountedCash,
     filters,
 }: CheckerInputProps) {
-    const [starting_float, setStartingFloat] = useState(() => {
-        if (typeof window === "undefined") return filters.starting_float || 0.0;
-        try {
-            const saved = localStorage.getItem(STARTING_STORAGE_KEY);
-            return saved ? saved : filters.starting_float || 0.0;
-        } catch (error) {
-            console.error("Failed to load starting_float:", error);
-            return filters.starting_float || 0.0;
-        }
-    });
-    const [denominations, setDenominations] = useState<
-        { key: string; value: number; qty: number }[]
-    >(() => {
-        if (typeof window === "undefined") return DENOMINATIONS;
-        try {
-            const saved = localStorage.getItem(DENOMINATION_STORAGE_KEY);
-            return saved ? JSON.parse(saved) : DENOMINATIONS;
-        } catch (error) {
-            console.error("Failed to load denominations:", error);
-            return DENOMINATIONS;
-        }
-    });
-    const [bundles, setBundles] = useState<
-        { key: string; value: number; qty: number }[]
-    >(() => {
-        if (typeof window === "undefined") return BUNDLES;
-        try {
-            const saved = localStorage.getItem(BUNDLE_STORAGE_KEY);
-            return saved ? JSON.parse(saved) : BUNDLES;
-        } catch (error) {
-            console.error("Failed to load bundles:", error);
-            return BUNDLES;
-        }
-    });
+    const {
+        denominations,
+        bundles,
+        countedCash,
+        handleDenominationChange,
+        handleBundleChange,
+        reset,
+    } = useRegisterChecker();
 
     useEffect(() => {
-        if (starting_float !== 0 && starting_float !== filters.starting_float) {
-            router.get(
-                registerChecker(),
-                {
-                    ...filters,
-                    starting_float,
-                },
-                { preserveState: true, replace: true },
-            );
-        }
-    }, []);
-
-    useEffect(() => {
-        try {
-            localStorage.setItem(
-                DENOMINATION_STORAGE_KEY,
-                JSON.stringify(denominations),
-            );
-        } catch (error) {
-            console.error(
-                "Failed to save denominations to localStorage:",
-                error,
-            );
-        }
-    }, [denominations]);
-
-    useEffect(() => {
-        try {
-            localStorage.setItem(BUNDLE_STORAGE_KEY, JSON.stringify(bundles));
-        } catch (error) {
-            console.error("Failed to save bundles to localStorage:", error);
-        }
-    }, [bundles]);
-
-    const reset = () => {
-        const confirmed = window.confirm(
-            "Are you sure you want to reset all quantities?",
-        );
-
-        if (confirmed) {
-            setDenominations(DENOMINATIONS);
-            setBundles(BUNDLES);
-        }
-    };
-
-    const handleDenomination = (key: string, qty: number) => {
-        qty = Math.max(0, qty); // disable negative
-
-        setDenominations((prev) =>
-            prev.map((denomination) => {
-                if (denomination.key === key)
-                    return { ...denomination, qty: qty };
-
-                return denomination;
-            }),
-        );
-    };
-
-    const handleBundle = (key: string, qty: number) => {
-        qty = Math.max(0, qty); // disable negative
-
-        setBundles((prev) =>
-            prev.map((bundle) => {
-                if (bundle.key === key) return { ...bundle, qty: qty };
-
-                return bundle;
-            }),
-        );
-    };
-
-    const totalCash = () => {
-        const totalDenomination = denominations.reduce(
-            (total, denomination) =>
-                total + denomination.value * (denomination.qty || 0),
-            0,
-        );
-
-        const totalBundle = bundles.reduce(
-            (total, bundle) => total + bundle.value * (bundle.qty || 0),
-            0,
-        );
-
-        return totalDenomination + totalBundle;
-    };
-
-    useEffect(() => {
-        setCountedCash(totalCash());
-    }, [denominations, bundles]);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = parseFloat(e.target.value) || 0;
-
-        setStartingFloat(value);
-        try {
-            localStorage.setItem(STARTING_STORAGE_KEY, value.toString());
-        } catch (error) {
-            console.error("Failed to save starting:", error);
-        }
-    };
-
-    const handleStarting = (e?: React.SyntheticEvent) => {
-        if (e) e.preventDefault();
-
-        if (starting_float === filters.starting_float) return;
-
-        router.get(
-            registerChecker(),
-            {
-                ...filters,
-                starting_float,
-            },
-            { preserveState: true },
-        );
-    };
+        setCountedCash(countedCash);
+    }, [countedCash, setCountedCash]);
 
     return (
-        <>
-            <div className="flex gap-4">
-                <form
-                    onSubmit={handleStarting}
-                    className="flex items-center gap-2 max-w-sm"
-                >
-                    <Input
-                        type="number"
-                        placeholder="Starting cash..."
-                        value={starting_float === 0 ? "" : starting_float}
-                        onChange={handleChange}
-                        onBlur={handleStarting}
-                    />
-                </form>
+        <div className="space-y-4">
+            <div className="flex gap-4 items-center">
+                <StartingFloatForm filters={filters} />
                 <Button variant="destructive" onClick={reset}>
                     Reset
                 </Button>
             </div>
+
             <div className="grid grid-cols-2 items-stretch gap-4">
                 <CheckerInputCard
                     objects={denominations}
-                    handleOnChange={handleDenomination}
+                    handleOnChange={handleDenominationChange}
                     label="Denomination"
                 />
-
                 <CheckerInputCard
                     objects={bundles}
-                    handleOnChange={handleBundle}
+                    handleOnChange={handleBundleChange}
                     label="Bundle"
                 />
             </div>
-        </>
+        </div>
     );
 }
