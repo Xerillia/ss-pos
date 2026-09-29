@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InsufficientStockException;
 use App\Http\Requests\StoreSaleRequest;
-use App\POSCheckoutService;
+use App\Services\POSCheckoutService;
 use Illuminate\Http\JsonResponse;
 
 class POSCheckoutController extends Controller

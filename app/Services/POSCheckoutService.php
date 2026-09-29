@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Services;
 
 use App\Enums\PaymentStatus;
 use App\Exceptions\InsufficientStockException;
@@ -100,6 +100,7 @@ class POSCheckoutService
                 'change_amount' => $changeAmount,
                 'debt_amount' => $debtAmount,
                 'notes' => $data['notes'] ?? null,
+                'sale_date' => $data['sale_date'],
             ]);
 
             // create SaleProduct records

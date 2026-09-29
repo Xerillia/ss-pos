@@ -28,21 +28,13 @@ import {
 import { Textarea } from "../ui/textarea";
 import { storeExpenditure, updateExpenditure } from "@/routes/expenditure";
 import { toast } from "sonner";
-import { ymd } from "@/lib/archive";
+import { utcToLocalIso } from "@/lib/archive";
 
 interface ExpenditureFormProps {
     expenditure?: Expenditure;
     mode: "create" | "edit";
     categories: ExpenseCategory[];
 }
-
-const getLocalTodayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-};
 
 export default function ExpenditureForm({
     expenditure,
@@ -53,9 +45,7 @@ export default function ExpenditureForm({
         {
             title: expenditure?.title || "",
             amount: expenditure?.amount || 0,
-            expense_date:
-                ymd(expenditure?.expense_date ?? getLocalTodayDate()) ||
-                getLocalTodayDate(),
+            expense_date: utcToLocalIso(expenditure?.expense_date),
             payment_method: expenditure?.payment_method || PaymentMethod.CASH,
             status: expenditure?.status || PaymentStatus.PAID,
             reference_number: expenditure?.reference_number || "",
@@ -152,7 +142,7 @@ export default function ExpenditureForm({
                 <Label htmlFor="expense_date">Expense Date</Label>
                 <Input
                     id="expense_date"
-                    type="date"
+                    type="datetime-local"
                     value={data.expense_date}
                     onChange={(e) => setData("expense_date", e.target.value)}
                     placeholder="Enter expenditure date"

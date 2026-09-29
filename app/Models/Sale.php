@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use App\Enums\SaleStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,6 +32,7 @@ class Sale extends Model
         'change_amount',
         'debt_amount',
         'notes',
+        'sale_date',
     ];
 
     protected $casts = [
@@ -44,6 +46,7 @@ class Sale extends Model
         'payment_status' => PaymentStatus::class,
         'payment_method' => PaymentMethod::class,
         'status' => SaleStatus::class,
+        'sale_date' => 'datetime',
     ];
 
     /**
@@ -68,5 +71,10 @@ class Sale extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function scopeDateRange(Builder $query, string|\DateTimeInterface $startDate, string|\DateTimeInterface $endDate)
+    {
+        return $query->whereBetween('sale_date', [$startDate, $endDate]);
     }
 }

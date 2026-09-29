@@ -29,6 +29,8 @@ interface CartContextType {
     finishTransaction: () => any;
     saleNumber: string | undefined;
     setSaleNumber: Dispatch<SetStateAction<string | undefined>>;
+    saleDate: string | undefined;
+    setSaleDate: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -59,6 +61,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         finishTransaction,
         saleNumber,
         setSaleNumber,
+        saleDate,
+        setSaleDate,
     } = useCart();
 
     return (
@@ -88,6 +92,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 finishTransaction,
                 saleNumber,
                 setSaleNumber,
+                saleDate,
+                setSaleDate,
             }}
         >
             {children}

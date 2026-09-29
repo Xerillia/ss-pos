@@ -31,6 +31,7 @@ class StoreSaleRequest extends FormRequest
             'discount_amount' => ['nullable', 'numeric', 'min:0'],
             'currency' => ['nullable', 'string', 'size:3'],
             'notes' => ['nullable', 'string'],
+            'sale_date' => ['required', 'date'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'distinct', 'exists:products,id'],
             'items.*.quantity' => ['required', 'integer', 'min:1'],

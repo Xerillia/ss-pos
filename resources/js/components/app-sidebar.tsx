@@ -2,6 +2,7 @@ import { Link } from "@inertiajs/react";
 import {
     BanknoteArrowDown,
     BookOpen,
+    Calculator,
     DatabaseBackup,
     FolderGit2,
     LayoutGrid,
@@ -24,7 +25,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { backup, converter, dashboard } from "@/routes";
+import { backup, converter, dashboard, registerChecker } from "@/routes";
 import type { NavItem } from "@/types";
 import { inventory } from "@/routes/product";
 import { pos } from "@/routes/pos";
@@ -47,6 +48,11 @@ const mainNavItems: NavItem[] = [
         title: "Sales",
         href: sales(),
         icon: ReceiptText,
+    },
+    {
+        title: "Register Checker",
+        href: registerChecker(),
+        icon: Calculator,
     },
     {
         title: "Expenditures",

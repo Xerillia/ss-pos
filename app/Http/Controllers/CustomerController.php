@@ -49,7 +49,7 @@ class CustomerController extends Controller
     {
         $customer->append(['total_spent', 'total_debt', 'total_order']);
 
-        return Inertia::render('customers/show-customer', [
+        return Inertia::render('customer/show-customer', [
             'customer' => $customer,
             'sales' => $customer->sales()
                 ->select(['id', 'customer_id', 'sale_number', 'total_amount', 'payment_status', 'created_at'])
