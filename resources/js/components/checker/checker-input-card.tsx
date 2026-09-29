@@ -9,6 +9,7 @@ import {
     TableHeader,
     TableRow,
 } from "../ui/table";
+import { ChangeEvent } from "react";
 
 interface CheckerInputCardProps {
     objects: { key: string; value: number; qty: number }[];
@@ -19,6 +20,15 @@ export default function CheckerInputCard({
     objects,
     handleOnChange,
 }: CheckerInputCardProps) {
+    const handleQuantityChange = (
+        e: ChangeEvent<HTMLInputElement>,
+        key: string,
+    ) => {
+        const rawValue = e.target.value;
+        const qty = rawValue === "" ? 0 : parseInt(rawValue, 10) || 0;
+        handleOnChange(key, qty);
+    };
+
     return (
         <Card className="h-full">
             <CardContent>
@@ -41,12 +51,11 @@ export default function CheckerInputCard({
                                     <Input
                                         type="number"
                                         min="0"
-                                        value={object.qty}
+                                        value={
+                                            object.qty === 0 ? "" : object.qty
+                                        }
                                         onChange={(e) =>
-                                            handleOnChange(
-                                                object.key,
-                                                parseInt(e.target.value),
-                                            )
+                                            handleQuantityChange(e, object.key)
                                         }
                                     />
                                 </TableCell>
