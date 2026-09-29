@@ -4,19 +4,21 @@ import { Card, CardContent } from "../ui/card";
 
 interface DiscrepancyBannerProps {
     discrepancy: number;
+    className?: string;
 }
 
 export default function DiscrepancyBanner({
     discrepancy,
+    className,
 }: DiscrepancyBannerProps) {
     return (
         <Card
-            className={`border transition-colors ${
+            className={`border transition-colors ${className} ${
                 discrepancy === 0
-                    ? "bg-emerald-500/10 border-emerald-500/30"
+                    ? "dark:bg-emerald-950 bg-emerald-100 border-emerald-500"
                     : discrepancy > 0
-                      ? "bg-amber-500/10 border-amber-500/30"
-                      : "bg-destructive/10 border-destructive/30"
+                      ? "dark:bg-amber-950 bg-amber-100 border-amber-500"
+                      : "bg-rose-100 dark:bg-rose-950 border-rose-500"
             }`}
         >
             <CardContent className="p-4 flex items-center justify-between">
@@ -28,14 +30,8 @@ export default function DiscrepancyBanner({
                             {discrepancy < 0 && "Drawer Short"}
                         </span>
                         <Badge
-                            variant={
-                                discrepancy === 0
-                                    ? "outline"
-                                    : discrepancy > 0
-                                      ? "secondary"
-                                      : "destructive"
-                            }
-                            className="capitalize"
+                            variant="outline"
+                            className="capitalize border-black dark:border-white"
                         >
                             {discrepancy === 0
                                 ? "Exact Match"
@@ -47,7 +43,7 @@ export default function DiscrepancyBanner({
                     <p className="text-xs text-muted-foreground">
                         {discrepancy === 0
                             ? "Physical count matches the system expected cash."
-                            : "Review cash drops or recount physical bills."}
+                            : "Review transactions or recount physical bills."}
                     </p>
                 </div>
 

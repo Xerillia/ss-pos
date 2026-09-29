@@ -44,7 +44,10 @@ export default function RegisterChecker({
                     expected_cash={summary.expected_cash}
                 />
                 <CheckerInput setCountedCash={setCountedCash} />
-                <DiscrepancyBanner discrepancy={discrepancy} />
+                <DiscrepancyBanner
+                    discrepancy={discrepancy}
+                    className="sticky bottom-4 z-1"
+                />
             </div>
         </>
     );
