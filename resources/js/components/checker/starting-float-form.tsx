@@ -32,7 +32,7 @@ export function StartingFloatForm({ filters }: StartingFloatFormProps) {
         router.get(
             registerChecker(),
             { ...filters, starting_float: val },
-            { preserveState: true },
+            { preserveState: true, preserveScroll: true },
         );
     };
 
@@ -52,6 +52,9 @@ export function StartingFloatForm({ filters }: StartingFloatFormProps) {
             onSubmit={handleSubmit}
             className="flex items-center gap-2 max-w-sm"
         >
+            <label className="text-xs font-medium text-gray-600">
+                Starting:
+            </label>
             <Input
                 type="number"
                 placeholder="Starting cash..."

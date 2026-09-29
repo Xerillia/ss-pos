@@ -3,6 +3,7 @@ import CheckerInputCard from "./checker-input-card";
 import { StartingFloatForm } from "./starting-float-form";
 import { Button } from "../ui/button";
 import { useRegisterChecker } from "@/hooks/use-register-checker";
+import { DateFilterForm } from "./date-filter-form";
 
 interface CheckerInputProps {
     setCountedCash: (cash: number) => void;
@@ -34,6 +35,7 @@ export default function CheckerInput({
         <div className="space-y-4">
             <div className="flex gap-4 items-center">
                 <StartingFloatForm filters={filters} />
+                <DateFilterForm filters={filters} />
                 <Button variant="destructive" onClick={reset}>
                     Reset
                 </Button>
