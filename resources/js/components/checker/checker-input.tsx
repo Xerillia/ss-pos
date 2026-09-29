@@ -25,9 +25,56 @@ const BUNDLES = [
     { key: "bundle_10000000", value: 10000000, qty: 0 },
 ];
 
+const DENOMINATION_STORAGE_KEY = "checker_denomination";
+const BUNDLE_STORAGE_KEY = "checker_bundle";
+
 export default function CheckerInput({ setCountedCash }: CheckerInputProps) {
-    const [denominations, setDenominations] = useState(DENOMINATIONS);
-    const [bundles, setBundles] = useState(BUNDLES);
+    const [denominations, setDenominations] = useState<
+        { key: string; value: number; qty: number }[]
+    >(() => {
+        if (typeof window === "undefined") return DENOMINATIONS;
+        try {
+            const saved = localStorage.getItem(DENOMINATION_STORAGE_KEY);
+            return saved ? JSON.parse(saved) : DENOMINATIONS;
+        } catch (error) {
+            console.error("Faled to load denominations:", error);
+            return DENOMINATIONS;
+        }
+    });
+    const [bundles, setBundles] = useState<
+        { key: string; value: number; qty: number }[]
+    >(() => {
+        if (typeof window === "undefined") return BUNDLES;
+        try {
+            const saved = localStorage.getItem(BUNDLE_STORAGE_KEY);
+            return saved ? JSON.parse(saved) : BUNDLES;
+        } catch (error) {
+            console.error("Failed to load bundles:", error);
+            return BUNDLES;
+        }
+    });
+
+    useEffect(() => {
+        try {
+            localStorage.setItem(
+                DENOMINATION_STORAGE_KEY,
+                JSON.stringify(denominations),
+            );
+        } catch (error) {
+            console.error(
+                "Failed to save denominations to localStorage:",
+                error,
+            );
+        }
+    }, [denominations]);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem(BUNDLE_STORAGE_KEY, JSON.stringify(bundles));
+        } catch (error) {
+            console.error("Failed to save bundles to localStorage:", error);
+        }
+    }, [bundles]);
 
     const reset = () => {
         const confirmed = window.confirm(
