@@ -29,6 +29,17 @@ export default function CheckerInput({ setCountedCash }: CheckerInputProps) {
     const [denominations, setDenominations] = useState(DENOMINATIONS);
     const [bundles, setBundles] = useState(BUNDLES);
 
+    const reset = () => {
+        const confirmed = window.confirm(
+            "Are you sure you want to reset all quantities?",
+        );
+
+        if (confirmed) {
+            setDenominations(DENOMINATIONS);
+            setBundles(BUNDLES);
+        }
+    };
+
     const handleDenomination = (key: string, qty: number) => {
         qty = Math.max(0, qty); // disable negative
 
