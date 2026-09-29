@@ -57,7 +57,7 @@ export default function DiscrepancyBanner({
                                 ? "text-foreground"
                                 : discrepancy > 0
                                   ? "text-amber-600 dark:text-amber-400"
-                                  : "text-destructive"
+                                  : "text-rose-600 dark:text-rose-400"
                         }`}
                     >
                         {discrepancy > 0 && "+"}
