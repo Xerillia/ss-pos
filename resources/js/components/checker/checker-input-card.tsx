@@ -14,11 +14,13 @@ import { ChangeEvent } from "react";
 interface CheckerInputCardProps {
     objects: { key: string; value: number; qty: number }[];
     handleOnChange: (key: string, qty: number) => void;
+    label: string;
 }
 
 export default function CheckerInputCard({
     objects,
     handleOnChange,
+    label,
 }: CheckerInputCardProps) {
     const handleQuantityChange = (
         e: ChangeEvent<HTMLInputElement>,
@@ -36,7 +38,7 @@ export default function CheckerInputCard({
                     <TableHeader>
                         <TableRow>
                             <TableHead className="text-right">
-                                Denomination
+                                {label}
                             </TableHead>
                             <TableHead>Quantity</TableHead>
                         </TableRow>

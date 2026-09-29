@@ -140,11 +140,13 @@ export default function CheckerInput({ setCountedCash }: CheckerInputProps) {
                 <CheckerInputCard
                     objects={denominations}
                     handleOnChange={handleDenomination}
+                    label="Denomination"
                 />
 
                 <CheckerInputCard
                     objects={bundles}
                     handleOnChange={handleBundle}
+                    label="Bundle"
                 />
             </div>
         </>
