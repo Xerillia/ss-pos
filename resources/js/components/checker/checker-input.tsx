@@ -33,6 +33,7 @@ const BUNDLES = [
     { key: "bundle_10000000", value: 10000000, qty: 0 },
 ];
 
+const STARTING_STORAGE_KEY = "checker_starting";
 const DENOMINATION_STORAGE_KEY = "checker_denomination";
 const BUNDLE_STORAGE_KEY = "checker_bundle";
 
@@ -40,9 +41,16 @@ export default function CheckerInput({
     setCountedCash,
     filters,
 }: CheckerInputProps) {
-    const [starting_float, setStartingFloat] = useState(
-        filters.starting_float || 0.0,
-    );
+    const [starting_float, setStartingFloat] = useState(() => {
+        if (typeof window === "undefined") return filters.starting_float || 0.0;
+        try {
+            const saved = localStorage.getItem(STARTING_STORAGE_KEY);
+            return saved ? saved : filters.starting_float || 0.0;
+        } catch (error) {
+            console.error("Failed to load starting_float:", error);
+            return filters.starting_float || 0.0;
+        }
+    });
     const [denominations, setDenominations] = useState<
         { key: string; value: number; qty: number }[]
     >(() => {
@@ -51,7 +59,7 @@ export default function CheckerInput({
             const saved = localStorage.getItem(DENOMINATION_STORAGE_KEY);
             return saved ? JSON.parse(saved) : DENOMINATIONS;
         } catch (error) {
-            console.error("Faled to load denominations:", error);
+            console.error("Failed to load denominations:", error);
             return DENOMINATIONS;
         }
     });
@@ -67,6 +75,19 @@ export default function CheckerInput({
             return BUNDLES;
         }
     });
+
+    useEffect(() => {
+        if (starting_float !== 0 && starting_float !== filters.starting_float) {
+            router.get(
+                registerChecker(),
+                {
+                    ...filters,
+                    starting_float,
+                },
+                { preserveState: true, replace: true },
+            );
+        }
+    }, []);
 
     useEffect(() => {
         try {
@@ -145,6 +166,17 @@ export default function CheckerInput({
         setCountedCash(totalCash());
     }, [denominations, bundles]);
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseFloat(e.target.value) || 0;
+
+        setStartingFloat(value);
+        try {
+            localStorage.setItem(STARTING_STORAGE_KEY, value.toString());
+        } catch (error) {
+            console.error("Failed to save starting:", error);
+        }
+    };
+
     const handleStarting = (e?: React.SyntheticEvent) => {
         if (e) e.preventDefault();
 
@@ -153,6 +185,7 @@ export default function CheckerInput({
         router.get(
             registerChecker(),
             {
+                ...filters,
                 starting_float,
             },
             { preserveState: true },
@@ -170,9 +203,7 @@ export default function CheckerInput({
                         type="number"
                         placeholder="Starting cash..."
                         value={starting_float === 0 ? "" : starting_float}
-                        onChange={(e) =>
-                            setStartingFloat(parseFloat(e.target.value) || 0)
-                        }
+                        onChange={handleChange}
                         onBlur={handleStarting}
                     />
                 </form>
