@@ -1,7 +1,6 @@
 import CheckerInput from "@/components/checker/checker-input";
 import CheckerSummary from "@/components/checker/checker-summary";
 import DiscrepancyBanner from "@/components/checker/discrepancy-banner";
-import { Field } from "@/components/ui/field";
 import { Head } from "@inertiajs/react";
 import { useState } from "react";
 
@@ -27,8 +26,6 @@ export default function RegisterChecker({
 }: RegisterCheckerProps) {
     const [countedCash, setCountedCash] = useState<number>(0);
 
-    // const [startDate, setStartDate] =
-
     const discrepancy = countedCash - summary.expected_cash;
 
     return (
@@ -43,7 +40,10 @@ export default function RegisterChecker({
                     total_cash_expenditures={summary.total_cash_expenditures}
                     expected_cash={summary.expected_cash}
                 />
-                <CheckerInput setCountedCash={setCountedCash} />
+                <CheckerInput
+                    setCountedCash={setCountedCash}
+                    filters={filters}
+                />
                 <DiscrepancyBanner
                     discrepancy={discrepancy}
                     className="sticky bottom-4 z-1"

@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
 import CheckerInputCard from "./checker-input-card";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { router } from "@inertiajs/react";
+import { registerChecker } from "@/routes";
 
 interface CheckerInputProps {
     setCountedCash: (cash: number) => void;
+    filters: {
+        start_date: string;
+        end_date: string;
+        starting_float: number;
+    };
 }
 
 const DENOMINATIONS = [
@@ -28,7 +36,13 @@ const BUNDLES = [
 const DENOMINATION_STORAGE_KEY = "checker_denomination";
 const BUNDLE_STORAGE_KEY = "checker_bundle";
 
-export default function CheckerInput({ setCountedCash }: CheckerInputProps) {
+export default function CheckerInput({
+    setCountedCash,
+    filters,
+}: CheckerInputProps) {
+    const [starting_float, setStartingFloat] = useState(
+        filters.starting_float || 0.0,
+    );
     const [denominations, setDenominations] = useState<
         { key: string; value: number; qty: number }[]
     >(() => {
@@ -131,11 +145,41 @@ export default function CheckerInput({ setCountedCash }: CheckerInputProps) {
         setCountedCash(totalCash());
     }, [denominations, bundles]);
 
+    const handleStarting = (e?: React.SyntheticEvent) => {
+        if (e) e.preventDefault();
+
+        if (starting_float === filters.starting_float) return;
+
+        router.get(
+            registerChecker(),
+            {
+                starting_float,
+            },
+            { preserveState: true },
+        );
+    };
+
     return (
         <>
-            <Button variant="destructive" onClick={reset}>
-                Reset
-            </Button>
+            <div className="flex gap-4">
+                <form
+                    onSubmit={handleStarting}
+                    className="flex items-center gap-2 max-w-sm"
+                >
+                    <Input
+                        type="number"
+                        placeholder="Starting cash..."
+                        value={starting_float === 0 ? "" : starting_float}
+                        onChange={(e) =>
+                            setStartingFloat(parseFloat(e.target.value) || 0)
+                        }
+                        onBlur={handleStarting}
+                    />
+                </form>
+                <Button variant="destructive" onClick={reset}>
+                    Reset
+                </Button>
+            </div>
             <div className="grid grid-cols-2 items-stretch gap-4">
                 <CheckerInputCard
                     objects={denominations}
