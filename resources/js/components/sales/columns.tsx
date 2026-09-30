@@ -30,8 +30,8 @@ import {
 } from "../ui/alert-dialog";
 import { toast } from "sonner";
 import { styleVariants } from "@/lib/style";
-import { VariantProps } from "class-variance-authority";
 import { statusVariantMap } from "@/lib/statusVariantMap";
+import { archive } from "@/lib/archive";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Sale>();
 
@@ -74,6 +74,12 @@ export const columns = [
         ),
     }),
 
+    // Sale Date
+    columnHelper.accessor("sale_date", {
+        header: "Sale Date",
+        cell: (info) => archive(info.getValue()),
+    }),
+
     // Customer
     columnHelper.accessor(
         (row) => row.customer?.name || WALK_IN_CUSTOMER.name,
@@ -82,12 +88,6 @@ export const columns = [
             header: "Customer",
         },
     ),
-
-    // Cashier
-    columnHelper.accessor((row) => row.user?.name || "System", {
-        id: "user",
-        header: "Cashier",
-    }),
 
     // Payment Method
     columnHelper.accessor("payment_method", {
