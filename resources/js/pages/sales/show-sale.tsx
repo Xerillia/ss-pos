@@ -13,8 +13,7 @@ import { SaleStatus, SaleStatusUtils } from "@/enums";
 import { archive } from "@/lib/archive";
 import { sales, updateSale } from "@/routes/sales";
 import { Sale } from "@/types/sale";
-import { Head, router, useForm } from "@inertiajs/react";
-import { Undo2 } from "lucide-react";
+import { Head, useForm } from "@inertiajs/react";
 import { toast } from "sonner";
 
 interface ShowSaleProps {
@@ -48,22 +47,10 @@ export default function ShowSale({ sale }: ShowSaleProps) {
         });
     };
 
-    const handleCancel = () => {
-        if (window.history.length <= 2) {
-            router.visit(sales());
-        } else {
-            window.history.back();
-        }
-    };
-
     return (
         <>
             <Head title={`Sale ${sale.sale_number}`} />
             <div className="m-4 space-y-4">
-                <Button variant="destructive" size="sm" onClick={handleCancel}>
-                    <Undo2 /> Cancel
-                </Button>
-
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
                         <div>
