@@ -34,7 +34,7 @@ class StoreSaleRequest extends FormRequest
             'sale_date' => ['required', 'date'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'distinct', 'exists:products,id'],
-            'items.*.quantity' => ['required', 'integer', 'min:1'],
+            'items.*.quantity' => ['required', 'numeric', 'min:0.01'],
             'items.*.unit_discount' => ['nullable', 'numeric', 'min:0'],
             'items.*.flat_discount' => ['nullable', 'numeric', 'min:0'],
         ];
