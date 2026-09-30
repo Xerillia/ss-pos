@@ -20,6 +20,7 @@ import { Dialog, DialogContent } from "../ui/dialog";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import DeleteDialogContent from "./delete-dialog-content";
 import { useState } from "react";
+import { UnitUtils } from "@/enums";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Product>();
 
@@ -77,6 +78,13 @@ export const columns = columnHelper.columns([
             );
         },
         cell: (info) => <p className="text-center">{info.getValue()}</p>,
+    }),
+
+    columnHelper.accessor("unit", {
+        header: "Unit",
+        cell: (info) => (
+            <p className="text-center">{UnitUtils.label(info.getValue())}</p>
+        ),
     }),
 
     columnHelper.accessor("created_at", {
