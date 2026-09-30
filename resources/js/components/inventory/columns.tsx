@@ -21,6 +21,7 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import DeleteDialogContent from "./delete-dialog-content";
 import { useState } from "react";
 import { UnitUtils } from "@/enums";
+import { formatNumber } from "@/lib/number";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Product>();
 
@@ -77,7 +78,9 @@ export const columns = columnHelper.columns([
                 </Button>
             );
         },
-        cell: (info) => <p className="text-center">{info.getValue()}</p>,
+        cell: (info) => (
+            <p className="text-center">{formatNumber(info.getValue())}</p>
+        ),
     }),
 
     columnHelper.accessor("unit", {

@@ -11,6 +11,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "@/lib/useDebounce";
 import { getPageRange } from "@/lib/pagination";
 import { useCartContext } from "./cart-context";
+import { formatNumber } from "@/lib/number";
 
 interface ItemListProps {
     products: Product[];
@@ -109,7 +110,11 @@ export default function ItemList({ products }: ItemListProps) {
                                                         {product.sku || "-"}
                                                     </p>
                                                 </div>
-                                                {stockLabel(product.quantity)}
+                                                {stockLabel(
+                                                    formatNumber(
+                                                        product.quantity,
+                                                    ),
+                                                )}
                                             </div>
                                             <Separator />
                                             <div className="flex justify-between items-end">
