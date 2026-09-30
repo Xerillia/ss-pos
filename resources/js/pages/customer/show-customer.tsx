@@ -13,7 +13,7 @@ import { customers, destroyCustomer, editCustomer } from "@/routes/customer";
 import { Customer } from "@/types/customer";
 import { Sale } from "@/types/sale";
 import { Head, router, useForm } from "@inertiajs/react";
-import { Edit, Trash, Undo2 } from "lucide-react";
+import { Edit, Trash } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -32,14 +32,6 @@ interface ShowCustomerProps {
 export default function ShowCustomer({ customer, sales }: ShowCustomerProps) {
     const [open, setOpen] = useState(false);
     const { delete: destroy, processing } = useForm();
-
-    const handleCancel = () => {
-        if (window.history.length <= 2) {
-            router.visit(customers());
-        } else {
-            window.history.back();
-        }
-    };
 
     const handleDelete = (
         e: React.SubmitEvent<HTMLFormElement>,
@@ -69,30 +61,20 @@ export default function ShowCustomer({ customer, sales }: ShowCustomerProps) {
         <>
             <Head title={`Customer ${customer.name}`} />
             <div className="m-4 space-y-4">
-                <div className="flex justify-between items-center">
+                <div className="flex gap-2 ml-auto w-max">
                     <Button
-                        variant="destructive"
                         size="sm"
-                        onClick={handleCancel}
+                        onClick={() => router.visit(editCustomer(customer))}
                     >
-                        <Undo2 /> Return
+                        <Edit /> Edit Customer
                     </Button>
-
-                    <div className="flex gap-2">
-                        <Button
-                            size="sm"
-                            onClick={() => router.visit(editCustomer(customer))}
-                        >
-                            <Edit /> Edit Customer
-                        </Button>
-                        <Button
-                            size="sm"
-                            variant="destructive"
-                            onClick={() => setOpen(true)}
-                        >
-                            <Trash /> Delete Customer
-                        </Button>
-                    </div>
+                    <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => setOpen(true)}
+                    >
+                        <Trash /> Delete Customer
+                    </Button>
                 </div>
 
                 <CustomerStats customer={customer} />
