@@ -45,7 +45,7 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name */}
             <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
