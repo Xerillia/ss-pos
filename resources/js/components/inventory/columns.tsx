@@ -24,23 +24,6 @@ import { useState } from "react";
 const columnHelper = createColumnHelper<DataTableFeatures, Product>();
 
 export const columns = columnHelper.columns([
-    columnHelper.accessor("id", {
-        id: "id",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === "asc")
-                    }
-                >
-                    ID
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
-        },
-        cell: (info) => <p className="text-center">{info.getValue()}</p>,
-    }),
     columnHelper.accessor("name", {
         header: ({ column }) => {
             return (
@@ -57,10 +40,7 @@ export const columns = columnHelper.columns([
         },
         cell: (info) => info.getValue(),
     }),
-    // columnHelper.accessor("description", {
-    //     header: "Description",
-    //     cell: (info) => <p className="max-w-32 truncate">{info.getValue()}</p>,
-    // }),
+
     columnHelper.accessor("price", {
         header: ({ column }) => {
             return (
@@ -81,6 +61,7 @@ export const columns = columnHelper.columns([
             return formatted;
         },
     }),
+
     columnHelper.accessor("quantity", {
         header: ({ column }) => {
             return (
@@ -97,6 +78,7 @@ export const columns = columnHelper.columns([
         },
         cell: (info) => <p className="text-center">{info.getValue()}</p>,
     }),
+
     columnHelper.accessor("created_at", {
         header: ({ column }) => {
             return (
@@ -115,24 +97,7 @@ export const columns = columnHelper.columns([
             <p className="text-center">{archive(row.getValue("created_at"))}</p>
         ),
     }),
-    columnHelper.accessor("updated_at", {
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === "asc")
-                    }
-                >
-                    Updated At
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
-        },
-        cell: ({ row }) => (
-            <p className="text-center">{archive(row.getValue("updated_at"))}</p>
-        ),
-    }),
+
     columnHelper.display({
         id: "actions",
         cell: ({ row }) => {
