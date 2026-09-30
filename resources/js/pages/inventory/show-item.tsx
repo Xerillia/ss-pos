@@ -1,10 +1,8 @@
 import ItemAction from "@/components/inventory/item-action";
 import ItemTable from "@/components/inventory/item-table";
-import { buttonVariants } from "@/components/ui/button";
 import { inventory } from "@/routes/product";
 import { Product } from "@/types/product";
-import { Head, Link } from "@inertiajs/react";
-import { Undo2 } from "lucide-react";
+import { Head } from "@inertiajs/react";
 
 interface ShowItemProps {
     product: Product;
@@ -15,14 +13,7 @@ export default function ShowItem({ product }: ShowItemProps) {
         <>
             <Head title={product.name} />
             <div className="m-4 space-y-4">
-                <div className="flex justify-between">
-                    <Link
-                        href={inventory()}
-                        className={buttonVariants({ size: "sm" })}
-                    >
-                        <Undo2 /> Return
-                    </Link>
-
+                <div className="flex justify-between ml-auto w-max">
                     <ItemAction product={product} />
                 </div>
 
