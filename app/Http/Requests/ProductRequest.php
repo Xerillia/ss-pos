@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Unit;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductRequest extends FormRequest
 {
@@ -28,6 +30,7 @@ class ProductRequest extends FormRequest
             'capital' => ['required', 'numeric', 'min:0'],
             'price' => ['required', 'numeric', 'min:0'],
             'quantity' => ['required', 'integer', 'min:0'],
+            'unit' => ['required', Rule::enum(Unit::class)],
         ];
     }
 }
