@@ -42,8 +42,24 @@ export default function CardItemCard({
     }, [item.quantity, isFocused]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const rawValue = e.target.value.replace(/[^0-9]/g, "");
-        setInputValue(rawValue);
+        let val = e.target.value.replace(",", ".");
+
+        if (val === "") {
+            setInputValue(val);
+            return;
+        }
+
+        if (/^\d*\.?\d*$/.test(val)) {
+            // keep it as a string
+            if (val.endsWith(".")) {
+                setInputValue(val);
+            } else {
+                const parsed = parseFloat(val);
+                if (!isNaN(parsed)) {
+                    setInputValue(val);
+                }
+            }
+        }
     };
 
     const handleFocus = () => {
@@ -52,7 +68,7 @@ export default function CardItemCard({
 
     const commitChange = () => {
         setIsFocused(false);
-        const parsedNumber = parseInt(inputValue, 10);
+        const parsedNumber = parseFloat(inputValue);
 
         // fallback to 1 (or current quantity) if field is empty or zero
         if (isNaN(parsedNumber) || parsedNumber <= 0) {
