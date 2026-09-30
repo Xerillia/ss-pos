@@ -54,6 +54,28 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
         }
     };
 
+    const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let val = e.target.value.replace(",", ".");
+
+        if (val === "") {
+            setData("quantity", 0);
+            return;
+        }
+
+        // process if it's a valid decimal pattern
+        if (/^\d*\.?\d*$/.test(val)) {
+            // keep it as a string
+            if (val.endsWith(".")) {
+                setData("quantity", val as unknown as number);
+            } else {
+                const parsed = parseFloat(val);
+                if (!isNaN(parsed)) {
+                    setData("quantity", parsed);
+                }
+            }
+        }
+    };
+
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name */}
@@ -130,10 +152,9 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
                 <Input
                     id="quantity"
                     type="text"
+                    inputMode="decimal"
                     value={data.quantity}
-                    onChange={(e) =>
-                        setData("quantity", parseInt(e.target.value) || 0)
-                    }
+                    onChange={handleQuantityChange}
                     placeholder="Enter item quantity"
                     className={errors.quantity ? "border-destructive" : ""}
                 />

@@ -29,7 +29,7 @@ class ProductRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'capital' => ['required', 'numeric', 'min:0'],
             'price' => ['required', 'numeric', 'min:0'],
-            'quantity' => ['required', 'integer', 'min:0'],
+            'quantity' => ['required', 'numeric', 'min:0'],
             'unit' => ['required', Rule::enum(Unit::class)],
         ];
     }
