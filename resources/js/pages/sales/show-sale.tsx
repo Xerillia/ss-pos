@@ -1,3 +1,4 @@
+import ShowSaleTable from "@/components/sales/show-sale-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { SaleStatus, SaleStatusUtils } from "@/enums";
 import { archive } from "@/lib/archive";
+import { rupiah } from "@/lib/rupiah";
 import { sales, updateSale } from "@/routes/sales";
 import { Sale } from "@/types/sale";
 import { Head, useForm } from "@inertiajs/react";
@@ -69,42 +71,33 @@ export default function ShowSale({ sale }: ShowSaleProps) {
                                 Purchased Items
                             </h3>
                             <div className="border rounded-md overflow-hidden">
-                                <table className="w-full text-left text-sm">
-                                    <thead className="bg-muted">
-                                        <tr>
-                                            <th className="p-3">Product</th>
-                                            <th className="p-3">Unit Price</th>
-                                            <th className="p-3">Qty</th>
-                                            <th className="p-3 text-right">
-                                                Subtotal
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y">
-                                        {sale.sale_products?.map((item) => (
-                                            <tr key={item.id}>
-                                                <td className="p-3 font-medium">
-                                                    {item.product_name}
-                                                </td>
-                                                <td className="p-3">
-                                                    {sale.currency}{" "}
-                                                    {Number(
-                                                        item.unit_price,
-                                                    ).toLocaleString()}
-                                                </td>
-                                                <td className="p-3">
-                                                    {item.quantity}
-                                                </td>
-                                                <td className="p-3 text-right">
-                                                    {sale.currency}{" "}
-                                                    {Number(
-                                                        item.total_price,
-                                                    ).toLocaleString()}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                <ShowSaleTable sale={sale} />
+                            </div>
+                            <div className="justify-end flex mr-4 mt-4">
+                                <div className="grid grid-cols-2 gap-x-4 text-muted-foreground text-sm">
+                                    <p>Order Discount</p>
+                                    <p className="font-mono">
+                                        {rupiah(sale.discount_amount)}
+                                    </p>
+                                    <p className="text-foreground font-bold text-base">
+                                        Total
+                                    </p>
+                                    <p className="text-foreground font-bold font-mono text-base">
+                                        {rupiah(sale.total_amount)}
+                                    </p>
+                                    <p className="mt-2">Paid Amount</p>
+                                    <p className="font-mono mt-2 text-emerald-600 dark:text-emerald-400">
+                                        {rupiah(sale.paid_amount)}
+                                    </p>
+                                    {sale.debt_amount > 0 && (
+                                        <>
+                                            <p>Debt Amount</p>
+                                            <p className="font-mono text-rose-600 dark:text-rose-400">
+                                                {rupiah(sale.debt_amount)}
+                                            </p>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         </div>
 
