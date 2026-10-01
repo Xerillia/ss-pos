@@ -168,7 +168,7 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
                 <Label htmlFor="unit">Unit</Label>
                 <Combobox
                     items={UnitUtils.options()}
-                    itemToStringLabel={(unit: Unit) => UnitUtils.label(unit)}
+                    itemToStringLabel={(unit: Unit) => unit.toUpperCase()}
                     value={data.unit}
                     onValueChange={(unit: Unit | null) =>
                         setData("unit", unit ?? Unit.PIECE)
@@ -179,8 +179,12 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
                         <ComboboxEmpty>No unit found.</ComboboxEmpty>
                         <ComboboxList>
                             {(unit) => (
-                                <ComboboxItem key={unit} value={unit}>
-                                    {UnitUtils.label(unit)}
+                                <ComboboxItem
+                                    key={unit}
+                                    value={unit}
+                                    className="uppercase"
+                                >
+                                    {unit}
                                 </ComboboxItem>
                             )}
                         </ComboboxList>

@@ -85,9 +85,7 @@ export const columns = columnHelper.columns([
 
     columnHelper.accessor("unit", {
         header: "Unit",
-        cell: (info) => (
-            <p className="text-center">{UnitUtils.label(info.getValue())}</p>
-        ),
+        cell: (info) => <p className="text-center">{info.getValue()}</p>,
     }),
 
     columnHelper.accessor("created_at", {

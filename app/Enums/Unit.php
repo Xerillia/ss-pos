@@ -4,18 +4,22 @@ namespace App\Enums;
 
 enum Unit: string
 {
-    case PIECE = 'pcs';
-    case KILOGRAM = 'kg';
-    case PAIL = 'pail';
     case BOX = 'box';
+    case KILOGRAM = 'kg';
+    case METER = 'mtr';
+    case PAIL = 'pail';
+    case PIECE = 'pcs';
+    case ROLL = 'roll';
 
     public function label(): string
     {
         return match ($this) {
-            self::PIECE => 'Pcs',
-            self::KILOGRAM => 'KG',
-            self::PAIL => 'Pail',
             self::BOX => 'Box',
+            self::KILOGRAM => 'Kilogram',
+            self::METER => 'Meter',
+            self::PAIL => 'Pail',
+            self::PIECE => 'Pieces',
+            self::ROLL => 'Roll',
         };
     }
 }

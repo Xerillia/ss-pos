@@ -31,10 +31,7 @@ export default function ItemList({ products }: ItemListProps) {
                   ? "border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300"
                   : "border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300";
 
-        const text =
-            quantity > 0
-                ? `${quantity} ${UnitUtils.label(unit)}`
-                : "Out of Stock";
+        const text = quantity > 0 ? `${quantity} ${unit}` : "Out of Stock";
 
         return <Badge className={style}>{text}</Badge>;
     };
