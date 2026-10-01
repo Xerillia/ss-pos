@@ -46,6 +46,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $product->load(['saleProducts:id,sale_id,product_id,quantity,total_price']);
+
         return Inertia::render('inventory/show-item', [
             'product' => $product,
         ]);
