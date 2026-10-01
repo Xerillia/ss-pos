@@ -94,7 +94,7 @@ export default function CardItemCard({
                     <div>
                         <p className="text-sm font-bold">{product.name}</p>
                         <p className="text-xs text-muted-foreground">
-                            {rupiah(product.price)}
+                            {rupiah(product.price)} / {product.unit}
                         </p>
                     </div>
                     <Button

@@ -36,7 +36,7 @@ export default function CartItemsCompact() {
                                     rupiah(-item.unit_discount)}
                             </TableCell>
                             <TableCell className="text-center font-mono -m-2 p-0">
-                                {item.quantity}
+                                {item.quantity} {item.product.unit}
                             </TableCell>
                             <TableCell className="text-center font-mono -m-2 p-0">
                                 {item.flat_discount > 0 &&
