@@ -1,3 +1,4 @@
+import ShowSaleTable from "@/components/sales/show-sale-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -69,42 +70,7 @@ export default function ShowSale({ sale }: ShowSaleProps) {
                                 Purchased Items
                             </h3>
                             <div className="border rounded-md overflow-hidden">
-                                <table className="w-full text-left text-sm">
-                                    <thead className="bg-muted">
-                                        <tr>
-                                            <th className="p-3">Product</th>
-                                            <th className="p-3">Unit Price</th>
-                                            <th className="p-3">Qty</th>
-                                            <th className="p-3 text-right">
-                                                Subtotal
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y">
-                                        {sale.sale_products?.map((item) => (
-                                            <tr key={item.id}>
-                                                <td className="p-3 font-medium">
-                                                    {item.product_name}
-                                                </td>
-                                                <td className="p-3">
-                                                    {sale.currency}{" "}
-                                                    {Number(
-                                                        item.unit_price,
-                                                    ).toLocaleString()}
-                                                </td>
-                                                <td className="p-3">
-                                                    {item.quantity}
-                                                </td>
-                                                <td className="p-3 text-right">
-                                                    {sale.currency}{" "}
-                                                    {Number(
-                                                        item.total_price,
-                                                    ).toLocaleString()}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                <ShowSaleTable sale={sale} />
                             </div>
                         </div>
 

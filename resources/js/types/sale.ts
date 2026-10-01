@@ -40,6 +40,7 @@ export type SaleProduct = {
     product_sku: string;
     quantity: number;
     unit_price: number;
+    unit_discount: number;
     flat_discount: number;
     total_price: number;
     item_status: SaleItemStatus;
