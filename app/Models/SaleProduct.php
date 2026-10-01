@@ -25,7 +25,7 @@ class SaleProduct extends Model
 
     protected $casts = [
         'item_status' => SaleItemStatus::class,
-        'quantity' => 'integer',
+        'quantity' => 'decimal:2',
         'unit_price' => 'decimal:2',
         'unit_discount' => 'decimal:2',
         'flat_discount' => 'decimal:2',

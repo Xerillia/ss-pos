@@ -9,6 +9,15 @@ import {
     convertLetterToNumber,
     INVALID_LETTERS_EXCLUDE_NUMBER_REGEX,
 } from "@/lib/converter";
+import { Unit, UnitUtils } from "@/enums";
+import {
+    Combobox,
+    ComboboxContent,
+    ComboboxEmpty,
+    ComboboxInput,
+    ComboboxItem,
+    ComboboxList,
+} from "../ui/combobox";
 
 interface ItemFormProps {
     product?: Product;
@@ -22,6 +31,7 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
         capital: product?.capital || 0,
         price: product?.price || 0,
         quantity: product?.quantity || 0,
+        unit: product?.unit || Unit.PIECE,
     });
 
     const handleCode = (value: string) => {
@@ -41,6 +51,28 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
                 return;
             }
             put(updateItem(product.id).url);
+        }
+    };
+
+    const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let val = e.target.value.replace(",", ".");
+
+        if (val === "") {
+            setData("quantity", 0);
+            return;
+        }
+
+        // process if it's a valid decimal pattern
+        if (/^\d*\.?\d*$/.test(val)) {
+            // keep it as a string
+            if (val.endsWith(".")) {
+                setData("quantity", val as unknown as number);
+            } else {
+                const parsed = parseFloat(val);
+                if (!isNaN(parsed)) {
+                    setData("quantity", parsed);
+                }
+            }
         }
     };
 
@@ -120,16 +152,40 @@ export default function ItemForm({ product, mode }: ItemFormProps) {
                 <Input
                     id="quantity"
                     type="text"
+                    inputMode="decimal"
                     value={data.quantity}
-                    onChange={(e) =>
-                        setData("quantity", parseInt(e.target.value) || 0)
-                    }
+                    onChange={handleQuantityChange}
                     placeholder="Enter item quantity"
                     className={errors.quantity ? "border-destructive" : ""}
                 />
                 {errors.quantity && (
                     <p className="text-red-500">{errors.quantity}</p>
                 )}
+            </div>
+
+            {/* Unit */}
+            <div>
+                <Label htmlFor="unit">Unit</Label>
+                <Combobox
+                    items={UnitUtils.options()}
+                    itemToStringLabel={(unit: Unit) => UnitUtils.label(unit)}
+                    value={data.unit}
+                    onValueChange={(unit: Unit | null) =>
+                        setData("unit", unit ?? Unit.PIECE)
+                    }
+                >
+                    <ComboboxInput placeholder="Select a unit" />
+                    <ComboboxContent>
+                        <ComboboxEmpty>No unit found.</ComboboxEmpty>
+                        <ComboboxList>
+                            {(unit) => (
+                                <ComboboxItem key={unit} value={unit}>
+                                    {UnitUtils.label(unit)}
+                                </ComboboxItem>
+                            )}
+                        </ComboboxList>
+                    </ComboboxContent>
+                </Combobox>
             </div>
 
             {/* Submit Button */}
