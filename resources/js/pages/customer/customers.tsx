@@ -24,7 +24,7 @@ export default function Customers({ customers }: CustomersProps) {
                     Add Customer
                 </Link>
 
-                <DataTable columns={columns as any} data={customers} />
+                <DataTable columns={columns as any} customers={customers} />
             </div>
         </>
     );
