@@ -110,7 +110,7 @@ export default function Checkout({ total }: CheckoutProps) {
                     <FieldSet>
                         <PaymentMethodSelector />
 
-                        <Field>
+                        <Field className="w-fit">
                             <FieldLabel htmlFor="sale_date">
                                 Sale Date
                             </FieldLabel>
