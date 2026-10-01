@@ -24,8 +24,6 @@ class CustomerFactory extends Factory
             'address' => $this->faker->address(),
             'city' => $this->faker->city(),
             'postal_code' => $this->faker->postcode(),
-            'credit_limit' => $this->faker->randomElement([0, 500000, 1000000, 2500000]),
-            'total_spent' => 0.00,
             'is_active' => true,
             'notes' => null,
         ];

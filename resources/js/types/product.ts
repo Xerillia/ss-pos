@@ -1,4 +1,5 @@
 import { Unit } from "@/enums";
+import { SaleProduct } from "./sale";
 
 export type Product = {
     id: number;
@@ -11,4 +12,5 @@ export type Product = {
     unit: Unit;
     created_at: string;
     updated_at: string;
+    sale_products: SaleProduct[];
 };

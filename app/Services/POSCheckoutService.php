@@ -57,6 +57,7 @@ class POSCheckoutService
                     'product_id' => $product->id,
                     'product_name' => $product->name,
                     'product_sku' => $product->sku,
+                    'product_unit' => $product->unit,
                     'quantity' => $quantity,
                     'unit_price' => $product->price,
                     'unit_discount' => $unitDiscount,

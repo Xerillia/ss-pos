@@ -25,7 +25,7 @@ return new class extends Migration
 
         Schema::create('expenditures', function (Blueprint $table) {
             $table->id();
-            $table->string('expense_number')->unique();
+            $table->string('expense_number')->nullable()->unique();
             $table->foreignIdFor(ExpenseCategory::class)->nullable()->constrained()->nullOnDelete();
             $table->foreignIdFor(User::class)->constrained();
 

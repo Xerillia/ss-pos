@@ -3,6 +3,7 @@ import {
     PaymentStatus,
     SaleItemStatus,
     SaleStatus,
+    Unit,
 } from "@/enums";
 import { User } from "./auth";
 import { Customer } from "./customer";
@@ -35,9 +36,11 @@ export type Sale = {
 export type SaleProduct = {
     id: number;
     sale_id: number;
+    sale: Sale;
     product_id?: number;
     product_name: string;
     product_sku: string;
+    product_unit: Unit;
     quantity: number;
     unit_price: number;
     unit_discount: number;

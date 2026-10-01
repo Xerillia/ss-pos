@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Unit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -24,4 +25,12 @@ class Product extends Model
         'quantity' => 'decimal:2',
         'unit' => Unit::class,
     ];
+
+    /**
+     * Get the sales associated with this product
+     */
+    public function saleProducts(): HasMany
+    {
+        return $this->hasMany(SaleProduct::class);
+    }
 }

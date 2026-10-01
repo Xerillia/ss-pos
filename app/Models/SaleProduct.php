@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SaleItemStatus;
+use App\Enums\Unit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,6 +17,7 @@ class SaleProduct extends Model
         'product_id',
         'product_name',
         'product_sku',
+        'product_unit',
         'quantity',
         'unit_price',
         'unit_discount',
@@ -24,6 +26,7 @@ class SaleProduct extends Model
     ];
 
     protected $casts = [
+        'product_unit' => Unit::class,
         'item_status' => SaleItemStatus::class,
         'quantity' => 'decimal:2',
         'unit_price' => 'decimal:2',
