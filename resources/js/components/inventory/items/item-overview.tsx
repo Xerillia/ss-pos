@@ -1,6 +1,6 @@
 import { Product } from "@/types/product";
-import ItemAction from "./item-action";
-import ItemTable from "./item-table";
+import ItemAction from "../item-action";
+import ItemTable from "../item-table";
 
 interface ItemOverviewProps {
     product: Product;
