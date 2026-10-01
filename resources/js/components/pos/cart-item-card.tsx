@@ -13,7 +13,7 @@ interface CartItemCardProps {
     onToggleExpand: () => void;
 }
 
-export default function CardItemCard({
+export default function CartItemCard({
     item,
     isExpanded,
     onToggleExpand,

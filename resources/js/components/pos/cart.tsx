@@ -1,7 +1,7 @@
 import { ShoppingCart } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useState } from "react";
-import CardItemCard from "./card-item-card";
+import CartItemCard from "./cart-item-card";
 import CartSummary from "./cart-summary";
 import { useCartContext } from "./cart-context";
 import { Customer } from "@/types/customer";
@@ -42,7 +42,7 @@ export default function Cart({ customers }: CartProps) {
                         const product = item.product;
 
                         return (
-                            <CardItemCard
+                            <CartItemCard
                                 key={product.id}
                                 item={item}
                                 isExpanded={expandId === item.product.id}
