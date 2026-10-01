@@ -1,6 +1,7 @@
 import { processCheckout } from "@/api/axios";
 import { PaymentMethod } from "@/enums";
 import { localToUtcIso, utcToLocalIso } from "@/lib/archive";
+import { formatNumber } from "@/lib/number";
 import { Customer } from "@/types/customer";
 import { Product } from "@/types/product";
 import { useEffect, useState } from "react";
@@ -92,7 +93,11 @@ export function useCart() {
             prevCart.map((item) => {
                 if (item.product.id === productId) {
                     // max item from stock
-                    if (item.quantity >= item.product.quantity) return item;
+                    if (item.quantity + 1 >= item.product.quantity)
+                        return {
+                            ...item,
+                            quantity: formatNumber(item.product.quantity),
+                        };
 
                     return { ...item, quantity: item.quantity + 1 };
                 }
