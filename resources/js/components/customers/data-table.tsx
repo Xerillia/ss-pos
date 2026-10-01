@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
     useTable,
     type ColumnDef,
@@ -23,16 +23,30 @@ import {
 } from "../../lib/data-table-features";
 import { Button } from "../ui/button";
 import { getPageRange } from "@/lib/pagination";
+import { Search } from "lucide-react";
+import { Input } from "../ui/input";
+import useFuseCustomer from "@/hooks/use-fuse-customer";
+import { useDebounce } from "@/lib/useDebounce";
+import { Customer } from "@/types/customer";
 
 interface DataTableProps<TData extends RowData> {
     columns: ColumnDef<DataTableFeatures, TData>[];
-    data: TData[];
+    customers: Customer[];
 }
 
 export function DataTable<TData extends RowData>({
     columns,
-    data,
+    customers,
 }: DataTableProps<TData>) {
+    const [searchQuery, setSearchQuery] = useState("");
+    const { filteredProducts: filteredCustomers } = useFuseCustomer(customers);
+
+    const debouncedSearchQuery = useDebounce(searchQuery, 300); // 300ms debounce
+
+    const filtered = useMemo<Customer[]>(() => {
+        return filteredCustomers(debouncedSearchQuery);
+    }, [debouncedSearchQuery, customers]);
+
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [pagination, setPagination] = useState({
         pageIndex: 0, // 0-indexed internally by TanStack Table
@@ -41,7 +55,7 @@ export function DataTable<TData extends RowData>({
 
     const table = useTable({
         features,
-        data,
+        data: filtered as unknown as TData[],
         columns,
         onSortingChange: setSorting,
         state: {
@@ -58,6 +72,18 @@ export function DataTable<TData extends RowData>({
 
     return (
         <>
+            <div className="relative">
+                <Search className="absolute top-1/2 left-3 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                <Input
+                    id="query"
+                    type="text"
+                    placeholder="Search customers..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-9"
+                />
+            </div>
+
             <div className="overflow-hidden rounded-md border">
                 <Table>
                     <TableHeader>
