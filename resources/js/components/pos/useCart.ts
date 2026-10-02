@@ -1,10 +1,11 @@
 import { processCheckout } from "@/api/axios";
 import { PaymentMethod } from "@/enums";
+import { useLocalStorageState } from "@/hooks/use-local-storage";
 import { localToUtcIso, utcToLocalIso } from "@/lib/archive";
 import { formatNumber } from "@/lib/number";
 import { Customer } from "@/types/customer";
 import { Product } from "@/types/product";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export interface CartItem {
     product: Product;
@@ -16,8 +17,10 @@ export interface CartItem {
 const CART_STORAGE_KEY = "shopping_cart";
 
 export function useCart() {
-    const [isHydrated, setIsHydrated] = useState(false);
-    const [cart, setCart] = useState<CartItem[]>([]);
+    const [cart, setCart] = useLocalStorageState<CartItem[]>(
+        CART_STORAGE_KEY,
+        [],
+    );
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
         PaymentMethod.CASH,
     );
@@ -26,29 +29,6 @@ export function useCart() {
     const [selectedCustomer, setSelectedCustomer] = useState<Customer>();
     const [saleNumber, setSaleNumber] = useState<string>();
     const [saleDate, setSaleDate] = useState<string>(utcToLocalIso());
-
-    useEffect(() => {
-        try {
-            const savedCart = localStorage.getItem(CART_STORAGE_KEY);
-            if (savedCart) {
-                setCart(JSON.parse(savedCart));
-            }
-        } catch (error) {
-            console.error("Failed to load cart from localStorage:", error);
-        } finally {
-            setIsHydrated(true);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (!isHydrated) return; // wait until hydration is complete
-
-        try {
-            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-        } catch (error) {
-            console.error("Failed to save cart to localStorage:", error);
-        }
-    }, [cart, isHydrated]);
 
     const addToCart = (product: Product) => {
         if (product.quantity <= 0) return;
