@@ -7,6 +7,7 @@ import { useCartContext } from "./cart-context";
 import { Customer } from "@/types/customer";
 import CustomerCombobox from "./customer-combobox";
 import ClearCartButton from "./clear-cart-button";
+import RefundItemButton from "./refund-item-button";
 
 interface CartProps {
     customers: Customer[];
@@ -33,6 +34,7 @@ export default function Cart({ customers }: CartProps) {
                         Cart
                     </div>
                     <CustomerCombobox customers={customers} />
+                    <RefundItemButton />
                     <ClearCartButton />
                 </CardTitle>
             </CardHeader>
