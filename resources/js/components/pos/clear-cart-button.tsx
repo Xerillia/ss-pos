@@ -12,19 +12,34 @@ import {
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
 import { useCartContext } from "./cart-context";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "../ui/tooltip";
 
 export default function ClearCartButton() {
     const { clearCart } = useCartContext();
 
     return (
         <AlertDialog>
-            <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="xs">
-                    <RefreshCw />
-                </Button>
-            </AlertDialogTrigger>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="destructive" size="xs">
+                                <RefreshCw />
+                            </Button>
+                        </AlertDialogTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>Reset the cart</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
 
-            <AlertDialogContent>
+            <AlertDialogContent onCloseAutoFocus={(e) => e.preventDefault()}>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
                         Are you sure to clear the cart?
