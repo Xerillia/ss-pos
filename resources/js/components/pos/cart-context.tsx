@@ -30,7 +30,7 @@ interface CartContextType {
     saleNumber: string | undefined;
     setSaleNumber: Dispatch<SetStateAction<string | undefined>>;
     saleDate: string | undefined;
-    setSaleDate: Dispatch<SetStateAction<string | undefined>>;
+    setSaleDate: Dispatch<SetStateAction<string>>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
