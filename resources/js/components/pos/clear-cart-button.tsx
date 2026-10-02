@@ -7,6 +7,7 @@ import {
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
+    AlertDialogTitle,
     AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
@@ -22,14 +23,18 @@ export default function ClearCartButton() {
                     <RefreshCw />
                 </Button>
             </AlertDialogTrigger>
+
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    Are you sure to clear the cart?
+                    <AlertDialogTitle>
+                        Are you sure to clear the cart?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                        This action cannot be undone. This will clear the
+                        current cart.
+                    </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogDescription>
-                    This action cannot be undone. This will clear the current
-                    cart.
-                </AlertDialogDescription>
+
                 <AlertDialogFooter>
                     <AlertDialogCancel variant="default">
                         Cancel
