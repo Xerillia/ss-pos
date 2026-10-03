@@ -19,8 +19,6 @@ export const WALK_IN_CUSTOMER: Customer = {
     address: null,
     city: null,
     postal_code: null,
-    credit_limit: 0,
-    total_spent: 0,
     is_active: true,
     notes: null,
     created_at: "",
