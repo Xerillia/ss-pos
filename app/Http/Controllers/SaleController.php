@@ -23,7 +23,7 @@ class SaleController extends Controller
         $products = Product::all(['id', 'sku', 'name', 'quantity', 'unit', 'price']);
         $customers = Customer::all(['id', 'name']);
         $sales = Sale::query()
-            ->with(['customer:id,name'])
+            ->with(['customer:id,name', 'saleProducts'])
             ->when($search, function ($query, $search) {
                 $query->where('sale_number', 'like', "%{$search}%")
                     ->orWhereHas('customer', function ($q) use ($search) {
