@@ -6,9 +6,13 @@ export type RefundItem = {
     product: {
         id: number;
         name: string;
+        unit_price: number;
+        unit_discount: number;
+        flat_discount: number;
+        subtotal: number;
     };
     quantity: number;
-    order_id?: number | null;
+    sale_id?: number | null;
     override_unit_price?: number | null;
     return_reason?: string | null;
 };
@@ -21,7 +25,8 @@ interface RefundContextType {
 
 const RefundContext = createContext<RefundContextType | undefined>(undefined);
 
-const isFound = (item: RefundItem, id: number) => item.product.id === id;
+const isFound = (item: RefundItem, product_id: number, sale_id: number) =>
+    item.product.id === product_id && item.sale_id === sale_id;
 
 export function RefundProvider({ children }: { children: React.ReactNode }) {
     const [refundCart, setRefundCart] = useLocalStorageState<RefundItem[]>(
@@ -32,7 +37,7 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
     const addToRefund = (sale_product: SaleProduct) => {
         setRefundCart((prevCart) => {
             const existing = prevCart.find((item) =>
-                isFound(item, sale_product.product_id),
+                isFound(item, sale_product.product_id, sale_product.sale_id),
             );
 
             if (existing) {
@@ -46,8 +51,11 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
 
                 // increment refunded item
                 return prevCart.map((item) =>
-                    isFound(item, sale_product.product_id)
-                        ? { ...item, quantity: item.quantity + 1 }
+                    isFound(item, sale_product.product_id, sale_product.sale_id)
+                        ? {
+                              ...item,
+                              quantity: item.quantity + 1,
+                          }
                         : item,
                 );
             }
@@ -59,8 +67,13 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
                     product: {
                         id: sale_product.product_id,
                         name: sale_product.product_name,
+                        unit_price: sale_product.unit_price,
+                        unit_discount: sale_product.unit_discount,
+                        flat_discount: sale_product.flat_discount,
+                        subtotal: sale_product.total_price,
                     },
                     quantity: 1,
+                    sale_id: sale_product.sale_id,
                 },
             ];
         });
