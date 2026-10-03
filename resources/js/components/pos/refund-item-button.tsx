@@ -18,6 +18,7 @@ import OrderCard from "./refunds/order-card";
 import RefundCard from "./refunds/refund-card";
 import { Sale } from "@/types/sale";
 import { RefundProvider } from "./refunds/refund-context";
+import ControlButtons from "./refunds/control-buttons";
 
 interface RefundItemButtonProps {
     sales: Sale[];
@@ -50,6 +51,8 @@ export default function RefundItemButton({ sales }: RefundItemButtonProps) {
                             Cancel
                         </AlertDialogCancel>
                     </AlertDialogHeader>
+
+                    <ControlButtons />
 
                     <div className="grid grid-cols-2 gap-4">
                         <OrderCard sales={sales} />

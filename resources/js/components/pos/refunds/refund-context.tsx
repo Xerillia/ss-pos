@@ -1,5 +1,4 @@
 import { useLocalStorageState } from "@/hooks/use-local-storage";
-import { Product } from "@/types/product";
 import { SaleProduct } from "@/types/sale";
 import { createContext, useContext } from "react";
 
@@ -17,6 +16,7 @@ export type RefundItem = {
 interface RefundContextType {
     refundCart: RefundItem[];
     addToRefund: (sale_product: SaleProduct) => void;
+    resetRefund: () => void;
 }
 
 const RefundContext = createContext<RefundContextType | undefined>(undefined);
@@ -66,8 +66,14 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
         });
     };
 
+    const resetRefund = () => {
+        setRefundCart([]);
+    };
+
     return (
-        <RefundContext.Provider value={{ refundCart, addToRefund }}>
+        <RefundContext.Provider
+            value={{ refundCart, addToRefund, resetRefund }}
+        >
             {children}
         </RefundContext.Provider>
     );
