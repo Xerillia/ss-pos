@@ -17,7 +17,6 @@ import {
 import OrderCard from "./refunds/order-card";
 import RefundCard from "./refunds/refund-card";
 import { Sale } from "@/types/sale";
-import { RefundProvider } from "./refunds/refund-context";
 import ControlButtons from "./refunds/control-buttons";
 
 interface RefundItemButtonProps {
@@ -44,21 +43,19 @@ export default function RefundItemButton({ sales }: RefundItemButtonProps) {
                 className="max-w-5/6!"
                 onCloseAutoFocus={(e) => e.preventDefault()}
             >
-                <RefundProvider>
-                    <AlertDialogHeader className="flex justify-between items-center">
-                        <AlertDialogTitle>Refund System</AlertDialogTitle>
-                        <AlertDialogCancel variant="destructive">
-                            Cancel
-                        </AlertDialogCancel>
-                    </AlertDialogHeader>
+                <AlertDialogHeader className="flex justify-between items-center">
+                    <AlertDialogTitle>Refund System</AlertDialogTitle>
+                    <AlertDialogCancel variant="destructive">
+                        Cancel
+                    </AlertDialogCancel>
+                </AlertDialogHeader>
 
-                    <ControlButtons />
+                <ControlButtons />
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <OrderCard sales={sales} />
-                        <RefundCard />
-                    </div>
-                </RefundProvider>
+                <div className="grid grid-cols-2 gap-4">
+                    <OrderCard sales={sales} />
+                    <RefundCard />
+                </div>
             </AlertDialogContent>
         </AlertDialog>
     );
