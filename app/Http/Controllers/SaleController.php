@@ -18,8 +18,8 @@ class SaleController extends Controller
      */
     public function pos()
     {
-        $products = Product::all();
-        $customers = Customer::all();
+        $products = Product::all(['id', 'sku', 'name', 'quantity', 'unit', 'price']);
+        $customers = Customer::all(['id', 'name']);
 
         return Inertia::render('pos/pos', [
             'products' => $products,
