@@ -8,12 +8,14 @@ import { Customer } from "@/types/customer";
 import CustomerCombobox from "./customer-combobox";
 import ClearCartButton from "./clear-cart-button";
 import RefundItemButton from "./refund-item-button";
+import { Sale } from "@/types/sale";
 
 interface CartProps {
     customers: Customer[];
+    sales: Sale[];
 }
 
-export default function Cart({ customers }: CartProps) {
+export default function Cart({ customers, sales }: CartProps) {
     const { cart } = useCartContext();
 
     const [expandId, setExpandId] = useState<number | null>();
@@ -34,7 +36,7 @@ export default function Cart({ customers }: CartProps) {
                         Cart
                     </div>
                     <CustomerCombobox customers={customers} />
-                    <RefundItemButton />
+                    <RefundItemButton sales={sales} />
                     <ClearCartButton />
                 </CardTitle>
             </CardHeader>

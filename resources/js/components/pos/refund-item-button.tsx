@@ -14,9 +14,16 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "../ui/tooltip";
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import OrderCard from "./refunds/order-card";
+import RefundCard from "./refunds/refund-card";
+import { Sale } from "@/types/sale";
+import { RefundProvider } from "./refunds/refund-context";
 
-export default function RefundItemButton() {
+interface RefundItemButtonProps {
+    sales: Sale[];
+}
+
+export default function RefundItemButton({ sales }: RefundItemButtonProps) {
     return (
         <AlertDialog>
             <TooltipProvider>
@@ -36,31 +43,19 @@ export default function RefundItemButton() {
                 className="max-w-5/6!"
                 onCloseAutoFocus={(e) => e.preventDefault()}
             >
-                <AlertDialogHeader className="flex justify-between items-center">
-                    <AlertDialogTitle>Refund System</AlertDialogTitle>
-                    <AlertDialogCancel variant="destructive">
-                        Cancel
-                    </AlertDialogCancel>
-                </AlertDialogHeader>
+                <RefundProvider>
+                    <AlertDialogHeader className="flex justify-between items-center">
+                        <AlertDialogTitle>Refund System</AlertDialogTitle>
+                        <AlertDialogCancel variant="destructive">
+                            Cancel
+                        </AlertDialogCancel>
+                    </AlertDialogHeader>
 
-                <div className="grid grid-cols-2 gap-4">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Orders</CardTitle>
-                            <CardDescription>
-                                Select orders for items to refund
-                            </CardDescription>
-                        </CardHeader>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Refund Items</CardTitle>
-                            <CardDescription>
-                                A list of items to be refunded
-                            </CardDescription>
-                        </CardHeader>
-                    </Card>
-                </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <OrderCard sales={sales} />
+                        <RefundCard />
+                    </div>
+                </RefundProvider>
             </AlertDialogContent>
         </AlertDialog>
     );

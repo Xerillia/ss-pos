@@ -37,7 +37,7 @@ export type SaleProduct = {
     id: number;
     sale_id: number;
     sale: Sale;
-    product_id?: number;
+    product_id: number;
     product_name: string;
     product_sku: string;
     product_unit: Unit;
