@@ -16,14 +16,27 @@ class SaleController extends Controller
     /**
      * Display POS
      */
-    public function pos()
+    public function pos(Request $request)
     {
+        $search = $request->input('search', '');
+
         $products = Product::all(['id', 'sku', 'name', 'quantity', 'unit', 'price']);
         $customers = Customer::all(['id', 'name']);
+        $sales = Sale::query()
+            ->with(['customer:id,name'])
+            ->when($search, function ($query, $search) {
+                $query->where('sale_number', 'like', "%{$search}%")
+                    ->orWhereHas('customer', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
+            })
+            ->latest()
+            ->paginate(10);
 
         return Inertia::render('pos/pos', [
             'products' => $products,
             'customers' => $customers,
+            'sales' => $sales,
         ]);
     }
 
