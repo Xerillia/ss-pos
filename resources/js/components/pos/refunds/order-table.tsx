@@ -4,6 +4,14 @@ import { rupiah } from "@/lib/rupiah";
 import { Sale } from "@/types/sale";
 import { Redo } from "lucide-react";
 import { useRefundContext } from "./refund-context";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
 interface OrderTableProps {
     sale: Sale;
@@ -13,44 +21,44 @@ export default function OrderTable({ sale }: OrderTableProps) {
     const { addToRefund } = useRefundContext();
 
     return (
-        <table className="w-full text-left text-sm overflow-scroll">
-            <thead className="bg-muted">
-                <tr>
-                    <th className="p-3 text-center">Product</th>
-                    <th className="p-3 text-center">Unit Price</th>
-                    <th className="p-3 text-center">Unit Disc</th>
-                    <th className="p-3 text-center">Qty</th>
-                    <th className="p-3 text-center">Flat Disc</th>
-                    <th className="p-3 text-center">Subtotal</th>
-                    <th />
-                </tr>
-            </thead>
-            <tbody className="divide-y">
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead className="text-center">Product</TableHead>
+                    <TableHead className="text-center">Unit Price</TableHead>
+                    <TableHead className="text-center">Unit Disc</TableHead>
+                    <TableHead className="text-center">Qty</TableHead>
+                    <TableHead className="text-center">Flat Disc</TableHead>
+                    <TableHead className="text-center">Subtotal</TableHead>
+                    <TableHead />
+                </TableRow>
+            </TableHeader>
+            <TableBody className="divide-y">
                 {sale.sale_products?.map((sale_product) => (
-                    <tr key={sale_product.id}>
-                        <td className="p-3 font-medium text-center">
+                    <TableRow key={sale_product.id}>
+                        <TableCell className="font-medium text-center">
                             {sale_product.product_name}
-                        </td>
-                        <td className="p-3 text-center font-mono">
+                        </TableCell>
+                        <TableCell className="text-center font-mono">
                             {rupiah(sale_product.unit_price)}
-                        </td>
-                        <td className="p-3 text-center font-mono">
+                        </TableCell>
+                        <TableCell className="text-center font-mono">
                             {sale_product.unit_discount > 0
                                 ? rupiah(sale_product.unit_discount)
                                 : ""}
-                        </td>
-                        <td className="p-3 text-center">
+                        </TableCell>
+                        <TableCell className="text-center">
                             {formatNumber(sale_product.quantity)}
-                        </td>
-                        <td className="p-3 text-center font-mono">
+                        </TableCell>
+                        <TableCell className="text-center font-mono">
                             {sale_product.flat_discount > 0
                                 ? rupiah(sale_product.flat_discount)
                                 : ""}
-                        </td>
-                        <td className="p-3 text-center font-mono">
+                        </TableCell>
+                        <TableCell className="text-center font-mono">
                             {rupiah(sale_product.total_price)}
-                        </td>
-                        <td>
+                        </TableCell>
+                        <TableCell>
                             <Button
                                 size="xs"
                                 className="w-6.5 h-6.5"
@@ -58,10 +66,10 @@ export default function OrderTable({ sale }: OrderTableProps) {
                             >
                                 <Redo />
                             </Button>
-                        </td>
-                    </tr>
+                        </TableCell>
+                    </TableRow>
                 ))}
-            </tbody>
-        </table>
+            </TableBody>
+        </Table>
     );
 }
