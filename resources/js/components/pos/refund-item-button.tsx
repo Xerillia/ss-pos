@@ -45,9 +45,7 @@ export default function RefundItemButton({ sales }: RefundItemButtonProps) {
             >
                 <AlertDialogHeader className="flex justify-between items-center">
                     <AlertDialogTitle>Refund System</AlertDialogTitle>
-                    <AlertDialogCancel variant="destructive">
-                        Cancel
-                    </AlertDialogCancel>
+                    <AlertDialogCancel>Return</AlertDialogCancel>
                 </AlertDialogHeader>
 
                 <ControlButtons />
