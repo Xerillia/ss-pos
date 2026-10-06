@@ -19,7 +19,6 @@ export default function RefundTable() {
             <TableHeader>
                 <TableRow>
                     <TableHead />
-                    <TableHead>Sale ID</TableHead>
                     <TableHead>Product</TableHead>
                     <TableHead className="text-center">Quantity</TableHead>
                     <TableHead>Refund</TableHead>
@@ -29,9 +28,7 @@ export default function RefundTable() {
                 {refundCart.map((item) => {
                     const product = item.product;
                     return (
-                        <TableRow
-                            key={`${product.id}-${item.sale_id ?? "none"}`}
-                        >
+                        <TableRow key={item.id}>
                             <TableCell>
                                 <Button
                                     size="xs"
@@ -42,7 +39,6 @@ export default function RefundTable() {
                                     <Trash />
                                 </Button>
                             </TableCell>
-                            <TableCell>{item.sale_id}</TableCell>
                             <TableCell>{product.name}</TableCell>
                             <TableCell className="text-center">
                                 <div className="flex gap-4 items-center mx-auto w-max">
