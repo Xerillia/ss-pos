@@ -49,14 +49,14 @@ export default function RefundItemButton({ sales }: RefundItemButtonProps) {
                     <AlertDialogCancel>Return</AlertDialogCancel>
                 </AlertDialogHeader>
 
-                <AlertDialogDescription className="space-y-4 overflow-y-auto max-h-[80vh]">
+                <div className="space-y-4 overflow-y-auto max-h-[80vh]">
                     <ControlButtons />
 
                     <div className="grid grid-cols-2 gap-4">
                         <OrderCard sales={sales} />
                         <RefundCard />
                     </div>
-                </AlertDialogDescription>
+                </div>
             </AlertDialogContent>
         </AlertDialog>
     );

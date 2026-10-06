@@ -17,7 +17,7 @@ export default function ControlButtons() {
 
             <TooltipProvider>
                 <Tooltip>
-                    <TooltipTrigger>
+                    <TooltipTrigger asChild>
                         <Button
                             variant="destructive"
                             size="sm"
