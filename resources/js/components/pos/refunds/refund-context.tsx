@@ -20,6 +20,8 @@ export type RefundItem = {
 interface RefundContextType {
     refundCart: RefundItem[];
     addToRefund: (sale_product: SaleProduct) => void;
+    subTotalOf: (item: RefundItem) => number;
+    totalRefund: () => number;
     resetRefund: () => void;
 }
 
@@ -27,6 +29,9 @@ const RefundContext = createContext<RefundContextType | undefined>(undefined);
 
 const isFound = (item: RefundItem, product_id: number, sale_id: number) =>
     item.product.id === product_id && item.sale_id === sale_id;
+
+const effectivePrice = (item: RefundItem) =>
+    item.override_unit_price || item.product.unit_price;
 
 export function RefundProvider({ children }: { children: React.ReactNode }) {
     const [refundCart, setRefundCart] = useLocalStorageState<RefundItem[]>(
@@ -79,13 +84,35 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
         });
     };
 
+    const subTotalOf = (item: RefundItem) => {
+        return (
+            (effectivePrice(item) - item.product.unit_discount) *
+                item.quantity -
+            item.product.flat_discount
+        );
+    };
+
+    const totalRefund = () => {
+        return refundCart.reduce((total, item) => {
+            const subtotal = subTotalOf(item);
+
+            return total + Math.min(subtotal, item.product.subtotal);
+        }, 0);
+    };
+
     const resetRefund = () => {
         setRefundCart([]);
     };
 
     return (
         <RefundContext.Provider
-            value={{ refundCart, addToRefund, resetRefund }}
+            value={{
+                refundCart,
+                addToRefund,
+                subTotalOf,
+                totalRefund,
+                resetRefund,
+            }}
         >
             {children}
         </RefundContext.Provider>
