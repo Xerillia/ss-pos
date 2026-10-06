@@ -36,7 +36,7 @@ export default function RefundItemButton({ sales }: RefundItemButtonProps) {
                             </Button>
                         </AlertDialogTrigger>
                     </TooltipTrigger>
-                    <TooltipContent>Add refunded items</TooltipContent>
+                    <TooltipContent>Manage refunds</TooltipContent>
                 </Tooltip>
             </TooltipProvider>
 
