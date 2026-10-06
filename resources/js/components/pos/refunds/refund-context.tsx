@@ -32,7 +32,7 @@ interface RefundContextType {
 
 const RefundContext = createContext<RefundContextType | undefined>(undefined);
 
-const isFound = (item: RefundItem, id: number) => item.product.id === id;
+const isFound = (item: RefundItem, id: number) => item.id === id;
 
 const effectivePrice = (item: RefundItem) =>
     item.override_unit_price || item.product.unit_price;
@@ -45,7 +45,9 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
 
     const addToRefund = (sale_product: SaleProduct) => {
         setRefundCart((prevCart) => {
-            const existing = prevCart.find((item) => isFound(item, item.id));
+            const existing = prevCart.find((item) =>
+                isFound(item, sale_product.id),
+            );
 
             if (existing) {
                 // refund based on past orders
