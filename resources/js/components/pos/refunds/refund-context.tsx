@@ -20,6 +20,7 @@ export type RefundItem = {
 interface RefundContextType {
     refundCart: RefundItem[];
     addToRefund: (sale_product: SaleProduct) => void;
+    removeFromRefund: (item: RefundItem) => void;
     subTotalOf: (item: RefundItem) => number;
     totalRefund: () => number;
     resetRefund: () => void;
@@ -84,6 +85,15 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
         });
     };
 
+    const removeFromRefund = (item: RefundItem) => {
+        setRefundCart((prevCart) =>
+            prevCart.filter((i) => {
+                if (i.sale_id) return i.sale_id !== item.sale_id;
+                // TODO: what about refunds for pre-POS or unknowns?
+            }),
+        );
+    };
+
     const subTotalOf = (item: RefundItem) => {
         return (
             (effectivePrice(item) - item.product.unit_discount) *
@@ -109,6 +119,7 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
             value={{
                 refundCart,
                 addToRefund,
+                removeFromRefund,
                 subTotalOf,
                 totalRefund,
                 resetRefund,
