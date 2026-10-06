@@ -32,11 +32,18 @@ class StoreSaleRequest extends FormRequest
             'currency' => ['nullable', 'string', 'size:3'],
             'notes' => ['nullable', 'string'],
             'sale_date' => ['required', 'date'],
+
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'distinct', 'exists:products,id'],
-            'items.*.quantity' => ['required', 'numeric', 'min:0.01'],
+            'items.*.quantity' => ['required', 'numeric', 'gt:0'],
             'items.*.unit_discount' => ['nullable', 'numeric', 'min:0'],
             'items.*.flat_discount' => ['nullable', 'numeric', 'min:0'],
+
+            'refunds' => ['nullable', 'array'],
+            'refunds.*.id' => ['nullable', 'exists:sale_products,id'],
+            'refunds.*.quantity' => ['required', 'numeric', 'gt:0'],
+            'refunds.*.override_unit_price' => ['nullable', 'numeric'],
+            'refunds.*.return_reason' => ['nullable', 'string'],
         ];
     }
 
