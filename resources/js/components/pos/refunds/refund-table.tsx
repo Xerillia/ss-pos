@@ -9,10 +9,11 @@ import {
 import { rupiah } from "@/lib/rupiah";
 import { useRefundContext } from "./refund-context";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { Minus, Plus, Trash } from "lucide-react";
 
 export default function RefundTable() {
-    const { subTotalOf, refundCart, removeFromRefund } = useRefundContext();
+    const { subTotalOf, refundCart, removeFromRefund, increment, decrement } =
+        useRefundContext();
     return (
         <Table>
             <TableHeader>
@@ -20,7 +21,7 @@ export default function RefundTable() {
                     <TableHead />
                     <TableHead>Sale ID</TableHead>
                     <TableHead>Product</TableHead>
-                    <TableHead>Qty</TableHead>
+                    <TableHead className="text-center">Quantity</TableHead>
                     <TableHead>Refund</TableHead>
                 </TableRow>
             </TableHeader>
@@ -43,7 +44,25 @@ export default function RefundTable() {
                             </TableCell>
                             <TableCell>{item.sale_id}</TableCell>
                             <TableCell>{product.name}</TableCell>
-                            <TableCell>{item.quantity}</TableCell>
+                            <TableCell className="text-center">
+                                <div className="flex gap-4 items-center mx-auto w-max">
+                                    <Button
+                                        size="xs"
+                                        className="aspect-square"
+                                        onClick={() => decrement(item)}
+                                    >
+                                        <Minus />
+                                    </Button>
+                                    <p>{item.quantity}</p>
+                                    <Button
+                                        size="xs"
+                                        className="aspect-square"
+                                        onClick={() => increment(item)}
+                                    >
+                                        <Plus />
+                                    </Button>
+                                </div>
+                            </TableCell>
                             <TableCell>{rupiah(subTotalOf(item))}</TableCell>
                         </TableRow>
                     );

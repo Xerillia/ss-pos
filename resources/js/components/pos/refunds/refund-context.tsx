@@ -3,6 +3,7 @@ import { SaleProduct } from "@/types/sale";
 import { createContext, useContext } from "react";
 
 export type RefundItem = {
+    id: number;
     product: {
         id: number;
         name: string;
@@ -12,6 +13,7 @@ export type RefundItem = {
         subtotal: number;
     };
     quantity: number;
+    maxQuantity?: number;
     sale_id?: number | null;
     override_unit_price?: number | null;
     return_reason?: string | null;
@@ -21,6 +23,8 @@ interface RefundContextType {
     refundCart: RefundItem[];
     addToRefund: (sale_product: SaleProduct) => void;
     removeFromRefund: (item: RefundItem) => void;
+    increment: (item: RefundItem) => void;
+    decrement: (item: RefundItem) => void;
     subTotalOf: (item: RefundItem) => number;
     totalRefund: () => number;
     resetRefund: () => void;
@@ -28,8 +32,7 @@ interface RefundContextType {
 
 const RefundContext = createContext<RefundContextType | undefined>(undefined);
 
-const isFound = (item: RefundItem, product_id: number, sale_id: number) =>
-    item.product.id === product_id && item.sale_id === sale_id;
+const isFound = (item: RefundItem, id: number) => item.product.id === id;
 
 const effectivePrice = (item: RefundItem) =>
     item.override_unit_price || item.product.unit_price;
@@ -42,22 +45,20 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
 
     const addToRefund = (sale_product: SaleProduct) => {
         setRefundCart((prevCart) => {
-            const existing = prevCart.find((item) =>
-                isFound(item, sale_product.product_id, sale_product.sale_id),
-            );
+            const existing = prevCart.find((item) => isFound(item, item.id));
 
             if (existing) {
                 // refund based on past orders
                 if (
                     sale_product &&
-                    existing.quantity >= sale_product?.quantity
+                    existing.quantity >= sale_product.quantity
                 ) {
                     return prevCart;
                 }
 
                 // increment refunded item
                 return prevCart.map((item) =>
-                    isFound(item, sale_product.product_id, sale_product.sale_id)
+                    isFound(item, item.id)
                         ? {
                               ...item,
                               quantity: item.quantity + 1,
@@ -70,6 +71,7 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
             return [
                 ...prevCart,
                 {
+                    id: sale_product.id,
                     product: {
                         id: sale_product.product_id,
                         name: sale_product.product_name,
@@ -79,18 +81,46 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
                         subtotal: sale_product.total_price,
                     },
                     quantity: 1,
-                    sale_id: sale_product.sale_id,
+                    maxQuantity: sale_product.quantity,
                 },
             ];
         });
     };
 
     const removeFromRefund = (item: RefundItem) => {
+        setRefundCart((prevCart) => prevCart.filter((i) => i.id !== item.id));
+    };
+
+    const increment = (item: RefundItem) => {
         setRefundCart((prevCart) =>
-            prevCart.filter((i) => {
-                if (i.sale_id) return i.sale_id !== item.sale_id;
-                // TODO: what about refunds for pre-POS or unknowns?
+            prevCart.map((i) => {
+                if (i.id === item.id)
+                    return {
+                        ...item,
+                        quantity: Math.min(
+                            item.quantity + 1,
+                            item.maxQuantity || Infinity,
+                        ),
+                    };
+
+                return i;
             }),
+        );
+    };
+
+    const decrement = (item: RefundItem) => {
+        setRefundCart((prevCart) =>
+            prevCart
+                .map((i) => {
+                    if (i.id === item.id)
+                        return {
+                            ...item,
+                            quantity: item.quantity - 1,
+                        };
+
+                    return i;
+                })
+                .filter((i) => i.quantity > 0),
         );
     };
 
@@ -120,6 +150,8 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
                 refundCart,
                 addToRefund,
                 removeFromRefund,
+                increment,
+                decrement,
                 subTotalOf,
                 totalRefund,
                 resetRefund,
