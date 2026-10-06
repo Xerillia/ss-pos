@@ -3,6 +3,7 @@ import {
     AlertDialog,
     AlertDialogCancel,
     AlertDialogContent,
+    AlertDialogDescription,
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
@@ -48,12 +49,14 @@ export default function RefundItemButton({ sales }: RefundItemButtonProps) {
                     <AlertDialogCancel>Return</AlertDialogCancel>
                 </AlertDialogHeader>
 
-                <ControlButtons />
+                <AlertDialogDescription className="space-y-4 overflow-y-auto max-h-[80vh]">
+                    <ControlButtons />
 
-                <div className="grid grid-cols-2 gap-4">
-                    <OrderCard sales={sales} />
-                    <RefundCard />
-                </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <OrderCard sales={sales} />
+                        <RefundCard />
+                    </div>
+                </AlertDialogDescription>
             </AlertDialogContent>
         </AlertDialog>
     );

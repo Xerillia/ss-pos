@@ -7,9 +7,10 @@ import {
 } from "@/components/ui/card";
 import { useRefundContext } from "./refund-context";
 import RefundTable from "./refund-table";
+import { rupiah } from "@/lib/rupiah";
 
 export default function RefundCard() {
-    const {} = useRefundContext();
+    const { totalRefund } = useRefundContext();
     return (
         <Card>
             <CardHeader>
@@ -19,6 +20,10 @@ export default function RefundCard() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
+                <div className="font-semibold text-sm text-muted-foreground w-max grid grid-cols-2 items-center space-x-4 ml-auto">
+                    <p>Total Refund:</p>
+                    <p className="font-mono">{rupiah(totalRefund())}</p>
+                </div>
                 <RefundTable />
             </CardContent>
         </Card>
