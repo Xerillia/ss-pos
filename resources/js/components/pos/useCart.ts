@@ -6,6 +6,7 @@ import { formatNumber } from "@/lib/number";
 import { Customer } from "@/types/customer";
 import { Product } from "@/types/product";
 import { useState } from "react";
+import { RefundItem } from "./refunds/refund-context";
 
 export interface CartItem {
     product: Product;
@@ -216,11 +217,7 @@ export function useCart() {
         }
     };
 
-    const finishTransaction = async (extraFields?: {
-        tax_amount?: number;
-        currency?: string;
-        notes?: string;
-    }) => {
+    const finishTransaction = async (refundCart?: RefundItem[]) => {
         if (cart.length === 0) {
             throw new Error("Cannot checkout with an empty cart.");
         }
@@ -230,10 +227,10 @@ export function useCart() {
             payment_method: paymentMethod,
             paid_amount: payAmount ?? 0,
             discount_amount: discountAmount ?? 0,
-            tax_amount: extraFields?.tax_amount ?? 0,
-            currency: extraFields?.currency ?? "IDR",
+            tax_amount: 0,
+            currency: "IDR",
             sale_number: saleNumber ?? null,
-            notes: extraFields?.notes ?? null,
+            notes: null,
             sale_date: localToUtcIso(saleDate),
             items: cart.map((item) => ({
                 product_id: item.product.id,
@@ -241,6 +238,13 @@ export function useCart() {
                 unit_discount: item.unit_discount || 0,
                 flat_discount: item.flat_discount || 0,
             })),
+            refunds:
+                refundCart?.map((item) => ({
+                    product_id: item.product.id,
+                    quantity: item.quantity,
+                    override_unit_price: item.override_unit_price || null,
+                    return_reason: item.return_reason || null,
+                })) || [],
         };
 
         try {

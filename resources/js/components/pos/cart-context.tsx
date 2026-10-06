@@ -3,6 +3,7 @@ import { CartItem, useCart } from "./useCart";
 import { Product } from "@/types/product";
 import { PaymentMethod } from "@/enums";
 import { Customer } from "@/types/customer";
+import { RefundItem } from "./refunds/refund-context";
 
 interface CartContextType {
     cart: CartItem[];
@@ -26,7 +27,7 @@ interface CartContextType {
     selectedCustomer: Customer | undefined;
     setSelectedCustomer: Dispatch<SetStateAction<Customer | undefined>>;
     clearCart: () => void;
-    finishTransaction: () => any;
+    finishTransaction: (refundCart?: RefundItem[]) => any;
     saleNumber: string | undefined;
     setSaleNumber: Dispatch<SetStateAction<string | undefined>>;
     saleDate: string | undefined;

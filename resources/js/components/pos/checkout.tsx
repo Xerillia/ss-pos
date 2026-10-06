@@ -18,12 +18,15 @@ import { CheckoutConfirmDialog } from "./checkout-confirm-dialog";
 import { toast } from "sonner";
 import { router } from "@inertiajs/react";
 import { WALK_IN_CUSTOMER } from "./customer-combobox";
+import { useRefundContext } from "./refunds/refund-context";
 
 interface CheckoutProps {
     total: number;
 }
 
 export default function Checkout({ total }: CheckoutProps) {
+    const { refundCart } = useRefundContext();
+
     const {
         payAmount,
         setPayAmount,
@@ -57,7 +60,7 @@ export default function Checkout({ total }: CheckoutProps) {
         const toastId = toast.loading("Checking out...");
 
         try {
-            const response = await finishTransaction();
+            const response = await finishTransaction(refundCart);
 
             if (response.success) {
                 toast.success(response.message, { id: toastId });
