@@ -29,14 +29,13 @@ export default function OrderTable({ sale }: OrderTableProps) {
                     <TableHead className="text-center">Unit Disc</TableHead>
                     <TableHead className="text-center">Qty</TableHead>
                     <TableHead className="text-center">Flat Disc</TableHead>
-                    <TableHead className="text-center">Subtotal</TableHead>
                     <TableHead />
                 </TableRow>
             </TableHeader>
             <TableBody className="divide-y">
                 {sale.sale_products?.map((sale_product) => (
                     <TableRow key={sale_product.id}>
-                        <TableCell className="font-medium text-center">
+                        <TableCell className="font-medium text-center text-ellipsis">
                             {sale_product.product_name}
                         </TableCell>
                         <TableCell className="text-center font-mono">
@@ -54,9 +53,6 @@ export default function OrderTable({ sale }: OrderTableProps) {
                             {sale_product.flat_discount > 0
                                 ? rupiah(sale_product.flat_discount)
                                 : ""}
-                        </TableCell>
-                        <TableCell className="text-center font-mono">
-                            {rupiah(sale_product.total_price)}
                         </TableCell>
                         <TableCell>
                             <Button
