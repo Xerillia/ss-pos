@@ -18,7 +18,9 @@ export interface CartItem {
 const CART_STORAGE_KEY = "shopping_cart";
 
 export function useCart() {
-    const [cart, setCart] = useLocalStorage<CartItem[]>(CART_STORAGE_KEY, []);
+    const [cart, setCart] = useLocalStorage<CartItem[]>(CART_STORAGE_KEY, [], {
+        initializeWithValue: false,
+    });
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
         PaymentMethod.CASH,
     );
@@ -238,6 +240,8 @@ export function useCart() {
             refunds:
                 refundCart?.map((item) => ({
                     product_id: item.product.id,
+                    sale_id: item.sale_id || null,
+                    sale_products_id: item.sale_product_id || null,
                     quantity: item.quantity,
                     override_unit_price: item.override_unit_price || null,
                     return_reason: item.return_reason || null,

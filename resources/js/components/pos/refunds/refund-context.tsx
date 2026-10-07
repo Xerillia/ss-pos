@@ -41,6 +41,7 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
     const [refundCart, setRefundCart] = useLocalStorage<RefundItem[]>(
         "refund_cart",
         [],
+        { initializeWithValue: false },
     );
 
     const addToRefund = (sale_product: SaleProduct) => {

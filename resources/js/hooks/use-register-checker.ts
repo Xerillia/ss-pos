@@ -30,11 +30,13 @@ export function useRegisterChecker() {
     const [denominations, setDenominations] = useLocalStorage<CashItem[]>(
         "checker_denomination",
         DENOMINATIONS,
+        { initializeWithValue: false },
     );
 
     const [bundles, setBundles] = useLocalStorage<CashItem[]>(
         "checker_bundle",
         BUNDLES,
+        { initializeWithValue: false },
     );
 
     const updateQuantity = (

@@ -15,6 +15,7 @@ export function StartingFloatForm({ filters }: StartingFloatFormProps) {
     const [storedFloat, setStoredFloat] = useLocalStorage(
         "checker_starting",
         filters.starting_float || 0,
+        { initializeWithValue: false },
     );
 
     const [startingFloat, setStartingFloat] = useState(storedFloat);
