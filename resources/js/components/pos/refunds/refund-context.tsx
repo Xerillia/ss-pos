@@ -1,6 +1,6 @@
-import { useLocalStorageState } from "@/hooks/use-local-storage";
 import { SaleProduct } from "@/types/sale";
 import { createContext, useContext } from "react";
+import { useLocalStorage } from "usehooks-ts";
 
 export type RefundItem = {
     id: number;
@@ -38,7 +38,7 @@ const effectivePrice = (item: RefundItem) =>
     item.override_unit_price || item.product.unit_price;
 
 export function RefundProvider({ children }: { children: React.ReactNode }) {
-    const [refundCart, setRefundCart] = useLocalStorageState<RefundItem[]>(
+    const [refundCart, setRefundCart] = useLocalStorage<RefundItem[]>(
         "refund_cart",
         [],
     );

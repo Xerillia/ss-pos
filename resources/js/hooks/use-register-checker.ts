@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useLocalStorageState } from "./use-local-storage";
+import { useLocalStorage } from "usehooks-ts";
 
 export interface CashItem {
     key: string;
@@ -27,12 +27,12 @@ const BUNDLES: CashItem[] = [
 ];
 
 export function useRegisterChecker() {
-    const [denominations, setDenominations] = useLocalStorageState<CashItem[]>(
+    const [denominations, setDenominations] = useLocalStorage<CashItem[]>(
         "checker_denomination",
         DENOMINATIONS,
     );
 
-    const [bundles, setBundles] = useLocalStorageState<CashItem[]>(
+    const [bundles, setBundles] = useLocalStorage<CashItem[]>(
         "checker_bundle",
         BUNDLES,
     );

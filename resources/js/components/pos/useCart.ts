@@ -1,12 +1,12 @@
 import { processCheckout } from "@/api/axios";
 import { PaymentMethod } from "@/enums";
-import { useLocalStorageState } from "@/hooks/use-local-storage";
 import { localToUtcIso, utcToLocalIso } from "@/lib/archive";
 import { formatNumber } from "@/lib/number";
 import { Customer } from "@/types/customer";
 import { Product } from "@/types/product";
 import { useState } from "react";
 import { RefundItem } from "./refunds/refund-context";
+import { useLocalStorage } from "usehooks-ts";
 
 export interface CartItem {
     product: Product;
@@ -18,10 +18,7 @@ export interface CartItem {
 const CART_STORAGE_KEY = "shopping_cart";
 
 export function useCart() {
-    const [cart, setCart] = useLocalStorageState<CartItem[]>(
-        CART_STORAGE_KEY,
-        [],
-    );
+    const [cart, setCart] = useLocalStorage<CartItem[]>(CART_STORAGE_KEY, []);
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
         PaymentMethod.CASH,
     );

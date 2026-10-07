@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { router } from "@inertiajs/react";
 import { Input } from "../ui/input";
 import { registerChecker } from "@/routes";
-import { useLocalStorageState } from "@/hooks/use-local-storage";
-
+import { useLocalStorage } from "usehooks-ts";
 interface StartingFloatFormProps {
     filters: {
         start_date: string;
@@ -13,7 +12,7 @@ interface StartingFloatFormProps {
 }
 
 export function StartingFloatForm({ filters }: StartingFloatFormProps) {
-    const [storedFloat, setStoredFloat] = useLocalStorageState(
+    const [storedFloat, setStoredFloat] = useLocalStorage(
         "checker_starting",
         filters.starting_float || 0,
     );
