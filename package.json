@@ -53,7 +53,7 @@
         "typescript": "^5.7.2",
         "usehooks-ts": "^3.1.1",
         "uuid": "^14.0.2",
-        "vite": "^8.0.0"
+        "vite": "npm:@voidzero-dev/vite-plus-core@0.3.3"
     },
     "devDependencies": {
         "@devwizard/vite-plugin-enumify": "^1.0.0",
@@ -63,7 +63,7 @@
         "@types/uuid": "^10.0.0",
         "babel-plugin-react-compiler": "^1.0.0",
         "fontaine": "^0.8.2",
-        "vite-plus": "^0.3.3"
+        "vite-plus": "0.3.3"
     },
     "optionalDependencies": {
         "@laravel/multiplex": "^0.4.1",
@@ -75,6 +75,14 @@
         "lightningcss-win32-x64-msvc": "^1.29.1"
     },
     "overrides": {
-        "shell-quote": "^1.8.5"
+        "shell-quote": "^1.8.5",
+        "vite": "npm:@voidzero-dev/vite-plus-core@0.3.3"
+    },
+    "devEngines": {
+        "packageManager": {
+            "name": "npm",
+            "version": "12.2.0",
+            "onFail": "download"
+        }
     }
 }
