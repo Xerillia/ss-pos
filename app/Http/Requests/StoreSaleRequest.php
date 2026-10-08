@@ -40,7 +40,9 @@ class StoreSaleRequest extends FormRequest
             'items.*.flat_discount' => ['nullable', 'numeric', 'min:0'],
 
             'refunds' => ['nullable', 'array'],
-            'refunds.*.id' => ['nullable', 'exists:sale_products,id'],
+            'refunds.*.product_id' => ['required', 'exists:products,id'],
+            'refunds.*.sale_products_id' => ['nullable', 'exists:sale_products,id'],
+            'refunds.*.sale_id' => ['nullable', 'exists:sales,id'],
             'refunds.*.quantity' => ['required', 'numeric', 'gt:0'],
             'refunds.*.override_unit_price' => ['nullable', 'numeric'],
             'refunds.*.return_reason' => ['nullable', 'string'],
