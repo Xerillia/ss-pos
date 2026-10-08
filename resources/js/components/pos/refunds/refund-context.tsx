@@ -2,6 +2,8 @@ import { SaleProduct } from "@/types/sale";
 import { createContext, useContext } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
+let id = 1;
+
 export type RefundItem = {
     id: number;
     product: {
@@ -15,6 +17,7 @@ export type RefundItem = {
     quantity: number;
     maxQuantity?: number;
     sale_id?: number | null;
+    sale_product_id?: number | null;
     override_unit_price?: number | null;
     return_reason?: string | null;
 };
@@ -45,6 +48,7 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
     );
 
     const addToRefund = (sale_product: SaleProduct) => {
+        console.log(sale_product);
         setRefundCart((prevCart) => {
             const existing = prevCart.find((item) =>
                 isFound(item, sale_product.id),
@@ -74,7 +78,7 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
             return [
                 ...prevCart,
                 {
-                    id: sale_product.id,
+                    id: id++,
                     product: {
                         id: sale_product.product_id,
                         name: sale_product.product_name,
@@ -83,6 +87,8 @@ export function RefundProvider({ children }: { children: React.ReactNode }) {
                         flat_discount: sale_product.flat_discount,
                         subtotal: sale_product.total_price,
                     },
+                    sale_id: sale_product.sale_id,
+                    sale_product_id: sale_product.id,
                     quantity: 1,
                     maxQuantity: sale_product.quantity,
                 },
