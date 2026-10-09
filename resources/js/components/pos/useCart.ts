@@ -241,7 +241,7 @@ export function useCart() {
                 refundCart?.map((item) => ({
                     product_id: item.product.id,
                     sale_id: item.sale_id || null,
-                    sale_products_id: item.sale_product_id || null,
+                    sale_product_id: item.sale_product_id || null,
                     quantity: item.quantity,
                     override_unit_price: item.override_unit_price || null,
                     return_reason: item.return_reason || null,
