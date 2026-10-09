@@ -10,10 +10,18 @@ import { rupiah } from "@/lib/rupiah";
 import { useRefundContext } from "./refund-context";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 export default function RefundTable() {
-    const { subTotalOf, refundCart, removeFromRefund, increment, decrement } =
-        useRefundContext();
+    const {
+        subTotalOf,
+        refundCart,
+        removeFromRefund,
+        increment,
+        decrement,
+        getReason,
+        setReason,
+    } = useRefundContext();
     return (
         <Table>
             <TableHeader>
@@ -22,6 +30,7 @@ export default function RefundTable() {
                     <TableHead>Product</TableHead>
                     <TableHead className="text-center">Quantity</TableHead>
                     <TableHead>Refund</TableHead>
+                    <TableHead>Reason (optional)</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -60,6 +69,17 @@ export default function RefundTable() {
                                 </div>
                             </TableCell>
                             <TableCell>{rupiah(subTotalOf(item))}</TableCell>
+                            <TableCell>
+                                <Input
+                                    id={`reason-${item.id}`}
+                                    type="text"
+                                    placeholder="Reason..."
+                                    value={getReason(item)}
+                                    onChange={(e) =>
+                                        setReason(item, e.target.value)
+                                    }
+                                />
+                            </TableCell>
                         </TableRow>
                     );
                 })}
