@@ -1,13 +1,17 @@
 import { rupiah } from "@/lib/rupiah";
 import { useCartContext } from "./cart-context";
+import { useRefundContext } from "./refunds/refund-context";
 
 export default function SummaryItem() {
     const { cartTotal, cartTotalWithoutDiscount, discountAmount } =
         useCartContext();
 
+    const { totalRefund } = useRefundContext();
+
     const withoutDiscount = cartTotalWithoutDiscount();
     const withDiscount = cartTotal();
     const saved = withoutDiscount - withDiscount - (discountAmount || 0);
+    const refund = totalRefund();
 
     return (
         <>
@@ -18,7 +22,7 @@ export default function SummaryItem() {
                 </div>
                 {saved > 0 && (
                     <div className="flex justify-between">
-                        <p>Subtotal Discount</p>
+                        <p>Discount</p>
                         <p className="font-mono">{rupiah(saved)}</p>
                     </div>
                 )}
@@ -28,6 +32,12 @@ export default function SummaryItem() {
                         <p className="font-mono">
                             {rupiah(discountAmount as number)}
                         </p>
+                    </div>
+                )}
+                {refund > 0 && (
+                    <div className="flex justify-between">
+                        <p>Refund</p>
+                        <p className="font-mono">{rupiah(refund)}</p>
                     </div>
                 )}
             </div>
