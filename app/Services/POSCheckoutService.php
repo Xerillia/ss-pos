@@ -3,9 +3,12 @@
 namespace App\Services;
 
 use App\Enums\PaymentStatus;
+use App\Enums\SaleItemStatus;
 use App\Exceptions\InsufficientStockException;
+use App\Exceptions\ProhibitRefundException;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\SaleProduct;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -22,6 +25,7 @@ class POSCheckoutService
         // process items, lock rows, verify stock, and prepare records
         return DB::transaction(function () use ($data, $user) {
             $consolidatedItems = $this->consolidateItems($data['items']);
+            $refunds = $data['refunds'];
 
             $subtotal = 0;
             $saleProductsData = [];
@@ -37,16 +41,10 @@ class POSCheckoutService
                 }
 
                 $quantity = $item['quantity'];
-                $grossTotal = $product->price * $quantity;
+                $unitDiscount = $item['unit_discount'];
+                $flatDiscount = $item['flat_discount'];
 
-                // discounts
-                $unitDiscount = min($item['unit_discount'] ?? 0.00, $product->price);
-                $flatDiscount = $item['flat_discount'] ?? 0.00;
-
-                // total discounts
-                $totalDiscount = min(($unitDiscount * $quantity) + $flatDiscount, $grossTotal);
-
-                $itemTotal = $grossTotal - $totalDiscount;
+                $itemTotal = $this->subtotal($product->unit_price, $quantity, $unitDiscount, $flatDiscount);
                 $subtotal += $itemTotal;
 
                 // deduct stock
@@ -66,11 +64,50 @@ class POSCheckoutService
                 ];
             }
 
+            $refundAmount = 0;
+
+            foreach ($refunds as $refund) {
+                // increment stock
+                Product::whereId($refund['product_id'])->increment('quantity', $refund['quantity']);
+
+                $saleProductId = $refund['sale_product_id'];
+                $saleId = $refund['sale_id'];
+
+                if ($saleProductId && $saleId) {
+                    // set to refunded
+                    $saleProduct = SaleProduct::whereId($saleProductId)->firstOrFail();
+                    $saleProduct->update([
+                        'item_status' => SaleItemStatus::REFUNDED,
+                    ]);
+
+                    $hasRemainingItems = SaleProduct::whereSaleId($refund['sale_id'])->where('item_status', '!=', SaleItemStatus::REFUNDED)->exists();
+
+                    $status = $hasRemainingItems ? PaymentStatus::PARTIALLY_REFUNDED : PaymentStatus::REFUNDED;
+
+                    // update payment status
+                    Sale::whereId($saleId)->update([
+                        'payment_status' => $status,
+                    ]);
+
+                    $unitPrice = $refund['override_unit_price'] ?? $saleProduct->unit_price;
+
+                    $refundAmount += $this->subtotal($unitPrice, $refund['quantity'], $saleProduct->unit_discount, $saleProduct->flat_discount);
+                }
+
+                // TODO: create refund history. use return_reason.
+            }
+
             // financial total
             $taxAmount = $data['tax_amount'] ?? 0.00;
             $discountAmount = $data['discount_amount'] ?? 0.00;
             $totalAmount = max(0, ($subtotal + $taxAmount) - $discountAmount);
 
+            // remove or comment out if allowed.
+            if ($totalAmount - $refundAmount < 0) {
+                throw new ProhibitRefundException($totalAmount, $refundAmount);
+            }
+
+            $totalAmount -= $refundAmount; // apply refund
             $paidAmount = $data['paid_amount'];
 
             // debt, change, payment status
@@ -95,6 +132,7 @@ class POSCheckoutService
                 'subtotal_amount' => $subtotal,
                 'tax_amount' => $taxAmount,
                 'discount_amount' => $discountAmount,
+                'refund_amount' => $refundAmount,
                 'total_amount' => $totalAmount,
                 'currency' => $data['currency'] ?? 'IDR',
                 'paid_amount' => $paidAmount,
@@ -139,5 +177,13 @@ class POSCheckoutService
     protected function generateSaleNumber(): string
     {
         return 'INV-'.now()->format('Ymd').'-'.strtoupper(Str::random(5));
+    }
+
+    /**
+     * Find the subtotal of a given parameters
+     */
+    protected function subtotal(float $unitPrice, float $quantity, float $unitDiscount = 0.00, float $flatDiscount = 0.00): float
+    {
+        return max((($unitPrice - $unitDiscount) * $quantity) - $flatDiscount, 0);
     }
 }
