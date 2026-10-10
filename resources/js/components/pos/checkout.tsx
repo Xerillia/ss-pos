@@ -20,17 +20,14 @@ import { router } from "@inertiajs/react";
 import { WALK_IN_CUSTOMER } from "./customer-combobox";
 import { useRefundContext } from "./refunds/refund-context";
 
-interface CheckoutProps {
-    total: number;
-}
-
-export default function Checkout({ total }: CheckoutProps) {
-    const { refundCart } = useRefundContext();
+export default function Checkout() {
+    const { refundCart, totalRefund } = useRefundContext();
 
     const {
         payAmount,
         setPayAmount,
         cart,
+        cartTotal,
         discountAmount,
         setDiscountAmount,
         finishTransaction,
@@ -82,12 +79,16 @@ export default function Checkout({ total }: CheckoutProps) {
         }
     };
 
+    const total = cartTotal() - totalRefund();
+
+    const isDisabled = Boolean(cart.length === 0 || total < 0);
+
     return (
         <>
             <Field className="mt-3">
                 <Button
                     onClick={() => setCheckoutOpen(true)}
-                    disabled={cart.length === 0}
+                    disabled={isDisabled}
                 >
                     <Receipt data-icon="inline-start" /> Checkout
                 </Button>

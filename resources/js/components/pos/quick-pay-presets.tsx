@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
 import { useCartContext } from "./cart-context";
+import { useRefundContext } from "./refunds/refund-context";
 
 const PRESET_INCREMENTS = [
     { label: "+ 1k", value: 1000 },
@@ -14,6 +15,7 @@ const PRESET_INCREMENTS = [
 
 export function QuickPayPresets() {
     const { setPayAmount, cartTotal } = useCartContext();
+    const { totalRefund } = useRefundContext();
 
     return (
         <div className="grid grid-cols-5 gap-3">
@@ -24,7 +26,10 @@ export function QuickPayPresets() {
             >
                 Reset
             </Button>
-            <Button size="sm" onClick={() => setPayAmount(cartTotal())}>
+            <Button
+                size="sm"
+                onClick={() => setPayAmount(cartTotal() - totalRefund())}
+            >
                 Exact
             </Button>
 

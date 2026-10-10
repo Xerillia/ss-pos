@@ -16,6 +16,7 @@ import CartItemsCompact from "./cart-items-compact";
 import { PaymentMethod, PaymentMethodUtils } from "@/enums";
 import { Field, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
+import { useRefundContext } from "./refunds/refund-context";
 
 interface CheckoutConfirmDialogProps {
     open: boolean;
@@ -38,8 +39,9 @@ export function CheckoutConfirmDialog({
         saleNumber,
         setSaleNumber,
     } = useCartContext();
+    const { totalRefund } = useRefundContext();
 
-    const total = cartTotal();
+    const total = cartTotal() - totalRefund();
     const currentPayAmount = payAmount || 0;
     const change = currentPayAmount - total;
     const debt = total - currentPayAmount;

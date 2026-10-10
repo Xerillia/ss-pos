@@ -12,6 +12,7 @@ export default function SummaryItem() {
     const withDiscount = cartTotal();
     const saved = withoutDiscount - withDiscount - (discountAmount || 0);
     const refund = totalRefund();
+    const total = withDiscount - refund;
 
     return (
         <>
@@ -43,7 +44,7 @@ export default function SummaryItem() {
             </div>
             <div className="font-bold flex justify-between">
                 <p>Total Amount</p>
-                <p className="font-mono">{rupiah(withDiscount)}</p>
+                <p className="font-mono">{rupiah(total)}</p>
             </div>
         </>
     );
