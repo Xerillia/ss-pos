@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\InsufficientStockException;
+use App\Exceptions\ProhibitRefundException;
 use App\Http\Requests\StoreSaleRequest;
 use App\Services\POSCheckoutService;
 use Illuminate\Http\JsonResponse;
@@ -30,6 +31,11 @@ class POSCheckoutController extends Controller
                 'product_id' => $e->getProductId(),
             ], 422);
 
+        } catch (ProhibitRefundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 422);
         } catch (\Throwable $e) {
             Log::error('POS Checkout Failed', [
                 'error' => $e->getMessage(),
