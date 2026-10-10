@@ -68,7 +68,8 @@ class POSCheckoutService
 
             foreach ($refunds as $refund) {
                 // increment stock
-                Product::whereId($refund['product_id'])->increment('quantity', $refund['quantity']);
+                $product = Product::whereId($refund['product_id'])->lockForUpdate()->firstOrFail();
+                $product->increment('quantity', $refund['quantity']);
 
                 $saleProductId = $refund['sale_product_id'];
                 $saleId = $refund['sale_id'];
