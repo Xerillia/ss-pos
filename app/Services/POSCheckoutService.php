@@ -44,7 +44,7 @@ class POSCheckoutService
                 $unitDiscount = $item['unit_discount'];
                 $flatDiscount = $item['flat_discount'];
 
-                $itemTotal = $this->subtotal($product->unit_price, $quantity, $unitDiscount, $flatDiscount);
+                $itemTotal = $this->subtotal($product->price, $quantity, $unitDiscount, $flatDiscount);
                 $subtotal += $itemTotal;
 
                 // deduct stock
