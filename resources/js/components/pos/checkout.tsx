@@ -21,7 +21,7 @@ import { WALK_IN_CUSTOMER } from "./customer-combobox";
 import { useRefundContext } from "./refunds/refund-context";
 
 export default function Checkout() {
-    const { refundCart, totalRefund } = useRefundContext();
+    const { refundCart, totalRefund, resetRefund } = useRefundContext();
 
     const {
         payAmount,
@@ -57,7 +57,7 @@ export default function Checkout() {
         const toastId = toast.loading("Checking out...");
 
         try {
-            const response = await finishTransaction(refundCart);
+            const response = await finishTransaction(refundCart, resetRefund);
 
             if (response.success) {
                 toast.success(response.message, { id: toastId });

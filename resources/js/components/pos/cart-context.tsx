@@ -27,7 +27,10 @@ interface CartContextType {
     selectedCustomer: Customer | undefined;
     setSelectedCustomer: Dispatch<SetStateAction<Customer | undefined>>;
     clearCart: () => void;
-    finishTransaction: (refundCart?: RefundItem[]) => any;
+    finishTransaction: (
+        refundCart?: RefundItem[],
+        resetRefund?: () => void,
+    ) => any;
     saleNumber: string | undefined;
     setSaleNumber: Dispatch<SetStateAction<string | undefined>>;
     saleDate: string | undefined;

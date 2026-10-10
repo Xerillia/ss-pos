@@ -216,7 +216,10 @@ export function useCart() {
         }
     };
 
-    const finishTransaction = async (refundCart?: RefundItem[]) => {
+    const finishTransaction = async (
+        refundCart?: RefundItem[],
+        resetRefund?: () => void,
+    ) => {
         if (cart.length === 0) {
             throw new Error("Cannot checkout with an empty cart.");
         }
@@ -253,6 +256,7 @@ export function useCart() {
 
             if (response.success) {
                 clearCart();
+                if (resetRefund) resetRefund();
             }
 
             return response;
