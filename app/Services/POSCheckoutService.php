@@ -24,8 +24,8 @@ class POSCheckoutService
     {
         // process items, lock rows, verify stock, and prepare records
         return DB::transaction(function () use ($data, $user) {
-            $consolidatedItems = $this->consolidateItems($data['items']);
-            $refunds = $data['refunds'];
+            $consolidatedItems = $this->consolidateItems($data['items'] ?? []);
+            $refunds = $data['refunds'] ?? [];
 
             $subtotal = 0;
             $saleProductsData = [];
