@@ -23,6 +23,7 @@ class SaleProduct extends Model
         'unit_discount',
         'flat_discount',
         'total_price',
+        'item_status',
     ];
 
     protected $casts = [
