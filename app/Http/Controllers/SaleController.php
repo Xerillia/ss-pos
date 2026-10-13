@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PaymentStatus;
 use App\Enums\SaleStatus;
 use App\Models\Customer;
 use App\Models\Product;
@@ -23,6 +24,7 @@ class SaleController extends Controller
         $products = Product::all(['id', 'sku', 'name', 'quantity', 'unit', 'price']);
         $customers = Customer::all(['id', 'name']);
         $sales = Sale::query()
+            ->where('payment_status', '!=', PaymentStatus::REFUNDED)
             ->with(['customer:id,name', 'saleProducts'])
             ->when($search, function ($query, $search) {
                 $query->where('sale_number', 'like', "%{$search}%")
