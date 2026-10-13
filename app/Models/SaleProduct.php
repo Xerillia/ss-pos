@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\SaleItemStatus;
 use App\Enums\Unit;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -50,5 +51,10 @@ class SaleProduct extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function scopeNotRefunded(Builder $query): void
+    {
+        $query->where('item_status', '!=', SaleItemStatus::REFUNDED);
     }
 }

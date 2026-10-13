@@ -25,7 +25,9 @@ class SaleController extends Controller
         $customers = Customer::all(['id', 'name']);
         $sales = Sale::query()
             ->where('payment_status', '!=', PaymentStatus::REFUNDED)
-            ->with(['customer:id,name', 'saleProducts'])
+            ->with(['customer:id,name', 'saleProducts' => function ($query) {
+                $query->notRefunded();
+            }])
             ->when($search, function ($query, $search) {
                 $query->where('sale_number', 'like', "%{$search}%")
                     ->orWhereHas('customer', function ($q) use ($search) {
