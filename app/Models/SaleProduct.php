@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class SaleProduct extends Model
 {
@@ -51,6 +52,14 @@ class SaleProduct extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * Get the refund entity of this sale product
+     */
+    public function refund(): HasOne
+    {
+        return $this->hasOne(Refund::class);
     }
 
     public function scopeNotRefunded(Builder $query): void
