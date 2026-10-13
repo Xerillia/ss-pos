@@ -12,6 +12,7 @@ class Refund extends Model
 
     protected $fillable = [
         'sale_product_id',
+        'product_id',
         'quantity',
         'refund_date',
         'refund_reason',
