@@ -7,6 +7,7 @@ import { Product } from "@/types/product";
 import { useState } from "react";
 import { RefundItem } from "./refunds/refund-context";
 import { useLocalStorage } from "usehooks-ts";
+import { router } from "@inertiajs/react";
 
 export interface CartItem {
     product: Product;
@@ -257,6 +258,9 @@ export function useCart() {
             if (response.success) {
                 clearCart();
                 if (resetRefund) resetRefund();
+                router.reload({
+                    only: ["sales"]
+                })
             }
 
             return response;
