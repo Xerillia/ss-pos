@@ -7,9 +7,11 @@ use App\Enums\SaleItemStatus;
 use App\Exceptions\InsufficientStockException;
 use App\Exceptions\ProhibitRefundException;
 use App\Models\Product;
+use App\Models\Refund;
 use App\Models\Sale;
 use App\Models\SaleProduct;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -69,7 +71,10 @@ class POSCheckoutService
             foreach ($refunds as $refund) {
                 // increment stock
                 $product = Product::whereId($refund['product_id'])->lockForUpdate()->firstOrFail();
-                $product->increment('quantity', $refund['quantity']);
+
+                $refundQuantity = $refund['quantity'];
+
+                $product->increment('quantity', $refundQuantity);
 
                 $saleProductId = $refund['sale_product_id'];
                 $saleId = $refund['sale_id'];
@@ -77,7 +82,7 @@ class POSCheckoutService
                 if ($saleProductId && $saleId) {
                     $saleProduct = SaleProduct::whereId($saleProductId)->firstOrFail();
 
-                    if ($saleProduct->quantity > $refund['quantity']) {
+                    if ($saleProduct->quantity > $refundQuantity) {
                         $saleProduct->update([
                             'item_status' => SaleItemStatus::PARTIALLY_REFUNDED,
                         ]);
@@ -98,10 +103,19 @@ class POSCheckoutService
 
                     $unitPrice = $refund['override_unit_price'] ?? $saleProduct->unit_price;
 
-                    $refundAmount += $this->subtotal($unitPrice, $refund['quantity'], $saleProduct->unit_discount, $saleProduct->flat_discount);
+                    $refundAmount += $this->subtotal($unitPrice, $refundQuantity, $saleProduct->unit_discount, $saleProduct->flat_discount);
+
+                    // create refund history
+                    // TOFIX: missing refundQuantity > leftoverOrder.
+                    Refund::create([
+                        'sale_product_id' => $saleProduct->id,
+                        'product_id' => $product->id,
+                        'quantity' => $refundQuantity,
+                        'refund_date' => $refund['refund_date'] ?? Carbon::now(),
+                        'refund_reason' => $refund['return_reason'],
+                    ]);
                 }
 
-                // TODO: create refund history. use return_reason.
             }
 
             // financial total
@@ -193,4 +207,12 @@ class POSCheckoutService
     {
         return max((($unitPrice - $unitDiscount) * $quantity) - $flatDiscount, 0);
     }
+
+    // /**
+    //  * refactor code here
+    //  */
+    // protected function handleSaleProductsData(array $items): array
+    // {
+
+    // }
 }
