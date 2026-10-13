@@ -75,11 +75,17 @@ class POSCheckoutService
                 $saleId = $refund['sale_id'];
 
                 if ($saleProductId && $saleId) {
-                    // set to refunded
                     $saleProduct = SaleProduct::whereId($saleProductId)->firstOrFail();
-                    $saleProduct->update([
-                        'item_status' => SaleItemStatus::REFUNDED,
-                    ]);
+
+                    if ($saleProduct->quantity > $refund['quantity']) {
+                        $saleProduct->update([
+                            'item_status' => SaleItemStatus::PARTIALLY_REFUNDED,
+                        ]);
+                    } else {
+                        $saleProduct->update([
+                            'item_status' => SaleItemStatus::REFUNDED,
+                        ]);
+                    }
 
                     $hasRemainingItems = SaleProduct::whereSaleId($refund['sale_id'])->where('item_status', '!=', SaleItemStatus::REFUNDED)->exists();
 
